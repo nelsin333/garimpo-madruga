@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin — Madruga</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Instrument+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=Instrument+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#080808;--surf:#0f0f0f;--surf2:#141414;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a;--p:#7b2fff}
+:root{--bg:#080808;--surf:#0f0f0f;--surf2:#141414;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a;--p:#7b2fff;--green:#22c55e}
 body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh}
 .login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
 .login-box{width:100%;max-width:360px;text-align:center}
@@ -23,9 +23,9 @@ header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px
 .hlogo{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;color:var(--gold)}
 .hlogo span{color:var(--muted2);font-size:11px;font-style:normal;font-family:'Space Mono',monospace;letter-spacing:1px;margin-left:8px}
 .hacts{display:flex;gap:10px;align-items:center}
-.btn-ag{padding:8px 16px;background:var(--gold);color:var(--ink);border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.btn-ag{padding:8px 16px;background:var(--gold);color:var(--ink);border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
 .btn-ag:hover{background:var(--gold-l)}
-.btn-ap{padding:8px 16px;background:var(--p);color:#fff;border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;transition:all .2s}
+.btn-ap{padding:8px 16px;background:var(--p);color:#fff;border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
 .btn-ap:hover{background:#8f3fff}
 .btn-out{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:10px;padding:8px 14px;font-family:'Space Mono',monospace;cursor:pointer;letter-spacing:1px}
 .btn-out:hover{border-color:var(--muted);color:var(--text)}
@@ -42,7 +42,7 @@ header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px
 .stat.pp .val{color:var(--p)}
 .stat.tt .val{color:var(--text)}
 .tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
+table{width:100%;border-collapse:collapse;min-width:600px}
 th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid var(--bord);background:var(--surf)}
 td{padding:13px 14px;border-bottom:1px solid var(--bord);font-size:13px;vertical-align:middle}
 tr:hover td{background:rgba(255,255,255,.015)}
@@ -51,28 +51,27 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .pill-p{background:rgba(123,47,255,.1);color:var(--p);border:1px solid rgba(123,47,255,.2)}
 .ssel{background:transparent;border:1px solid var(--bord);color:var(--text);padding:5px 10px;font-size:11px;font-family:'Instrument Sans',sans-serif;cursor:pointer;outline:none}
 .ssel option{background:#111}
-.ssel.s0{border-color:#333;color:var(--muted2)}
+.ssel.s0{border-color:#555;color:var(--muted2)}
 .ssel.s1{border-color:#f0a500;color:#f0a500}
-.ssel.s2{border-color:var(--gold);color:var(--gold)}
-.ssel.s3{border-color:#ff3c00;color:#ff3c00}
+.ssel.s2{border-color:var(--green);color:var(--green)}
+.ssel.s3{border-color:var(--muted2);color:var(--muted2)}
 .btn-del{background:transparent;border:none;color:#2a2a2a;cursor:pointer;font-size:15px;padding:4px 8px;transition:color .2s}
 .btn-del:hover{color:#ff3c00}
-.btn-edit{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:11px;padding:5px 10px;cursor:pointer;transition:all .2s;font-family:'Instrument Sans',sans-serif}
+.btn-edit{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:11px;padding:5px 10px;cursor:pointer;font-family:'Instrument Sans',sans-serif}
 .btn-edit:hover{border-color:var(--gold-dim);color:var(--gold)}
-.foto-thumb{width:40px;height:40px;object-fit:cover;border-radius:2px;border:1px solid var(--bord)}
+.foto-thumb{width:44px;height:44px;object-fit:cover;border:1px solid var(--bord)}
+.sem-foto{width:44px;height:44px;background:var(--surf2);border:1px solid var(--bord);display:flex;align-items:center;justify-content:center;font-size:18px}
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .ei{font-size:40px;margin-bottom:12px}
 .empty p{font-size:13px;font-family:'Space Mono',monospace}
 .loading{text-align:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px}
-.mbg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .mbg.show{display:flex}
-.modal{background:var(--surf);border:1px solid var(--bord);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal{background:var(--surf);border:1px solid var(--bord);width:100%;max-width:480px;margin:auto}
 .mhd{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
 .mhd h2{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;font-weight:700;color:var(--gold)}
-.mhd .cls{background:transparent;border:none;color:var(--muted2);font-size:20px;cursor:pointer;padding:4px}
-.mhd .cls:hover{color:var(--text)}
+.mhd .cls{background:transparent;border:none;color:var(--muted2);font-size:20px;cursor:pointer}
 .mbody{padding:20px}
-.msec{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--bord)}
 .mf{margin-bottom:14px}
 .mf label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);font-family:'Space Mono',monospace;margin-bottom:6px}
 .mf input,.mf textarea,.mf select{width:100%;background:var(--surf2);border:1px solid var(--bord);color:var(--text);padding:11px 14px;font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;-webkit-appearance:none;border-radius:0}
@@ -80,7 +79,11 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .mf textarea{resize:vertical;min-height:76px}
 .mf select option{background:#111}
 .mr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.foto-preview{width:100%;height:160px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
+.vendedor-card{background:rgba(201,168,76,.06);border:1px solid var(--gold-dim);padding:12px 14px;margin-bottom:14px;display:none}
+.vendedor-card .vc-nome{font-weight:600;color:var(--text);margin-bottom:4px}
+.vendedor-card .vc-pix{font-size:11px;color:var(--gold);font-family:'Space Mono',monospace}
+.vendedor-new{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.3);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--green);font-family:'Space Mono',monospace;display:none}
+.foto-preview-img{width:100%;max-height:200px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
 .mft{padding:0 20px 20px;display:flex;gap:10px}
 .mbtn{flex:1;padding:13px;border:none;font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
 .mbtn-g{background:var(--gold);color:var(--ink)}
@@ -88,8 +91,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .mbtn-p{background:var(--p);color:#fff}
 .mbtn-p:hover{background:#8f3fff}
 .mbtn-x{background:transparent;border:1px solid var(--bord);color:var(--muted2)}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--ink);padding:12px 20px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;z-index:999;display:none;animation:slideIn .3s ease}
-@keyframes slideIn{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--ink);padding:12px 20px;font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1px;z-index:999;display:none}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bord)}
 @media(max-width:600px){.hacts .btn-ag,.hacts .btn-ap{font-size:9px;padding:7px 10px}.mr2{grid-template-columns:1fr}}
@@ -97,360 +99,4 @@ tr:hover td{background:rgba(255,255,255,.015)}
 </head>
 <body>
 
-<div class="login" id="ls">
-  <div class="login-box">
-    <h1>Madruga</h1>
-    <p>ACESSO RESTRITO — ADMIN</p>
-    <input type="password" id="pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()">
-    <button onclick="chk()">Entrar</button>
-    <div class="login-err" id="err">Senha incorreta.</div>
-  </div>
-</div>
-
-<div id="app" style="display:none">
-  <header>
-    <div class="hlogo">Madruga <span>ADMIN</span></div>
-    <div class="hacts">
-      <button class="btn-ag" onclick="openM('garimpo')">+ Garimpo</button>
-      <button class="btn-ap" onclick="openM('basements')">+ Basements</button>
-      <button class="btn-out" onclick="logout()">SAIR</button>
-    </div>
-  </header>
-  <div class="fbar">
-    <button class="flt aa" id="fa" onclick="sf('all')">Todos</button>
-    <button class="flt" id="fg" onclick="sf('garimpo')">👕 Garimpo</button>
-    <button class="flt" id="fp2" onclick="sf('basements')">🎮 Basements</button>
-  </div>
-  <div class="stats">
-    <div class="stat gg"><div class="val" id="sg">0</div><div class="lbl">Garimpo</div></div>
-    <div class="stat pp"><div class="val" id="sp">0</div><div class="lbl">Basements</div></div>
-    <div class="stat tt"><div class="val" id="st2">0</div><div class="lbl">Total</div></div>
-  </div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descrição</th><th>Preço Venda</th><th>Repasse</th><th>Status</th><th>Ações</th></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="loading" id="loading">Carregando...</div>
-    <div class="empty" id="empty" style="display:none"><div class="ei">📦</div><p>Nenhum item ainda.</p></div>
-  </div>
-</div>
-
-<div class="mbg" id="mb">
-  <div class="modal">
-    <div class="mhd"><h2 id="mt">Novo item</h2><button class="cls" onclick="closeM()">✕</button></div>
-    <div class="mbody">
-      <input type="hidden" id="ms">
-      <input type="hidden" id="mid">
-
-      <div class="msec">Dados do vendedor</div>
-      <div class="mr2">
-        <div class="mf"><label>Nome do vendedor *</label><input id="v-nome" type="text" placeholder="Nome completo"></div>
-        <div class="mf"><label>WhatsApp *</label><input id="v-wpp" type="tel" placeholder="(11) 99999-9999"></div>
-      </div>
-      <div class="mf"><label>Instagram</label><input id="v-ig" type="text" placeholder="@usuario"></div>
-      <div class="mf"><label>Observações do vendedor</label><textarea id="v-obs" placeholder="Anotações sobre esse vendedor..."></textarea></div>
-
-      <div class="msec">Dados da peça</div>
-      <div class="mf"><label>Categoria</label><select id="mc"></select></div>
-      <div class="mf"><label>Descrição</label><textarea id="md" placeholder="Descreva a peça em detalhes..."></textarea></div>
-      <div class="mr2">
-        <div class="mf"><label>Preço de venda (R$)</label><input id="mp-venda" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
-        <div class="mf"><label>Repasse ao vendedor (R$)</label><input id="mp-repasse" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
-      </div>
-      <div class="mr2">
-        <div class="mf"><label>Estado</label>
-          <select id="me">
-            <option value="">Seleciona</option>
-            <option>Novo / Nunca usado</option>
-            <option>Excelente</option>
-            <option>Muito bom</option>
-            <option>Bom</option>
-            <option>Regular (com defeito)</option>
-          </select>
-        </div>
-        <div class="mf"><label>Origem</label>
-          <select id="mo">
-            <option value="whatsapp">WhatsApp</option>
-            <option value="instagram">Instagram</option>
-            <option value="presencial">Presencial</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="msec">Foto da peça</div>
-      <div class="mf">
-        <label>Foto (JPG, PNG)</label>
-        <input type="file" id="m-foto" accept="image/*" onchange="previewFoto(this)" style="background:transparent;border:1px dashed var(--bord);color:var(--muted2);padding:10px">
-        <img id="foto-preview" class="foto-preview">
-      </div>
-    </div>
-    <div class="mft">
-      <button class="mbtn mbtn-x" onclick="closeM()">Cancelar</button>
-      <button class="mbtn mbtn-g" id="mbtn" onclick="saveI()">Salvar</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-const SUPABASE_URL = 'https://bldlhcpghqueklouvtxe.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const PASS = '3743';
-const CATS = {
-  garimpo: ['Camiseta','Moletom / Hoodie','Calça','Shorts','Jaqueta','Tênis','Boné / Acessório','Outro'],
-  basements: ['Video Game (Console)','Video Game (Jogo)','Mangá / HQ','Figura / Colecionável','Decoração / Retro','Eletrônico','Outro']
-};
-
-let filter = 'all', editId = null, allPecas = [];
-
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', 3000);
-}
-
-function chk() {
-  const v = document.getElementById('pwd').value;
-  if (v === PASS) {
-    document.getElementById('ls').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    render();
-  } else {
-    document.getElementById('err').style.display = 'block';
-    document.getElementById('pwd').value = '';
-  }
-}
-
-function logout() {
-  document.getElementById('ls').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('pwd').value = '';
-}
-
-function sf(f) {
-  filter = f;
-  document.getElementById('fa').className = 'flt' + (f==='all' ? ' aa' : '');
-  document.getElementById('fg').className = 'flt' + (f==='garimpo' ? ' ag' : '');
-  document.getElementById('fp2').className = 'flt' + (f==='basements' ? ' ap' : '');
-  renderTable();
-}
-
-async function render() {
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('empty').style.display = 'none';
-
-  const { data, error } = await sb
-    .from('pecas')
-    .select('*, vendedores(nome, whatsapp, instagram)')
-    .order('criado_em', { ascending: false });
-
-  document.getElementById('loading').style.display = 'none';
-
-  if (error) { toast('Erro ao carregar: ' + error.message); return; }
-  allPecas = data || [];
-  updateStats();
-  renderTable();
-}
-
-function updateStats() {
-  document.getElementById('sg').textContent = allPecas.filter(p => p.loja === 'garimpo').length;
-  document.getElementById('sp').textContent = allPecas.filter(p => p.loja === 'basements').length;
-  document.getElementById('st2').textContent = allPecas.length;
-}
-
-function renderTable() {
-  const fil = filter === 'all' ? allPecas : allPecas.filter(p => p.loja === filter);
-  const tb = document.getElementById('tbody');
-  tb.innerHTML = '';
-
-  if (!fil.length) { document.getElementById('empty').style.display = 'block'; return; }
-  document.getElementById('empty').style.display = 'none';
-
-  fil.forEach(p => {
-    const isG = p.loja === 'garimpo';
-    const vendedor = p.vendedores || {};
-    const tr = document.createElement('tr');
-    const fotoHtml = p.foto_url
-      ? '<img src="' + p.foto_url + '" class="foto-thumb">'
-      : '<div style="width:40px;height:40px;background:var(--bord);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:16px">📷</div>';
-
-    tr.innerHTML =
-      '<td>' + fotoHtml + '</td>' +
-      '<td><span class="pill ' + (isG ? 'pill-g' : 'pill-p') + '">' + (isG ? 'GARIMPO' : 'BASEMENTS') + '</span></td>' +
-      '<td><div style="font-weight:500">' + (vendedor.nome || '—') + '</div><div style="font-size:11px;color:var(--muted2)">' + (vendedor.whatsapp || '') + '</div></td>' +
-      '<td style="color:var(--muted2);font-size:12px">' + (p.categoria || '—') + '</td>' +
-      '<td style="max-width:160px;font-size:12px;color:var(--muted2)">' + (p.descricao || '').substring(0, 48) + (p.descricao && p.descricao.length > 48 ? '...' : '') + '</td>' +
-      '<td style="font-family:monospace;font-size:12px;color:var(' + (isG ? '--gold' : '--p') + ')">' + (p.preco_venda ? 'R$ ' + Number(p.preco_venda).toFixed(2).replace('.', ',') : '—') + '</td>' +
-      '<td style="font-family:monospace;font-size:12px;color:var(--muted2)">' + (p.preco_repasse ? 'R$ ' + Number(p.preco_repasse).toFixed(2).replace('.', ',') : '—') + '</td>' +
-      '<td><select class="ssel s' + statusIdx(p.status) + '" onchange="setSt(\'' + p.id + '\',this)">' +
-        '<option value="disponivel" ' + (p.status==='disponivel'?'selected':'') + '>🟡 Disponível</option>' +
-        '<option value="negociando" ' + (p.status==='negociando'?'selected':'') + '>🔄 Negociando</option>' +
-        '<option value="vendido" ' + (p.status==='vendido'?'selected':'') + '>✅ Vendido</option>' +
-        '<option value="devolvido" ' + (p.status==='devolvido'?'selected':'') + '>↩️ Devolvido</option>' +
-      '</select></td>' +
-      '<td style="display:flex;gap:6px;align-items:center">' +
-        '<button class="btn-edit" onclick="editI(\'' + p.id + '\')">✏️</button>' +
-        '<button class="btn-del" onclick="delI(\'' + p.id + '\')">🗑️</button>' +
-      '</td>';
-    tb.appendChild(tr);
-  });
-}
-
-function statusIdx(s) {
-  return {disponivel:0,negociando:1,vendido:2,devolvido:3}[s] || 0;
-}
-
-async function setSt(id, sel) {
-  const statusMap = {0:'disponivel',1:'negociando',2:'vendido',3:'devolvido'};
-  const novoStatus = sel.value;
-  sel.className = 'ssel s' + statusIdx(novoStatus);
-  const { error } = await sb.from('pecas').update({ status: novoStatus }).eq('id', id);
-  if (error) toast('Erro ao atualizar status');
-  else { toast('Status atualizado!'); render(); }
-}
-
-async function delI(id) {
-  if (!confirm('Excluir esta peça?')) return;
-  const { error } = await sb.from('pecas').delete().eq('id', id);
-  if (error) toast('Erro ao excluir');
-  else { toast('Peça excluída!'); render(); }
-}
-
-function openM(store) {
-  editId = null;
-  document.getElementById('ms').value = store;
-  document.getElementById('mid').value = '';
-  document.getElementById('mt').textContent = 'Nova peça — ' + (store === 'garimpo' ? 'Garimpo' : 'Basements');
-  document.getElementById('mbtn').className = 'mbtn ' + (store === 'garimpo' ? 'mbtn-g' : 'mbtn-p');
-  const sel = document.getElementById('mc');
-  sel.innerHTML = '<option value="">Seleciona</option>';
-  CATS[store].forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
-  ['v-nome','v-wpp','v-ig','v-obs','md','mp-venda','mp-repasse'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('me').value = '';
-  document.getElementById('mo').value = 'whatsapp';
-  document.getElementById('m-foto').value = '';
-  document.getElementById('foto-preview').style.display = 'none';
-  document.getElementById('mb').classList.add('show');
-}
-
-async function editI(id) {
-  const peca = allPecas.find(p => p.id === id);
-  if (!peca) return;
-  editId = id;
-  openM(peca.loja);
-  document.getElementById('mt').textContent = 'Editar peça';
-  document.getElementById('mid').value = id;
-  const v = peca.vendedores || {};
-  document.getElementById('v-nome').value = v.nome || '';
-  document.getElementById('v-wpp').value = v.whatsapp || '';
-  document.getElementById('v-ig').value = v.instagram || '';
-  document.getElementById('v-obs').value = '';
-  document.getElementById('md').value = peca.descricao || '';
-  document.getElementById('mp-venda').value = peca.preco_venda ? 'R$ ' + Number(peca.preco_venda).toFixed(2).replace('.', ',') : '';
-  document.getElementById('mp-repasse').value = peca.preco_repasse ? 'R$ ' + Number(peca.preco_repasse).toFixed(2).replace('.', ',') : '';
-  document.getElementById('me').value = peca.estado || '';
-  document.getElementById('mo').value = peca.origem || 'whatsapp';
-  if (peca.foto_url) {
-    const img = document.getElementById('foto-preview');
-    img.src = peca.foto_url; img.style.display = 'block';
-  }
-  setTimeout(() => document.getElementById('mc').value = peca.categoria || '', 50);
-}
-
-function closeM() { document.getElementById('mb').classList.remove('show'); }
-
-function previewFoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const img = document.getElementById('foto-preview');
-    img.src = e.target.result; img.style.display = 'block';
-  };
-  reader.readAsDataURL(file);
-}
-
-async function uploadFoto(file) {
-  const ext = file.name.split('.').pop();
-  const nome = Date.now() + '.' + ext;
-  const { data, error } = await sb.storage.from('fotos').upload(nome, file, { upsert: true });
-  if (error) return null;
-  const { data: urlData } = sb.storage.from('fotos').getPublicUrl(nome);
-  return urlData.publicUrl;
-}
-
-async function saveI() {
-  const store = document.getElementById('ms').value;
-  const nomeV = document.getElementById('v-nome').value.trim();
-  const wppV = document.getElementById('v-wpp').value.trim();
-  if (!nomeV || !wppV) { alert('Nome e WhatsApp do vendedor são obrigatórios!'); return; }
-
-  document.getElementById('mbtn').textContent = 'Salvando...';
-
-  // Salvar ou buscar vendedor
-  let vendedorId = null;
-  const { data: vExist } = await sb.from('vendedores').select('id').eq('whatsapp', wppV).single();
-  if (vExist) {
-    vendedorId = vExist.id;
-    await sb.from('vendedores').update({ nome: nomeV, instagram: document.getElementById('v-ig').value }).eq('id', vendedorId);
-  } else {
-    const { data: vNew, error: vErr } = await sb.from('vendedores').insert({
-      nome: nomeV, whatsapp: wppV,
-      instagram: document.getElementById('v-ig').value,
-      observacoes: document.getElementById('v-obs').value
-    }).select().single();
-    if (vErr) { toast('Erro ao salvar vendedor: ' + vErr.message); document.getElementById('mbtn').textContent = 'Salvar'; return; }
-    vendedorId = vNew.id;
-  }
-
-  // Upload de foto
-  let fotoUrl = null;
-  const fotoFile = document.getElementById('m-foto').files[0];
-  if (fotoFile) fotoUrl = await uploadFoto(fotoFile);
-
-  // Converter preços
-  const toNum = v => v ? parseFloat(v.replace('R$ ','').replace(/\./g,'').replace(',','.')) : null;
-
-  const dadosPeca = {
-    vendedor_id: vendedorId,
-    loja: store,
-    categoria: document.getElementById('mc').value,
-    descricao: document.getElementById('md').value,
-    preco_venda: toNum(document.getElementById('mp-venda').value),
-    preco_repasse: toNum(document.getElementById('mp-repasse').value),
-    estado: document.getElementById('me').value,
-    origem: document.getElementById('mo').value,
-    status: 'disponivel'
-  };
-  if (fotoUrl) dadosPeca.foto_url = fotoUrl;
-
-  let error;
-  if (editId) {
-    ({ error } = await sb.from('pecas').update(dadosPeca).eq('id', editId));
-  } else {
-    ({ error } = await sb.from('pecas').insert(dadosPeca));
-  }
-
-  document.getElementById('mbtn').textContent = 'Salvar';
-  if (error) { toast('Erro ao salvar: ' + error.message); return; }
-  toast(editId ? 'Peça atualizada!' : 'Peça cadastrada!');
-  closeM();
-  render();
-}
-
-function fmt2(i) {
-  let v = i.value.replace(/\D/g, '');
-  if (!v) { i.value = ''; return; }
-  v = (parseInt(v) / 100).toFixed(2);
-  i.value = 'R$ ' + v.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-}
-
-document.getElementById('mb').addEventListener('click', function(e) { if (e.target === this) closeM(); });
-document.getElementById('pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') chk(); });
-</script>
-</body>
-</html>
+<d
