@@ -10,11 +10,9 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#0a0a0a;--surf:#111;--surf2:#161616;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a;--green:#22c55e;--red:#ef4444}
 body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh}
-
-/* AUTH */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .auth-box{width:100%;max-width:400px}
-.auth-logo{font-family:'Playfair Display',serif;font-size:28px;font-style:italic;font-weight:700;color:var(--gold);text-align:center;margin-bottom:8px}
+.auth-logo{font-family:'Playfair Display',serif;font-size:32px;font-style:italic;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px}
 .auth-sub{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);text-align:center;margin-bottom:36px}
 .auth-tabs{display:flex;gap:1px;background:var(--bord);margin-bottom:28px}
 .auth-tab{flex:1;padding:12px;border:none;background:var(--surf);color:var(--muted2);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;border-bottom:2px solid transparent}
@@ -24,26 +22,24 @@ body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-s
 .afield input{width:100%;background:var(--surf);border:1px solid var(--bord);color:var(--text);padding:13px 16px;font-family:'Instrument Sans',sans-serif;font-size:14px;outline:none;border-radius:0;-webkit-appearance:none}
 .afield input:focus{border-color:var(--gold-dim)}
 .afield input::placeholder{color:var(--muted)}
+.senha-wrap{position:relative}
+.senha-wrap input{padding-right:48px}
+.senha-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px;padding:4px}
 .btn-auth{width:100%;padding:15px;background:var(--gold);color:var(--ink);border:none;font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s;margin-top:8px}
 .btn-auth:hover{background:var(--gold-l)}
-.auth-err{color:var(--red);font-size:12px;margin-top:10px;text-align:center;font-family:'Space Mono',monospace;display:none}
-.auth-ok{color:var(--green);font-size:12px;margin-top:10px;text-align:center;font-family:'Space Mono',monospace;display:none}
-
-/* PORTAL */
+.auth-msg{font-size:12px;margin-top:10px;text-align:center;font-family:'Space Mono',monospace;display:none}
+.auth-msg.err{color:var(--red)}
+.auth-msg.ok{color:var(--green)}
 .portal{display:none}
 nav{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50}
 .nav-logo{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;color:var(--gold)}
 .nav-logo span{color:var(--muted2);font-size:11px;font-style:normal;font-family:'Space Mono',monospace;letter-spacing:1px;margin-left:8px}
 .btn-sair{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:10px;padding:8px 14px;font-family:'Space Mono',monospace;cursor:pointer;letter-spacing:1px}
 .btn-sair:hover{border-color:var(--muted);color:var(--text)}
-
-/* PERFIL BANNER */
-.perfil-banner{background:var(--surf);border-bottom:1px solid var(--bord);padding:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.perfil-info h2{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:var(--text);margin-bottom:4px}
-.perfil-info p{font-size:12px;color:var(--muted2);font-family:'Space Mono',monospace}
+.perfil-banner{background:var(--surf);border-bottom:1px solid var(--bord);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.perfil-info h2{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:var(--text);margin-bottom:4px}
+.perfil-info p{font-size:11px;color:var(--muted2);font-family:'Space Mono',monospace}
 .perfil-pix{background:rgba(201,168,76,.08);border:1px solid var(--gold-dim);padding:8px 16px;font-size:11px;font-family:'Space Mono',monospace;color:var(--gold)}
-
-/* STATS */
 .portal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord);border-bottom:1px solid var(--bord)}
 .pstat{background:var(--surf);padding:18px 16px;text-align:center}
 .pstat .val{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;line-height:1}
@@ -51,17 +47,15 @@ nav{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;di
 .pstat.disp .val{color:var(--gold)}
 .pstat.vend .val{color:var(--green)}
 .pstat.tot .val{color:var(--text)}
-
-/* PECAS */
-.pecas-wrap{padding:24px;max-width:900px;margin:0 auto}
+.pecas-wrap{padding:20px;max-width:900px;margin:0 auto}
 .pecas-hd{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted2);margin-bottom:20px;display:flex;align-items:center;gap:12px}
 .pecas-hd::after{content:'';flex:1;height:1px;background:var(--bord)}
-.pecas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
-.peca-card{background:var(--surf);border:1px solid var(--bord);transition:border-color .2s}
+.pecas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.peca-card{background:var(--surf);border:1px solid var(--bord);transition:border-color .2s;overflow:hidden}
 .peca-card:hover{border-color:var(--gold-dim)}
-.peca-foto{width:100%;aspect-ratio:1;object-fit:cover;background:var(--surf2);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--muted)}
+.peca-foto{width:100%;aspect-ratio:1;object-fit:cover;background:var(--surf2);display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--muted);overflow:hidden}
 .peca-foto img{width:100%;height:100%;object-fit:cover}
-.peca-body{padding:16px}
+.peca-body{padding:14px}
 .peca-loja{display:inline-block;padding:3px 10px;font-size:9px;font-family:'Space Mono',monospace;letter-spacing:1px;font-weight:700;margin-bottom:10px}
 .peca-loja.g{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
 .peca-loja.b{background:rgba(123,47,255,.1);color:#a78bfa;border:1px solid rgba(123,47,255,.2)}
@@ -70,7 +64,7 @@ nav{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;di
 .peca-precos{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
 .peca-preco{background:var(--surf2);padding:10px 12px;border:1px solid var(--bord)}
 .peca-preco .pl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:4px}
-.peca-preco .pv{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold)}
+.peca-preco .pv{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--gold)}
 .peca-preco.rep .pv{color:var(--green)}
 .peca-status{display:flex;align-items:center;gap:8px;font-size:12px}
 .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -82,22 +76,14 @@ nav{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;di
 .s-vendido .status-txt{color:var(--green)}
 .s-devolvido .status-dot{background:var(--muted2)}
 .s-devolvido .status-txt{color:var(--muted2)}
-
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-state .ei{font-size:40px;margin-bottom:12px}
-.empty-state p{font-size:13px;font-family:'Space Mono',monospace}
+.empty-state p{font-size:13px;font-family:'Space Mono',monospace;line-height:1.8}
 .loading-txt{text-align:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px}
-
-/* COMPLETAR PERFIL */
-.completar-wrap{min-height:60vh;display:flex;align-items:center;justify-content:center;padding:20px}
-.completar-box{width:100%;max-width:440px;background:var(--surf);border:1px solid var(--bord);padding:32px}
-.completar-box h2{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:var(--gold);margin-bottom:6px}
-.completar-box p{font-size:13px;color:var(--muted2);margin-bottom:28px;line-height:1.6}
 </style>
 </head>
 <body>
 
-<!-- AUTH -->
 <div class="auth-wrap" id="auth-wrap">
   <div class="auth-box">
     <div class="auth-logo">Madruga</div>
@@ -107,49 +93,58 @@ nav{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;di
       <button class="auth-tab" id="tab-cadastro" onclick="showTab('cadastro')">Criar conta</button>
     </div>
 
-    <!-- LOGIN -->
     <div id="form-login">
-      <div class="afield"><label>Email</label><input id="l-email" type="email" placeholder="seu@email.com"></div>
-      <div class="afield"><label>Senha</label><input id="l-senha" type="password" placeholder="••••••••"></div>
+      <div class="afield"><label>WhatsApp</label><input id="l-wpp" type="tel" placeholder="11999999999" oninput="limpaNum(this)"></div>
+      <div class="afield"><label>Senha</label>
+        <div class="senha-wrap">
+          <input id="l-senha" type="password" placeholder="••••••••">
+          <button class="senha-toggle" onclick="toggleSenha('l-senha',this)">👁️</button>
+        </div>
+      </div>
       <button class="btn-auth" onclick="login()">Entrar</button>
-      <div class="auth-err" id="login-err"></div>
+      <div class="auth-msg err" id="login-err"></div>
     </div>
 
-    <!-- CADASTRO -->
     <div id="form-cadastro" style="display:none">
-      <div class="afield"><label>Seu nome completo</label><input id="c-nome" type="text" placeholder="Nome completo"></div>
-      <div class="afield"><label>Email</label><input id="c-email" type="email" placeholder="seu@email.com"></div>
-      <div class="afield"><label>Senha</label><input id="c-senha" type="password" placeholder="Mínimo 6 caracteres"></div>
-      <div class="afield"><label>WhatsApp</label><input id="c-wpp" type="tel" placeholder="(11) 99999-9999"></div>
+      <div class="afield"><label>Nome completo</label><input id="c-nome" type="text" placeholder="Seu nome completo"></div>
+      <div class="afield"><label>WhatsApp</label><input id="c-wpp" type="tel" placeholder="11999999999" oninput="limpaNum(this)"></div>
       <div class="afield"><label>Chave Pix</label><input id="c-pix" type="text" placeholder="CPF, email, telefone ou chave aleatória"></div>
+      <div class="afield"><label>Senha</label>
+        <div class="senha-wrap">
+          <input id="c-senha" type="password" placeholder="Mínimo 6 caracteres">
+          <button class="senha-toggle" onclick="toggleSenha('c-senha',this)">👁️</button>
+        </div>
+      </div>
+      <div class="afield"><label>Confirmar senha</label>
+        <div class="senha-wrap">
+          <input id="c-senha2" type="password" placeholder="Repete a senha">
+          <button class="senha-toggle" onclick="toggleSenha('c-senha2',this)">👁️</button>
+        </div>
+      </div>
       <button class="btn-auth" onclick="cadastrar()">Criar conta</button>
-      <div class="auth-err" id="cadastro-err"></div>
-      <div class="auth-ok" id="cadastro-ok"></div>
+      <div class="auth-msg err" id="cadastro-err"></div>
+      <div class="auth-msg ok" id="cadastro-ok"></div>
     </div>
   </div>
 </div>
 
-<!-- PORTAL -->
 <div class="portal" id="portal">
   <nav>
     <div class="nav-logo">Madruga <span>MEU PORTAL</span></div>
     <button class="btn-sair" onclick="sair()">SAIR</button>
   </nav>
-
   <div class="perfil-banner" id="perfil-banner">
     <div class="perfil-info">
-      <h2 id="perfil-nome">Carregando...</h2>
-      <p id="perfil-email"></p>
+      <h2 id="perfil-nome">—</h2>
+      <p id="perfil-wpp"></p>
     </div>
     <div class="perfil-pix" id="perfil-pix"></div>
   </div>
-
   <div class="portal-stats">
     <div class="pstat disp"><div class="val" id="qt-disp">0</div><div class="lbl">Disponíveis</div></div>
     <div class="pstat vend"><div class="val" id="qt-vend">0</div><div class="lbl">Vendidas</div></div>
     <div class="pstat tot"><div class="val" id="qt-tot">0</div><div class="lbl">Total</div></div>
   </div>
-
   <div class="pecas-wrap">
     <div class="pecas-hd">Minhas peças</div>
     <div class="loading-txt" id="portal-loading">Carregando suas peças...</div>
@@ -166,9 +161,16 @@ const SUPABASE_URL = 'https://bldlhcpghqueklouvtxe.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let userAtual = null;
+function limpaNum(input) {
+  input.value = input.value.replace(/\D/g, '');
+}
 
-// TABS
+function toggleSenha(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁️'; }
+}
+
 function showTab(tab) {
   document.getElementById('tab-login').className = 'auth-tab' + (tab==='login'?' active':'');
   document.getElementById('tab-cadastro').className = 'auth-tab' + (tab==='cadastro'?' active':'');
@@ -176,90 +178,85 @@ function showTab(tab) {
   document.getElementById('form-cadastro').style.display = tab==='cadastro' ? 'block' : 'none';
 }
 
-// LOGIN
+function showMsg(id, msg, tipo) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'auth-msg ' + tipo;
+  el.style.display = 'block';
+}
+
+function wppToEmail(wpp) {
+  return wpp.replace(/\D/g,'') + '@madruga.app';
+}
+
 async function login() {
-  const email = document.getElementById('l-email').value.trim();
+  const wpp = document.getElementById('l-wpp').value.replace(/\D/g,'');
   const senha = document.getElementById('l-senha').value;
-  if (!email || !senha) { showErr('login-err', 'Preenche email e senha!'); return; }
+  if (!wpp || !senha) { showMsg('login-err','Preenche WhatsApp e senha!','err'); return; }
+  const email = wppToEmail(wpp);
   const { data, error } = await sb.auth.signInWithPassword({ email, password: senha });
-  if (error) { showErr('login-err', 'Email ou senha incorretos.'); return; }
+  if (error) { showMsg('login-err','WhatsApp ou senha incorretos.','err'); return; }
   abrirPortal(data.user);
 }
 
-// CADASTRO
 async function cadastrar() {
   const nome = document.getElementById('c-nome').value.trim();
-  const email = document.getElementById('c-email').value.trim();
-  const senha = document.getElementById('c-senha').value;
-  const wpp = document.getElementById('c-wpp').value.trim();
+  const wpp = document.getElementById('c-wpp').value.replace(/\D/g,'');
   const pix = document.getElementById('c-pix').value.trim();
-  if (!nome || !email || !senha || !wpp || !pix) { showErr('cadastro-err', 'Preenche todos os campos!'); return; }
-  if (senha.length < 6) { showErr('cadastro-err', 'Senha precisa ter no mínimo 6 caracteres.'); return; }
+  const senha = document.getElementById('c-senha').value;
+  const senha2 = document.getElementById('c-senha2').value;
+  if (!nome||!wpp||!pix||!senha) { showMsg('cadastro-err','Preenche todos os campos!','err'); return; }
+  if (senha.length < 6) { showMsg('cadastro-err','Senha precisa ter no mínimo 6 caracteres.','err'); return; }
+  if (senha !== senha2) { showMsg('cadastro-err','As senhas não coincidem!','err'); return; }
 
+  const email = wppToEmail(wpp);
   const { data, error } = await sb.auth.signUp({ email, password: senha });
-  if (error) { showErr('cadastro-err', 'Erro ao criar conta: ' + error.message); return; }
+  if (error) { showMsg('cadastro-err','Erro: ' + error.message,'err'); return; }
 
-  // Salvar perfil
-  await sb.from('perfis').insert({ id: data.user.id, nome, whatsapp: wpp, chave_pix: pix });
+  await sb.from('perfis').upsert({ id: data.user.id, nome, whatsapp: wpp, chave_pix: pix });
+  await sb.from('vendedores').update({ user_id: data.user.id, email }).eq('whatsapp', wpp);
 
-  // Vincular ao vendedor pelo whatsapp
-  await sb.from('vendedores').update({ email, user_id: data.user.id }).eq('whatsapp', wpp);
-
-  document.getElementById('cadastro-err').style.display = 'none';
-  showOk('cadastro-ok', 'Conta criada! Pode fazer login agora.');
-  setTimeout(() => showTab('login'), 2000);
+  showMsg('cadastro-ok','Conta criada! Pode entrar agora.','ok');
+  setTimeout(() => { showTab('login'); document.getElementById('l-wpp').value = wpp; }, 2000);
 }
 
-// ABRIR PORTAL
 async function abrirPortal(user) {
-  userAtual = user;
   document.getElementById('auth-wrap').style.display = 'none';
   document.getElementById('portal').style.display = 'block';
 
-  // Buscar perfil
   const { data: perfil } = await sb.from('perfis').select('*').eq('id', user.id).single();
   if (perfil) {
     document.getElementById('perfil-nome').textContent = perfil.nome || 'Vendedor';
-    document.getElementById('perfil-email').textContent = user.email;
+    document.getElementById('perfil-wpp').textContent = 'WhatsApp: ' + (perfil.whatsapp || '');
     document.getElementById('perfil-pix').textContent = 'Pix: ' + (perfil.chave_pix || '—');
   }
 
   carregarPecas(user);
 }
 
-// CARREGAR PECAS
 async function carregarPecas(user) {
   document.getElementById('portal-loading').style.display = 'block';
   document.getElementById('portal-empty').style.display = 'none';
 
-  // Buscar vendedor pelo user_id
-  const { data: vendedor } = await sb.from('vendedores').select('id').eq('user_id', user.id).single();
+  const { data: perfil } = await sb.from('perfis').select('whatsapp').eq('id', user.id).single();
+  if (!perfil) { document.getElementById('portal-loading').style.display = 'none'; document.getElementById('portal-empty').style.display = 'block'; return; }
 
-  if (!vendedor) {
-    document.getElementById('portal-loading').style.display = 'none';
-    document.getElementById('portal-empty').style.display = 'block';
-    return;
-  }
+  const { data: vendedor } = await sb.from('vendedores').select('id').eq('whatsapp', perfil.whatsapp).single();
+  if (!vendedor) { document.getElementById('portal-loading').style.display = 'none'; document.getElementById('portal-empty').style.display = 'block'; return; }
 
   const { data: pecas } = await sb.from('pecas').select('*').eq('vendedor_id', vendedor.id).order('criado_em', { ascending: false });
-
   document.getElementById('portal-loading').style.display = 'none';
 
-  if (!pecas || !pecas.length) {
-    document.getElementById('portal-empty').style.display = 'block';
-    return;
-  }
+  if (!pecas || !pecas.length) { document.getElementById('portal-empty').style.display = 'block'; return; }
 
-  // Stats
-  document.getElementById('qt-disp').textContent = pecas.filter(p => p.status === 'disponivel' || p.status === 'negociando').length;
-  document.getElementById('qt-vend').textContent = pecas.filter(p => p.status === 'vendido').length;
+  document.getElementById('qt-disp').textContent = pecas.filter(p => p.status==='disponivel'||p.status==='negociando').length;
+  document.getElementById('qt-vend').textContent = pecas.filter(p => p.status==='vendido').length;
   document.getElementById('qt-tot').textContent = pecas.length;
 
-  // Render cards
   const grid = document.getElementById('pecas-grid');
   grid.innerHTML = '';
   pecas.forEach(p => {
-    const statusTxt = {disponivel:'Disponível',negociando:'Em negociação',vendido:'Vendido',devolvido:'Devolvido'}[p.status] || p.status;
+    const statusMap = {disponivel:'Disponível',negociando:'Em negociação',vendido:'Vendido',devolvido:'Devolvido'};
     const div = document.createElement('div');
     div.className = 'peca-card';
     div.innerHTML =
@@ -272,32 +269,19 @@ async function carregarPecas(user) {
           '<div class="peca-preco"><div class="pl">Preço de venda</div><div class="pv">'+(p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'A definir')+'</div></div>' +
           '<div class="peca-preco rep"><div class="pl">Seu repasse</div><div class="pv">'+(p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'A definir')+'</div></div>' +
         '</div>' +
-        '<div class="peca-status s-'+p.status+'"><div class="status-dot"></div><div class="status-txt">'+statusTxt+'</div></div>' +
+        '<div class="peca-status s-'+(p.status||'disponivel')+'"><div class="status-dot"></div><div class="status-txt">'+(statusMap[p.status]||'Disponível')+'</div></div>' +
       '</div>';
     grid.appendChild(div);
   });
 }
 
-// SAIR
 async function sair() {
   await sb.auth.signOut();
-  userAtual = null;
   document.getElementById('portal').style.display = 'none';
   document.getElementById('auth-wrap').style.display = 'flex';
   document.getElementById('pecas-grid').innerHTML = '';
 }
 
-// HELPERS
-function showErr(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.style.display = 'block';
-}
-function showOk(id, msg) {
-  const el = document.getElementById(id);
-  el.textContent = msg; el.style.display = 'block';
-}
-
-// CHECK SESSION
 sb.auth.onAuthStateChange((event, session) => {
   if (session) abrirPortal(session.user);
 });
