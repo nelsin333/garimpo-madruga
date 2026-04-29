@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garimpo do Madruga — Consignado</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Instrument+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0a;--surf:#111;--surf2:#161616;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;overflow-x:hidden;font-size:14px}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:999;mix-blend-mode:screen}
+nav{background:rgba(10,10,10,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--bord);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--text)}
+.logo span{color:var(--gold)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{padding:8px 18px;border:1px solid var(--gold-dim);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none;transition:all .2s}
+.nav-cta:hover{background:var(--gold);color:var(--ink)}
+.hero{display:grid;grid-template-columns:55% 45%;min-height:92vh}
+.hero-l{display:flex;flex-direction:column;justify-content:flex-end;padding:60px 48px;background:var(--surf);position:relative;border-right:1px solid var(--bord)}
+.tag-line{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tag-line::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-h1{font-family:'Playfair Display',serif;font-size:clamp(40px,5vw,68px);font-weight:900;line-height:.93;letter-spacing:-1px;color:var(--text);margin-bottom:22px}
+.hero-h1 em{font-style:italic;color:var(--gold);display:block}
+.hero-p{font-size:13px;line-height:1.75;color:var(--muted2);max-width:340px;margin-bottom:36px}
+.hero-btns{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn-gold{padding:13px 28px;background:var(--gold);color:var(--ink);font-size:10px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;font-family:'Instrument Sans',sans-serif;font-weight:600;transition:all .22s;text-decoration:none;display:inline-block}
+.btn-gold:hover{background:var(--gold-l)}
+.btn-ghost{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted2);text-decoration:none;display:flex;align-items:center;gap:6px;transition:all .2s}
+.btn-ghost:hover{color:var(--gold);gap:12px}
+.btn-ghost::after{content:'→'}
+.hero-nums{position:absolute;bottom:60px;right:0;display:flex;flex-direction:column;gap:1px}
+.hnum{background:var(--surf2);padding:14px 20px;border-left:1px solid var(--bord)}
+.hnum .n{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:2px}
+.hnum .l{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.hero-r{background:var(--bg);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.big-g{font-family:'Playfair Display',serif;font-size:clamp(160px,20vw,260px);font-weight:900;font-style:italic;color:rgba(201,168,76,.06);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);user-select:none}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,.07)}
+.ring:nth-child(2){width:260px;height:260px;top:5%;right:-80px}
+.ring:nth-child(3){width:180px;height:180px;bottom:10%;left:-50px}
+.htag{position:absolute;border:1px solid var(--gold-dim);color:var(--gold);padding:7px 13px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-family:'Space Mono',monospace;animation:fl 5s ease-in-out infinite;background:rgba(201,168,76,.03)}
+.htag:nth-child(4){top:22%;left:10%;animation-delay:0s}
+.htag:nth-child(5){top:50%;right:8%;animation-delay:-2s}
+.htag:nth-child(6){bottom:26%;left:16%;animation-delay:-4s}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.mq{background:var(--gold);padding:12px 0;overflow:hidden}
+.mq-track{display:flex;animation:mq 22s linear infinite;width:max-content}
+.mqi{font-family:'Playfair Display',serif;font-size:12px;font-style:italic;color:var(--ink);padding:0 32px;white-space:nowrap;opacity:.85}
+.mqd{color:rgba(10,10,10,.3);padding:0 6px}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.sec{padding:80px 48px}
+.sec-hd{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:52px;border-bottom:1px solid var(--bord);padding-bottom:28px}
+.sec-n{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--gold-dim);text-transform:uppercase}
+.sec-t{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,46px);font-weight:700;line-height:1.1;color:var(--text)}
+.sec-t em{font-style:italic;color:var(--gold)}
+.vantagens{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord)}
+.vant{background:var(--surf);padding:36px 28px;transition:background .25s}
+.vant:hover{background:var(--surf2)}
+.vant-ico{font-size:28px;margin-bottom:16px}
+.vant h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.vant p{font-size:12px;line-height:1.75;color:var(--muted2)}
+.vant-num{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--gold-dim);margin-bottom:12px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord)}
+.step{background:var(--surf);padding:36px 28px;position:relative;transition:background .25s}
+.step:hover{background:var(--surf2)}
+.stn{font-family:'Playfair Display',serif;font-size:60px;font-weight:900;font-style:italic;color:rgba(201,168,76,.07);line-height:1;margin-bottom:16px}
+.step h3{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.step p{font-size:12px;line-height:1.75;color:var(--muted2)}
+.step .ico{position:absolute;top:36px;right:28px;font-size:22px;opacity:.5}
+.rules-sec{background:var(--surf);border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);padding:60px 48px}
+.rules-inner{max-width:700px;margin:0 auto}
+.rules-hd{margin-bottom:36px}
+.rules-hd .rtag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.rules-hd .rtag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.rules-hd h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);font-weight:700;color:var(--text);line-height:1.1}
+.rules-hd h2 em{font-style:italic;color:var(--gold)}
+.rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rule{border:1px solid var(--bord);padding:20px 22px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+.rule:hover{border-color:var(--gold-dim)}
+.rule .rico{font-size:22px;flex-shrink:0;margin-top:2px}
+.rule h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px}
+.rule p{font-size:11px;line-height:1.65;color:var(--muted2)}
+.rule.destaque{border-color:var(--gold-dim);background:rgba(201,168,76,.04)}
+.fsec{background:var(--bg);padding:80px 48px;position:relative;overflow:hidden;border-top:1px solid var(--bord)}
+.fsec::before{content:'CONSIGNADO';position:absolute;font-family:'Playfair Display',serif;font-size:160px;font-weight:900;font-style:italic;color:rgba(201,168,76,.02);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;pointer-events:none}
+.finr{max-width:620px;margin:0 auto;position:relative;z-index:2}
+.fhd{margin-bottom:44px}
+.ftag{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.ftag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.fhd h2{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,48px);font-weight:700;line-height:1.1;color:var(--text)}
+.fhd h2 em{font-style:italic;color:var(--gold)}
+.stabs{display:flex;gap:1px;margin-bottom:36px;background:var(--bord)}
+.stab{flex:1;padding:13px;background:var(--surf);border:none;color:var(--muted);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;border-bottom:2px solid transparent}
+.stab.ag{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,.06)}
+.stab.ap{color:#a78bfa;border-bottom-color:#a78bfa;background:rgba(167,139,250,.06)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.fg.one{grid-template-columns:1fr}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);font-family:'Space Mono',monospace}
+.fld input,.fld textarea,.fld select{background:var(--surf);border:1px solid var(--bord);color:var(--text);padding:12px 16px;font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;-webkit-appearance:none;border-radius:0}
+.fld input:focus,.fld textarea:focus,.fld select:focus{border-color:var(--gold-dim);background:var(--surf2)}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--muted)}
+.fld textarea{resize:vertical;min-height:84px}
+.fld select option{background:#111}
+.clbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);font-family:'Space Mono',monospace;margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.chip{padding:7px 14px;border:1px solid var(--bord);color:var(--muted2);font-size:11px;cursor:pointer;transition:all .15s;background:transparent;font-family:'Instrument Sans',sans-serif}
+.chip:hover{border-color:var(--gold-dim);color:var(--text)}
+.chip.ag{border-color:var(--gold-dim);color:var(--gold);background:rgba(201,168,76,.07)}
+.chip.ap{border-color:#6d4fa0;color:#a78bfa;background:rgba(167,139,250,.07)}
+.upl{border:1px dashed var(--bord);padding:28px;text-align:center;cursor:pointer;transition:all .2s;position:relative;margin-bottom:24px}
+.upl:hover{border-color:var(--gold-dim);background:rgba(201,168,76,.03)}
+.upl input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upl .ui{font-size:26px;margin-bottom:8px}
+.upl p{color:var(--muted2);font-size:12px}
+.upl span{color:var(--muted);font-size:10px;display:block;margin-top:3px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:24px}
+.pth{aspect-ratio:1;position:relative;overflow:hidden}
+.pth img{width:100%;height:100%;object-fit:cover}
+.pth button{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.8);border:none;color:white;width:20px;height:20px;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.notice{border-left:2px solid var(--gold-dim);padding:13px 16px;background:rgba(201,168,76,.04);margin-bottom:28px;font-size:12px;color:var(--muted2);line-height:1.65}
+.notice strong{color:var(--gold);display:block;margin-bottom:3px}
+.bsub{width:100%;padding:17px;background:var(--gold);color:var(--ink);border:none;cursor:pointer;font-family:'Playfair Display',serif;font-size:17px;font-style:italic;font-weight:700;letter-spacing:1px;transition:all .22s;position:relative}
+.bsub::after{content:'→';position:absolute;right:20px;top:50%;transform:translateY(-50%);transition:right .2s}
+.bsub:hover{background:var(--gold-l)}
+.bsub:hover::after{right:14px}
+.bsub.ps{background:#7c3aed;color:#fff}
+.bsub.ps:hover{background:#6d28d9}
+.suc{display:none;text-align:center;padding:48px 32px}
+.suc.show{display:block}
+.suc .si{font-size:48px;margin-bottom:16px;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.suc h3{font-family:'Playfair Display',serif;font-size:30px;font-style:italic;font-weight:700;color:var(--gold);margin-bottom:10px}
+.suc p{color:var(--muted2);font-size:13px;line-height:1.65;margin-bottom:24px}
+.bwp{display:inline-flex;align-items:center;gap:9px;padding:13px 24px;background:#25D366;color:white;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
+.bwp:hover{background:#1db954}
+footer{background:#080808;border-top:1px solid var(--bord);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.flogo-ft{font-family:'Playfair Display',serif;font-size:15px;font-weight:700;color:var(--text)}
+.flogo-ft span{color:var(--gold)}
+.fcopy{font-size:10px;letter-spacing:1px;color:var(--muted);font-family:'Space Mono',monospace}
+.alink{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#1e1e1e;text-decoration:none;font-family:'Space Mono',monospace;transition:color .2s}
+.alink:hover{color:#333}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.rv.vis{opacity:1;transform:translateY(0)}
+@media(max-width:700px){nav{padding:12px 16px}.nav-links{display:none}.hero{grid-template-columns:1fr}.hero-l{padding:72px 20px 48px}.hero-r{height:200px}.hero-nums{display:none}.sec{padding:60px 20px}.sec-hd{flex-direction:column;align-items:flex-start;gap:10px}.vantagens,.steps{grid-template-columns:1fr}.rules-sec{padding:48px 20px}.rules-grid{grid-template-columns:1fr}.fsec{padding:60px 20px}.fg{grid-template-columns:1fr}footer{padding:32px 20px;flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Garimpo<span>.</span>Madruga</div>
+  <div class="nav-links">
+    <a href="#vantagens">Por que consignar</a>
+    <a href="#como">Como funciona</a>
+    <a href="#form">Consignar agora</a>
+    <a href="#form" class="nav-cta">Quero consignar</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-l">
+    <div class="tag-line">Second Hand — Penha, Zona Leste · SP</div>
+    <h1 class="hero-h1">Seu item<br>merece um<br><em>novo dono.</em></h1>
+    <p class="hero-p">Você deixa com a gente, a gente vende. Sem esforço, sem taxa absurda — só resultado. Cada peça que circula é moda mais consciente.</p>
+    <div class="hero-btns">
+      <a href="#form" class="btn-gold">Consignar agora</a>
+      <a href="#vantagens" class="btn-ghost">Por que consignar</a>
+    </div>
+    <div class="hero-nums">
+      <div class="hnum"><div class="n">+1000</div><div class="l">Peças vendidas</div></div>
+    </div>
+  </div>
+  <div class="hero-r">
+    <div class="big-g">G</div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="htag">Nike Vintage</div>
+    <div class="htag">Ralph Lauren</div>
+    <div class="htag">The North Face</div>
+  </div>
+</section>
+<div class="mq"><div class="mq-track"><span class="mqi">Garimpo do Madruga</span><span class="mqd">·</span><span class="mqi">Basements Madruga</span><span class="mqd">·</span><span class="mqi">Second Hand</span><span class="mqd">·</span><span class="mqi">Vintage & Consignado</span><span class="mqd">·</span><span class="mqi">Penha — Zona Leste, SP</span><span class="mqd">·</span><span class="mqi">Nike · Ralph Lauren · Lacoste · The North Face · Arc'teryx</span><span class="mqd">·</span><span class="mqi">Garimpo do Madruga</span><span class="mqd">·</span><span class="mqi">Basements Madruga</span><span class="mqd">·</span><span class="mqi">Second Hand</span><span class="mqd">·</span><span class="mqi">Vintage & Consignado</span><span class="mqd">·</span><span class="mqi">Penha — Zona Leste, SP</span><span class="mqd">·</span><span class="mqi">Nike · Ralph Lauren · Lacoste · The North Face · Arc'teryx</span><span class="mqd">·</span></div></div>
+<section class="sec" id="vantagens">
+  <div class="sec-hd rv"><div><div class="sec-n">01 — Por que consignar</div><h2 class="sec-t">Vantagens reais<br><em>pra você.</em></h2></div></div>
+  <div class="vantagens">
+    <div class="vant rv"><div class="vant-num">01</div><div class="vant-ico">💰</div><h3>Você recebe de verdade</h3><p>Sem taxa absurda, sem corte desproporcional. Você combina o valor que quer receber e a gente negocia junto. Transparência total.</p></div>
+    <div class="vant rv"><div class="vant-num">02</div><div class="vant-ico">📦</div><h3>Zero esforço pra você</h3><p>Você traz o item, a gente cuida de tudo — foto, anúncio, venda. Não precisa fazer nada depois que o item estiver aqui.</p></div>
+    <div class="vant rv"><div class="vant-num">03</div><div class="vant-ico">🔄</div><h3>Moda que circula</h3><p>Desapegar do que não usa é prático e consciente. Cada peça que circula é uma peça a menos descartada no mundo.</p></div>
+  </div>
+</section>
+<section class="sec" id="como" style="padding-top:0">
+  <div class="sec-hd rv"><div><div class="sec-n">02 — Como funciona</div><h2 class="sec-t">Simples assim,<br><em>sem enrolação.</em></h2></div></div>
+  <div class="steps">
+    <div class="step rv"><div class="stn">01</div><span class="ico">📋</span><h3>Você preenche</h3><p>Manda o formulário com foto, descrição e o valor que quer receber. A gente analisa e entra em contato pelo WhatsApp.</p></div>
+    <div class="step rv"><div class="stn">02</div><span class="ico">🛵</span><h3>Combinamos a entrega</h3><p>Se você for da Zona Leste ou perto da Penha, a gente mesmo busca de moto — sem custo pra você. O frete é por nossa conta.</p></div>
+    <div class="step rv"><div class="stn">03</div><span class="ico">💸</span><h3>Você recebe</h3><p>Tiramos as fotos, fazemos o anúncio e vendemos. Você recebe o combinado assim que a venda fechar.</p></div>
+  </div>
+</section>
+<div class="rules-sec">
+  <div class="rules-inner">
+    <div class="rules-hd rv"><div class="rtag">Antes de consignar</div><h2>O que você precisa<br><em>saber.</em></h2></div>
+    <div class="rules-grid">
+      <div class="rule destaque rv"><span class="rico">📍</span><div><h4>O item precisa estar com a gente</h4><p>Para confirmar o consignado, o produto precisa ser entregue pessoalmente ou retirado por nós. Só então assumimos a responsabilidade pela venda.</p></div></div>
+      <div class="rule destaque rv"><span class="rico">🛵</span><div><h4>Frete por nossa conta</h4><p>Se você for da Penha ou região próxima na Zona Leste, a gente vai buscar de moto — sem custo algum pra você. Não conseguimos atender via estação por conta da nossa rotina intensa no Garimpo.</p></div></div>
+      <div class="rule rv"><span class="rico">📸</span><div><h4>A gente cuida das fotos</h4><p>Assim que o item chegar, tiramos as fotos e fazemos o anúncio. A apresentação é nossa responsabilidade.</p></div></div>
+      <div class="rule rv"><span class="rico">🔒</span><div><h4>Assumimos a responsabilidade</h4><p>A partir da entrega, somos responsáveis pela guarda e venda do item. Você fica informado sobre o andamento.</p></div></div>
+      <div class="rule rv"><span class="rico">📝</span><div><h4>Tudo combinado antes</h4><p>Preço e condições são alinhados via WhatsApp antes de qualquer coisa. Se não fechar, o item volta pra você sem problema.</p></div></div>
+      <div class="rule rv"><span class="rico">💬</span><div><h4>Contraproposta sempre possível</h4><p>Se o valor não encaixar, a gente faz uma contraproposta honesta. Negociamos juntos, sem pressão.</p></div></div>
+    </div>
+  </div>
+</div>
+<section class="fsec" id="form">
+  <div class="finr">
+    <div class="fhd rv"><div class="ftag">Consignado</div><h2>Manda seu<br><em>item pra gente.</em></h2></div>
+    <div id="fw">
+      <div class="stabs">
+        <button class="stab ag" id="tg" onclick="sw('garimpo')">👕 Garimpo do Madruga</button>
+        <button class="stab" id="tp" onclick="sw('basements')">🎮 Basements Madruga</button>
+      </div>
+      <form onsubmit="sub(event)">
+        <div class="fg">
+          <div class="fld"><label>Seu nome *</label><input id="fn" type="text" placeholder="Como você se chama?" required></div>
+          <div class="fld"><label>WhatsApp *</label><input id="fw2" type="tel" placeholder="(11) 99999-9999" required></div>
+        </div>
+        <div style="margin-bottom:16px"><div class="clbl">Categoria *</div><div class="chips" id="chips"></div><input type="hidden" id="fc"></div>
+        <div class="fg one"><div class="fld"><label>Descrição do item *</label><textarea id="fd" placeholder="Ex: Camiseta Nike vintage anos 90, tamanho M, sem manchas..." required></textarea></div></div>
+        <div class="fg" style="margin-top:16px">
+          <div class="fld"><label>Preço que quer receber *</label><input id="fp" type="text" placeholder="R$ 0,00" required oninput="fmt(this)"></div>
+          <div class="fld"><label>Estado de conservação *</label>
+            <select id="fe" required>
+              <option value="" disabled selected>Seleciona</option>
+              <option>Novo / Nunca usado</option><option>Excelente</option><option>Muito bom</option><option>Bom</option><option>Regular (com defeito)</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:20px">
+          <div class="upl" id="upl"><input type="file" id="ff" accept="image/*" multiple onchange="addP(this)"><div class="ui">📸</div><p>Adicionar fotos do item (até 6)</p><span>Frente, costas e detalhes — quanto mais melhor</span></div>
+          <div class="pgrid" id="pgrid"></div>
+        </div>
+        <div class="notice"><strong>⚠️ O item precisa estar com a gente.</strong> Após o alinhamento pelo WhatsApp, combinamos a retirada ou entrega. Se você for da Penha ou Zona Leste próxima, buscamos de moto — sem custo pra você.</div>
+        <button type="submit" class="bsub" id="bsub">Enviar proposta de consignado</button>
+      </form>
+    </div>
+    <div class="suc" id="suc">
+      <div class="si">✅</div>
+      <h3 id="st">Proposta recebida!</h3>
+      <p id="sd">Suas informações chegaram pra gente. Em breve vamos entrar em contato pelo WhatsApp pra fechar os detalhes e combinar a retirada do item.</p>
+      <a href="#" class="bwp" id="bwp-link">📲 Falar no WhatsApp</a>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="flogo-ft">Garimpo<span>.</span>Madruga</div>
+  <div class="fcopy">Penha — Zona Leste, São Paulo · © 2025</div>
+  <a href="admin.html" class="alink">acesso restrito</a>
+</footer>
+<script>
+const S={garimpo:{cats:['Camiseta','Moletom / Hoodie','Calça','Shorts','Jaqueta','Tênis','Boné / Acessório','Outro'],cc:'ag',tg:'ag',tp:'',bc:'',wpp:'5511994865917',st:'Proposta recebida!',sd:'Suas informações chegaram pra gente. Em breve vamos entrar em contato pelo WhatsApp pra fechar os detalhes e combinar a retirada.'},basements:{cats:['Video Game (Console)','Video Game (Jogo)','Mangá / HQ','Figura / Colecionável','Decoração / Retro','Eletrônico','Outro'],cc:'ap',tg:'',tp:'ap',bc:'ps',wpp:'5511994865917',st:'Proposta recebida!',sd:'Item recebido! Em breve falamos com você pelo WhatsApp pra combinar os detalhes e a retirada.'}};
+let store='garimpo',cat='',photos=[];
+function sw(s){store=s;cat='';const c=S[s];document.getElementById('tg').className='stab '+(c.tg||'');document.getElementById('tp').className='stab '+(c.tp||'');document.getElementById('bsub').className='bsub '+(c.bc||'');rC();}
+function rC(){const c=S[store],el=document.getElementById('chips');el.innerHTML='';c.cats.forEach(x=>{const b=document.createElement('button');b.type='button';b.className='chip'+(cat===x?' '+c.cc:'');b.textContent=x;b.onclick=()=>{cat=x;document.getElementById('fc').value=x;rC();};el.appendChild(b);});}
+function fmt(i){let v=i.value.replace(/\D/g,'');if(!v){i.value='';return;}v=(parseInt(v)/100).toFixed(2);i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
+function addP(input){Array.from(input.files).slice(0,6-photos.length).forEach(f=>{const r=new FileReader();r.onload=e=>{photos.push(e.target.result);rP();};r.readAsDataURL(f);});input.value='';}
+function rP(){const el=document.getElementById('pgrid');el.innerHTML='';photos.forEach((p,i)=>{const d=document.createElement('div');d.className='pth';d.innerHTML='<img src="'+p+'"><button onclick="rmP('+i+')">✕</button>';el.appendChild(d);});document.getElementById('upl').style.display=photos.length>=6?'none':'block';}
+function rmP(i){photos.splice(i,1);rP();}
+function sub(e){e.preventDefault();if(!cat){alert('Seleciona uma categoria!');return;}const c=S[store];const msg=encodeURIComponent('🔥 *NOVO CONSIGNADO — '+(store==='garimpo'?'GARIMPO DO MADRUGA':'BASEMENTS MADRUGA')+'*\n\n👤 *Nome:* '+document.getElementById('fn').value+'\n📱 *WhatsApp:* '+document.getElementById('fw2').value+'\n🏷️ *Categoria:* '+cat+'\n📝 *Descrição:* '+document.getElementById('fd').value+'\n💰 *Preço desejado:* '+document.getElementById('fp').value+'\n⭐ *Estado:* '+document.getElementById('fe').value+'\n📸 *Fotos:* '+photos.length+' foto(s)\n\n_Formulário de consignado_');document.getElementById('fw').style.display='none';const sc=document.getElementById('suc');sc.classList.add('show');document.getElementById('st').textContent=c.st;document.getElementById('sd').textContent=c.sd;document.getElementById('bwp-link').href='https://wa.me/'+c.wpp+'?text='+msg;document.getElementById('form').scrollIntoView({behavior:'smooth'});}
+const obs=new IntersectionObserver(entries=>{entries.forEach((en,i)=>{if(en.isIntersecting)setTimeout(()=>en.target.classList.add('vis'),i*80);});},{threshold:.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+rC();
+</script>
+</body>
+</html>
