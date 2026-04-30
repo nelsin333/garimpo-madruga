@@ -21,6 +21,7 @@ body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-s
 .btn-entrar{width:100%;padding:16px;background:var(--gold);color:var(--ink);border:none;font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
 .btn-entrar:hover{background:var(--gold-l)}
 .login-err{color:var(--red);font-size:12px;margin-top:10px;display:none;font-family:'Space Mono',monospace}
+
 header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50}
 .hlogo{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;color:var(--gold)}
 .hlogo span{color:var(--muted2);font-size:11px;font-style:normal;font-family:'Space Mono',monospace;letter-spacing:1px;margin-left:8px}
@@ -28,20 +29,49 @@ header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px
 .btn-ag{padding:8px 16px;background:var(--gold);color:var(--ink);border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
 .btn-ap{padding:8px 16px;background:var(--p);color:#fff;border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
 .btn-out{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:10px;padding:8px 14px;font-family:'Space Mono',monospace;cursor:pointer}
-.fbar{display:flex;border-bottom:1px solid var(--bord);background:var(--surf)}
-.flt{flex:1;padding:12px;border:none;background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent}
-.flt.ag{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,.03)}
-.flt.ap{color:var(--p);border-bottom-color:var(--p);background:rgba(123,47,255,.03)}
-.flt.aa{color:var(--text);border-bottom-color:var(--muted)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord);border-bottom:1px solid var(--bord)}
-.stat{background:var(--surf);padding:20px 16px;text-align:center}
-.stat .val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1}
-.stat .lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
+
+/* VIEWS */
+.view{display:none}
+.view.active{display:block}
+
+/* VENDEDORES */
+.vendedores-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:24px}
+.vcard{background:var(--surf);border:1px solid var(--bord);padding:20px;cursor:pointer;transition:all .2s;position:relative}
+.vcard:hover{border-color:var(--gold-dim);background:var(--surf2)}
+.vcard-nome{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:700;color:var(--text);margin-bottom:4px}
+.vcard-wpp{font-size:11px;color:var(--muted2);font-family:'Space Mono',monospace;margin-bottom:12px}
+.vcard-pix{font-size:10px;color:var(--gold-dim);font-family:'Space Mono',monospace;margin-bottom:12px}
+.vcard-stats{display:flex;gap:16px}
+.vcard-stat{text-align:center}
+.vcard-stat .vs-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1}
+.vcard-stat .vs-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:3px;font-family:'Space Mono',monospace}
+.vcard-stat.vend .vs-val{color:var(--green)}
+.vcard-badge{position:absolute;top:16px;right:16px;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.badge-g{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2);font-size:9px;font-family:'Space Mono',monospace;padding:2px 8px;letter-spacing:1px}
+.badge-p{background:rgba(123,47,255,.1);color:var(--p);border:1px solid rgba(123,47,255,.2);font-size:9px;font-family:'Space Mono',monospace;padding:2px 8px;letter-spacing:1px}
+.empty-v{text-align:center;padding:80px 20px;color:var(--muted)}
+.empty-v .ei{font-size:48px;margin-bottom:16px}
+.empty-v p{font-family:'Space Mono',monospace;font-size:13px;line-height:1.8}
+
+/* PECAS VIEW */
+.pecas-header{background:var(--surf);border-bottom:1px solid var(--bord);padding:16px 24px;display:flex;align-items:center;gap:16px}
+.btn-back{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:12px;padding:8px 16px;font-family:'Space Mono',monospace;cursor:pointer;letter-spacing:1px}
+.btn-back:hover{border-color:var(--gold-dim);color:var(--gold)}
+.pecas-header-info h2{font-family:'Playfair Display',serif;font-size:20px;font-style:italic;color:var(--text);margin-bottom:2px}
+.pecas-header-info p{font-size:11px;color:var(--muted2);font-family:'Space Mono',monospace}
+.pecas-header-actions{margin-left:auto;display:flex;gap:10px}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bord);border-bottom:1px solid var(--bord)}
+.stat{background:var(--surf);padding:16px;text-align:center}
+.stat .val{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;line-height:1}
+.stat .lbl{font-size:9px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
 .stat.gg .val{color:var(--gold)}
 .stat.pp .val{color:var(--p)}
 .stat.tt .val{color:var(--text)}
+.stat.vv .val{color:var(--green)}
+
 .tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:700px}
+table{width:100%;border-collapse:collapse;min-width:600px}
 th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid var(--bord);background:var(--surf)}
 td{padding:13px 14px;border-bottom:1px solid var(--bord);font-size:13px;vertical-align:middle}
 tr:hover td{background:rgba(255,255,255,.015)}
@@ -63,6 +93,8 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .ei{font-size:40px;margin-bottom:12px}
 .loading-txt{text-align:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px}
+
+/* MODAL */
 .mbg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .mbg.show{display:flex}
 .modal{background:var(--surf);border:1px solid var(--bord);width:100%;max-width:480px;margin:auto}
@@ -77,9 +109,6 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .mf textarea{resize:vertical;min-height:80px}
 .mf select option{background:#111}
 .mr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.vendedor-card{background:var(--surf2);border:1px solid var(--gold-dim);padding:12px 16px;margin-bottom:16px;display:none}
-.vc-nome{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--gold);margin-bottom:4px}
-.vc-pix{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)}
 .foto-preview-img{width:100%;max-height:200px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
 .upload-progress{font-size:12px;color:var(--gold);font-family:'Space Mono',monospace;margin-top:8px;display:none}
 .mft{padding:0 20px 20px;display:flex;gap:10px}
@@ -91,10 +120,11 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--ink);padding:12px 20px;font-family:'Space Mono',monospace;font-size:11px;z-index:999;display:none}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-thumb{background:var(--bord)}
-@media(max-width:600px){.hacts .btn-ag,.hacts .btn-ap{font-size:9px;padding:7px 10px}.mr2{grid-template-columns:1fr}}
+@media(max-width:600px){.hacts .btn-ag,.hacts .btn-ap{font-size:9px;padding:7px 10px}.mr2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.vendedores-grid{grid-template-columns:1fr;padding:16px}}
 </style>
 </head>
 <body>
+
 <div class="login" id="ls">
   <div class="login-box">
     <h1>Madruga</h1>
@@ -107,6 +137,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
     <div class="login-err" id="err">Senha incorreta.</div>
   </div>
 </div>
+
 <div id="app" style="display:none">
   <header>
     <div class="hlogo">Madruga <span>ADMIN</span></div>
@@ -116,25 +147,45 @@ tr:hover td{background:rgba(255,255,255,.015)}
       <button class="btn-out" onclick="logout()">SAIR</button>
     </div>
   </header>
-  <div class="fbar">
-    <button class="flt aa" id="fa" onclick="sf('all')">Todos</button>
-    <button class="flt" id="fg" onclick="sf('garimpo')">👕 Garimpo</button>
-    <button class="flt" id="fp2" onclick="sf('basements')">🎮 Basements</button>
+
+  <!-- VIEW: VENDEDORES -->
+  <div class="view active" id="view-vendedores">
+    <div class="vendedores-grid" id="vendedores-grid">
+      <div class="loading-txt">Carregando vendedores...</div>
+    </div>
   </div>
-  <div class="stats">
-    <div class="stat gg"><div class="val" id="sg">0</div><div class="lbl">Garimpo</div></div>
-    <div class="stat pp"><div class="val" id="sp">0</div><div class="lbl">Basements</div></div>
-    <div class="stat tt"><div class="val" id="st2">0</div><div class="lbl">Total</div></div>
-  </div>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descricao</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Acoes</th></tr></thead>
-      <tbody id="tbody"></tbody>
-    </table>
-    <div class="loading-txt" id="loading">Carregando...</div>
-    <div class="empty" id="empty" style="display:none"><div class="ei">📦</div><p style="font-family:Space Mono,monospace;font-size:13px">Nenhum item ainda.</p></div>
+
+  <!-- VIEW: PECAS DO VENDEDOR -->
+  <div class="view" id="view-pecas">
+    <div class="pecas-header">
+      <button class="btn-back" onclick="voltarVendedores()">← Voltar</button>
+      <div class="pecas-header-info">
+        <h2 id="pecas-vendedor-nome">—</h2>
+        <p id="pecas-vendedor-info">—</p>
+      </div>
+      <div class="pecas-header-actions">
+        <button class="btn-ag" onclick="openM('garimpo',false)">+ Garimpo</button>
+        <button class="btn-ap" onclick="openM('basements',false)">+ Basements</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat gg"><div class="val" id="sg">0</div><div class="lbl">Garimpo</div></div>
+      <div class="stat pp"><div class="val" id="sp">0</div><div class="lbl">Basements</div></div>
+      <div class="stat vv"><div class="val" id="sv">0</div><div class="lbl">Vendidas</div></div>
+      <div class="stat tt"><div class="val" id="st2">0</div><div class="lbl">Total</div></div>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr><th>Foto</th><th>Loja</th><th>Categoria</th><th>Descricao</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Acoes</th></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="loading-txt" id="loading" style="display:none">Carregando...</div>
+      <div class="empty" id="empty" style="display:none"><div class="ei">📦</div><p style="font-family:Space Mono,monospace;font-size:13px">Nenhuma peca ainda.</p></div>
+    </div>
   </div>
 </div>
+
+<!-- MODAL -->
 <div class="mbg" id="mb">
   <div class="modal">
     <div class="mhd"><h2 id="mt">Nova peca</h2><button class="cls" onclick="closeM()">✕</button></div>
@@ -145,9 +196,9 @@ tr:hover td{background:rgba(255,255,255,.015)}
         <label>WhatsApp do vendedor</label>
         <input id="m-wpp" type="tel" placeholder="11999999999" oninput="buscaVendedor(this.value)">
       </div>
-      <div class="vendedor-card" id="vendedor-card">
-        <div class="vc-nome" id="vc-nome"></div>
-        <div class="vc-pix" id="vc-pix"></div>
+      <div class="vendedor-card" id="vendedor-card" style="background:var(--surf2);border:1px solid var(--gold-dim);padding:12px 16px;margin-bottom:16px;display:none">
+        <div id="vc-nome" style="font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--gold);margin-bottom:4px"></div>
+        <div id="vc-pix" style="font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)"></div>
       </div>
       <div class="mf"><label>Categoria</label><select id="mc"></select></div>
       <div class="mf"><label>Descricao</label><textarea id="md" placeholder="Descreva a peca..."></textarea></div>
@@ -168,7 +219,9 @@ tr:hover td{background:rgba(255,255,255,.015)}
     </div>
   </div>
 </div>
+
 <div class="toast" id="toast"></div>
+
 <script>
 const SURL='https://bldlhcpghqueklouvtxe.supabase.co';
 const SKEY='sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
@@ -180,7 +233,8 @@ const CATS={
   garimpo:['Camiseta','Moletom / Hoodie','Calca','Shorts','Jaqueta','Tenis','Bone / Acessorio','Outro'],
   basements:['Video Game (Console)','Video Game (Jogo)','Manga / HQ','Figura / Colecional','Decoracao / Retro','Eletronico','Outro']
 };
-let filter='all',editId=null,allPecas=[],vendedorAtual=null,buscaTimer=null,fotoAtual=null;
+
+let editId=null,allPecas=[],allVendedores=[],vendedorAtual=null,buscaTimer=null,fotoAtual=null,vendedorFiltro=null;
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 function togglePwd(){const i=document.getElementById('pwd');i.type=i.type==='password'?'text':'password';}
@@ -189,8 +243,8 @@ function chk(){
   if(document.getElementById('pwd').value===PASS){
     document.getElementById('ls').style.display='none';
     document.getElementById('app').style.display='block';
-    render();
-  } else {
+    renderVendedores();
+  }else{
     document.getElementById('err').style.display='block';
     document.getElementById('pwd').value='';
   }
@@ -202,62 +256,93 @@ function logout(){
   document.getElementById('pwd').value='';
 }
 
-function sf(f){
-  filter=f;
-  document.getElementById('fa').className='flt'+(f==='all'?' aa':'');
-  document.getElementById('fg').className='flt'+(f==='garimpo'?' ag':'');
-  document.getElementById('fp2').className='flt'+(f==='basements'?' ap':'');
-  renderTable();
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
 }
 
-async function uploadCloudinary(file){
-  const prog=document.getElementById('upload-progress');
-  prog.style.display='block';
-  const fd=new FormData();
-  fd.append('file',file);
-  fd.append('upload_preset',CLOUD_PRESET);
-  try{
-    const res=await fetch('https://api.cloudinary.com/v1_1/'+CLOUD_NAME+'/image/upload',{method:'POST',body:fd});
-    const data=await res.json();
-    prog.style.display='none';
-    if(data.secure_url)return data.secure_url;
-    return null;
-  }catch(e){
-    prog.style.display='none';
-    return null;
+async function renderVendedores(){
+  showView('vendedores');
+  const grid=document.getElementById('vendedores-grid');
+  grid.innerHTML='<div class="loading-txt">Carregando vendedores...</div>';
+
+  const {data:pecas}=await sb.from('pecas').select('*, vendedores(id,nome,whatsapp,chave_pix)').order('criado_em',{ascending:false});
+  allPecas=pecas||[];
+
+  const {data:vendedores}=await sb.from('vendedores').select('*').order('nome');
+  allVendedores=vendedores||[];
+
+  if(!allVendedores.length){
+    grid.innerHTML='<div class="empty-v"><div class="ei">👥</div><p>Nenhum vendedor ainda.<br>Cadastre uma peca para comecar.</p></div>';
+    return;
   }
+
+  grid.innerHTML='';
+  allVendedores.forEach(v=>{
+    const pecasV=allPecas.filter(p=>p.vendedor_id===v.id);
+    const total=pecasV.length;
+    const vendidas=pecasV.filter(p=>p.status==='vendido').length;
+    const disponiveis=pecasV.filter(p=>p.status==='disponivel'||p.status==='negociando').length;
+    const temG=pecasV.some(p=>p.loja==='garimpo');
+    const temB=pecasV.some(p=>p.loja==='basements');
+
+    const card=document.createElement('div');
+    card.className='vcard';
+    card.onclick=()=>abrirVendedor(v.id);
+    card.innerHTML=
+      '<div class="vcard-badge">'+
+        (temG?'<span class="badge-g">GARIMPO</span>':'')+
+        (temB?'<span class="badge-p">BASEMENTS</span>':'')+
+      '</div>'+
+      '<div class="vcard-nome">'+(v.nome||'Vendedor')+'</div>'+
+      '<div class="vcard-wpp">📱 '+(v.whatsapp||'—')+'</div>'+
+      (v.chave_pix?'<div class="vcard-pix">Pix: '+v.chave_pix+'</div>':'')+
+      '<div class="vcard-stats">'+
+        '<div class="vcard-stat"><div class="vs-val">'+total+'</div><div class="vs-lbl">Total</div></div>'+
+        '<div class="vcard-stat"><div class="vs-val">'+disponiveis+'</div><div class="vs-lbl">Disponiveis</div></div>'+
+        '<div class="vcard-stat vend"><div class="vs-val">'+vendidas+'</div><div class="vs-lbl">Vendidas</div></div>'+
+      '</div>';
+    grid.appendChild(card);
+  });
 }
 
-async function render(){
-  document.getElementById('loading').style.display='block';
-  document.getElementById('empty').style.display='none';
-  const {data,error}=await sb.from('pecas').select('*, vendedores(nome,whatsapp,chave_pix)').order('criado_em',{ascending:false});
-  document.getElementById('loading').style.display='none';
-  if(error){toast('Erro: '+error.message);return;}
-  allPecas=data||[];
-  document.getElementById('sg').textContent=allPecas.filter(p=>p.loja==='garimpo').length;
-  document.getElementById('sp').textContent=allPecas.filter(p=>p.loja==='basements').length;
-  document.getElementById('st2').textContent=allPecas.length;
-  renderTable();
+function abrirVendedor(vendedorId){
+  vendedorFiltro=vendedorId;
+  const v=allVendedores.find(x=>x.id===vendedorId)||{};
+  const pecasV=allPecas.filter(p=>p.vendedor_id===vendedorId);
+
+  document.getElementById('pecas-vendedor-nome').textContent=v.nome||'Vendedor';
+  document.getElementById('pecas-vendedor-info').textContent=(v.whatsapp||'')+(v.chave_pix?' · Pix: '+v.chave_pix:'');
+
+  document.getElementById('sg').textContent=pecasV.filter(p=>p.loja==='garimpo').length;
+  document.getElementById('sp').textContent=pecasV.filter(p=>p.loja==='basements').length;
+  document.getElementById('sv').textContent=pecasV.filter(p=>p.status==='vendido').length;
+  document.getElementById('st2').textContent=pecasV.length;
+
+  renderPecas(pecasV);
+  showView('pecas');
 }
 
-function renderTable(){
-  const fil=filter==='all'?allPecas:allPecas.filter(p=>p.loja===filter);
+function voltarVendedores(){
+  vendedorFiltro=null;
+  renderVendedores();
+}
+
+function renderPecas(pecas){
   const tb=document.getElementById('tbody');
   tb.innerHTML='';
-  if(!fil.length){document.getElementById('empty').style.display='block';return;}
+  if(!pecas.length){document.getElementById('empty').style.display='block';return;}
   document.getElementById('empty').style.display='none';
-  fil.forEach(p=>{
+
+  pecas.forEach(p=>{
     const isG=p.loja==='garimpo';
-    const v=p.vendedores||{};
     const si=['disponivel','negociando','vendido','devolvido'].indexOf(p.status||'disponivel');
     const tr=document.createElement('tr');
     tr.innerHTML=
       '<td>'+(p.foto_url?'<img src="'+p.foto_url+'" class="foto-thumb" onerror="this.parentNode.innerHTML=\'<div class=no-foto>📷</div>\'">':`<div class="no-foto">📷</div>`)+'</td>'+
       '<td><span class="pill '+(isG?'pill-g':'pill-p')+'">'+(isG?'GARIMPO':'BASEMENTS')+'</span></td>'+
-      '<td><div style="font-weight:500">'+(v.nome||'—')+'</div><div style="font-size:11px;color:var(--muted2)">'+(v.whatsapp||'')+'</div>'+(v.chave_pix?'<div style="font-size:10px;color:var(--gold-dim);font-family:monospace">Pix: '+v.chave_pix+'</div>':'')+'</td>'+
       '<td style="color:var(--muted2);font-size:12px">'+(p.categoria||'—')+'</td>'+
-      '<td style="max-width:140px;font-size:12px;color:var(--muted2)">'+(p.descricao||'').substring(0,45)+(p.descricao&&p.descricao.length>45?'...':'')+'</td>'+
+      '<td style="max-width:160px;font-size:12px;color:var(--muted2)">'+(p.descricao||'').substring(0,50)+(p.descricao&&p.descricao.length>50?'...':'')+'</td>'+
       '<td style="font-family:monospace;font-size:12px;color:var('+(isG?'--gold':'--p')+')">'+(p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'—')+'</td>'+
       '<td style="font-family:monospace;font-size:12px;color:var(--green)">'+(p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'—')+'</td>'+
       '<td><select class="ssel s'+Math.max(0,si)+'" onchange="setSt(\''+p.id+'\',this)">'+
@@ -277,13 +362,17 @@ function renderTable(){
 async function setSt(id,sel){
   sel.className='ssel s'+['disponivel','negociando','vendido','devolvido'].indexOf(sel.value);
   await sb.from('pecas').update({status:sel.value}).eq('id',id);
-  toast('Status atualizado!');render();
+  toast('Status atualizado!');
+  if(vendedorFiltro) abrirVendedor(vendedorFiltro);
+  else renderVendedores();
 }
 
 async function delI(id){
   if(!confirm('Excluir esta peca?'))return;
   await sb.from('pecas').delete().eq('id',id);
-  toast('Excluida!');render();
+  toast('Excluida!');
+  if(vendedorFiltro) await renderVendedores().then(()=>abrirVendedor(vendedorFiltro));
+  else renderVendedores();
 }
 
 function openM(store,preserveEdit){
@@ -295,8 +384,22 @@ function openM(store,preserveEdit){
   const sel=document.getElementById('mc');
   sel.innerHTML='<option value="">Seleciona</option>';
   CATS[store].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
-  document.getElementById('m-wpp').value='';
-  document.getElementById('vendedor-card').style.display='none';
+
+  // Se tiver vendedor filtrado, preenche o WhatsApp automaticamente
+  if(vendedorFiltro&&!preserveEdit){
+    const v=allVendedores.find(x=>x.id===vendedorFiltro);
+    if(v){
+      document.getElementById('m-wpp').value=v.whatsapp||'';
+      vendedorAtual={id:v.id,nome:v.nome,chave_pix:v.chave_pix};
+      document.getElementById('vc-nome').textContent=v.nome||'Vendedor';
+      document.getElementById('vc-pix').textContent=v.chave_pix?'Pix: '+v.chave_pix:'Sem chave pix';
+      document.getElementById('vendedor-card').style.display='block';
+    }
+  } else {
+    document.getElementById('m-wpp').value='';
+    document.getElementById('vendedor-card').style.display='none';
+  }
+
   document.getElementById('md').value='';
   document.getElementById('mp-venda').value='';
   document.getElementById('mp-repasse').value='';
@@ -331,8 +434,9 @@ async function editI(id){
   openM(p.loja,true);
   document.getElementById('mt').textContent='Editar peca';
   document.getElementById('mid').value=id;
-  document.getElementById('m-wpp').value=p.vendedores?.whatsapp||'';
-  if(p.vendedores?.whatsapp)buscaVendedor(p.vendedores.whatsapp);
+  const v=allVendedores.find(x=>x.id===p.vendedor_id)||{};
+  document.getElementById('m-wpp').value=v.whatsapp||'';
+  if(v.whatsapp) buscaVendedor(v.whatsapp);
   document.getElementById('md').value=p.descricao||'';
   document.getElementById('mp-venda').value=p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'';
   document.getElementById('mp-repasse').value=p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'';
@@ -347,6 +451,23 @@ function previewFoto(input){
   const r=new FileReader();
   r.onload=e=>{const img=document.getElementById('foto-preview');img.src=e.target.result;img.style.display='block';};
   r.readAsDataURL(file);
+}
+
+async function uploadCloudinary(file){
+  const prog=document.getElementById('upload-progress');
+  prog.style.display='block';
+  const fd=new FormData();
+  fd.append('file',file);
+  fd.append('upload_preset',CLOUD_PRESET);
+  try{
+    const res=await fetch('https://api.cloudinary.com/v1_1/'+CLOUD_NAME+'/image/upload',{method:'POST',body:fd});
+    const data=await res.json();
+    prog.style.display='none';
+    return data.secure_url||null;
+  }catch(e){
+    prog.style.display='none';
+    return null;
+  }
 }
 
 async function saveI(){
@@ -387,7 +508,15 @@ async function saveI(){
   document.getElementById('mbtn').textContent='Salvar';
   if(error){toast('Erro: '+error.message);return;}
   toast(editId?'Peca atualizada!':'Peca cadastrada!');
-  closeM();render();
+  closeM();
+
+  if(vendedorFiltro){
+    const {data:pecas}=await sb.from('pecas').select('*, vendedores(id,nome,whatsapp,chave_pix)').order('criado_em',{ascending:false});
+    allPecas=pecas||[];
+    abrirVendedor(vendedorFiltro);
+  } else {
+    renderVendedores();
+  }
 }
 
 function fmt2(i){let v=i.value.replace(/\D/g,'');if(!v){i.value='';return;}v=(parseInt(v)/100).toFixed(2);i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
