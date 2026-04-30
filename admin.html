@@ -1,406 +1,409 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin — Madruga</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Instrument+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-    :root{--bg:#080808;--surf:#0f0f0f;--surf2:#141414;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a;--p:#7b2fff;--green:#22c55e;--red:#ef4444}
-    body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh}
-    .login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
-    .login-box{width:100%;max-width:360px;text-align:center}
-    .login-box h1{font-family:'Playfair Display',serif;font-size:42px;font-style:italic;font-weight:700;color:var(--gold);margin-bottom:6px}
-    .login-box p{color:var(--muted2);font-size:12px;margin-bottom:32px;font-family:'Space Mono',monospace;letter-spacing:1px}
-    .senha-wrap{position:relative;margin-bottom:12px}
-    .senha-wrap input{width:100%;background:var(--surf);border:1px solid var(--bord);color:var(--text);padding:14px 48px 14px 16px;font-size:15px;outline:none;font-family:'Instrument Sans',sans-serif;text-align:center;letter-spacing:4px;border-radius:0}
-    .senha-wrap input:focus{border-color:var(--gold-dim)}
-    .senha-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px}
-    .btn-entrar{width:100%;padding:16px;background:var(--gold);color:var(--ink);border:none;font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
-    .btn-entrar:hover{background:var(--gold-l)}
-    .login-err{color:var(--red);font-size:12px;margin-top:10px;display:none;font-family:'Space Mono',monospace}
-    header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50}
-    .hlogo{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;color:var(--gold)}
-    .hlogo span{color:var(--muted2);font-size:11px;font-style:normal;font-family:'Space Mono',monospace;letter-spacing:1px;margin-left:8px}
-    .hacts{display:flex;gap:10px;align-items:center}
-    .btn-ag{padding:8px 16px;background:var(--gold);color:var(--ink);border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
-    .btn-ap{padding:8px 16px;background:var(--p);color:#fff;border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
-    .btn-out{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:10px;padding:8px 14px;font-family:'Space Mono',monospace;cursor:pointer}
-    .fbar{display:flex;border-bottom:1px solid var(--bord);background:var(--surf)}
-    .flt{flex:1;padding:12px;border:none;background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent}
-    .flt.ag{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,.03)}
-    .flt.ap{color:var(--p);border-bottom-color:var(--p);background:rgba(123,47,255,.03)}
-    .flt.aa{color:var(--text);border-bottom-color:var(--muted)}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord);border-bottom:1px solid var(--bord)}
-    .stat{background:var(--surf);padding:20px 16px;text-align:center}
-    .stat .val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1}
-    .stat .lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
-    .stat.gg .val{color:var(--gold)}
-    .stat.pp .val{color:var(--p)}
-    .stat.tt .val{color:var(--text)}
-    .tw{overflow-x:auto}
-    table{width:100%;border-collapse:collapse;min-width:700px}
-    th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid var(--bord);background:var(--surf)}
-    td{padding:13px 14px;border-bottom:1px solid var(--bord);font-size:13px;vertical-align:middle}
-    tr:hover td{background:rgba(255,255,255,.015)}
-    .pill{display:inline-block;padding:3px 10px;font-size:10px;font-family:'Space Mono',monospace;letter-spacing:1px;font-weight:700}
-    .pill-g{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
-    .pill-p{background:rgba(123,47,255,.1);color:var(--p);border:1px solid rgba(123,47,255,.2)}
-    .ssel{background:transparent;border:1px solid var(--bord);color:var(--text);padding:5px 10px;font-size:11px;font-family:'Instrument Sans',sans-serif;cursor:pointer;outline:none}
-    .ssel option{background:#111}
-    .ssel.s0{border-color:#f0a500;color:#f0a500}
-    .ssel.s1{border-color:var(--gold);color:var(--gold)}
-    .ssel.s2{border-color:var(--green);color:var(--green)}
-    .ssel.s3{border-color:var(--muted2);color:var(--muted2)}
-    .btn-del{background:transparent;border:none;color:#2a2a2a;cursor:pointer;font-size:15px;padding:4px 8px;transition:color .2s}
-    .btn-del:hover{color:var(--red)}
-    .btn-edit{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:11px;padding:5px 10px;cursor:pointer;font-family:'Instrument Sans',sans-serif}
-    .btn-edit:hover{border-color:var(--gold-dim);color:var(--gold)}
-    .foto-thumb{width:44px;height:44px;object-fit:cover;border-radius:2px;border:1px solid var(--bord)}
-    .no-foto{width:44px;height:44px;background:var(--surf2);border:1px solid var(--bord);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:18px}
-    .empty{text-align:center;padding:60px 20px;color:var(--muted)}
-    .empty .ei{font-size:40px;margin-bottom:12px}
-    .loading-txt{text-align:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px}
-    .mbg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
-    .mbg.show{display:flex}
-    .modal{background:var(--surf);border:1px solid var(--bord);width:100%;max-width:480px;margin:auto}
-    .mhd{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
-    .mhd h2{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;font-weight:700;color:var(--gold)}
-    .mhd .cls{background:transparent;border:none;color:var(--muted2);font-size:20px;cursor:pointer;padding:4px}
-    .mbody{padding:20px}
-    .mf{margin-bottom:16px}
-    .mf label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);font-family:'Space Mono',monospace;margin-bottom:7px}
-    .mf input,.mf textarea,.mf select{width:100%;background:var(--surf2);border:1px solid var(--bord);color:var(--text);padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;-webkit-appearance:none;border-radius:0}
-    .mf input:focus,.mf textarea:focus,.mf select:focus{border-color:var(--gold-dim)}
-    .mf textarea{resize:vertical;min-height:80px}
-    .mf select option{background:#111}
-    .mr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .vendedor-card{background:var(--surf2);border:1px solid var(--gold-dim);padding:12px 16px;margin-bottom:16px;display:none}
-    .vc-nome{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--gold);margin-bottom:4px}
-    .vc-pix{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)}
-    .foto-preview-img{width:100%;max-height:200px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
-    .mft{padding:0 20px 20px;display:flex;gap:10px}
-    .mbtn{flex:1;padding:13px;border:none;font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
-    .mbtn-g{background:var(--gold);color:var(--ink)}
-    .mbtn-g:hover{background:var(--gold-l)}
-    .mbtn-p{background:var(--p);color:#fff}
-    .mbtn-x{background:transparent;border:1px solid var(--bord);color:var(--muted2)}
-    .toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--ink);padding:12px 20px;font-family:'Space Mono',monospace;font-size:11px;z-index:999;display:none}
-    ::-webkit-scrollbar{width:4px;height:4px}
-    ::-webkit-scrollbar-thumb{background:var(--bord)}
-    @media(max-width:600px){.hacts .btn-ag,.hacts .btn-ap{font-size:9px;padding:7px 10px}.mr2{grid-template-columns:1fr}}
-    </style>
-  </head>
-  <body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Madruga</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Instrument+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080808;--surf:#0f0f0f;--surf2:#141414;--bord:#1e1e1e;--gold:#c9a84c;--gold-l:#e0c06a;--gold-dim:#8a6f2e;--text:#f0ece4;--muted:#555;--muted2:#888;--ink:#0a0a0a;--p:#7b2fff;--green:#22c55e;--red:#ef4444}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh}
+.login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;padding:20px}
+.login-box{width:100%;max-width:360px;text-align:center}
+.login-box h1{font-family:'Playfair Display',serif;font-size:42px;font-style:italic;font-weight:700;color:var(--gold);margin-bottom:6px}
+.login-box p{color:var(--muted2);font-size:12px;margin-bottom:32px;font-family:'Space Mono',monospace;letter-spacing:1px}
+.senha-wrap{position:relative;margin-bottom:12px}
+.senha-wrap input{width:100%;background:var(--surf);border:1px solid var(--bord);color:var(--text);padding:14px 48px 14px 16px;font-size:15px;outline:none;font-family:'Instrument Sans',sans-serif;text-align:center;letter-spacing:4px;border-radius:0}
+.senha-wrap input:focus{border-color:var(--gold-dim)}
+.senha-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted2);cursor:pointer;font-size:16px}
+.btn-entrar{width:100%;padding:16px;background:var(--gold);color:var(--ink);border:none;font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-entrar:hover{background:var(--gold-l)}
+.login-err{color:var(--red);font-size:12px;margin-top:10px;display:none;font-family:'Space Mono',monospace}
+header{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:60px;position:sticky;top:0;z-index:50}
+.hlogo{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;color:var(--gold)}
+.hlogo span{color:var(--muted2);font-size:11px;font-style:normal;font-family:'Space Mono',monospace;letter-spacing:1px;margin-left:8px}
+.hacts{display:flex;gap:10px;align-items:center}
+.btn-ag{padding:8px 16px;background:var(--gold);color:var(--ink);border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
+.btn-ap{padding:8px 16px;background:var(--p);color:#fff;border:none;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;cursor:pointer}
+.btn-out{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:10px;padding:8px 14px;font-family:'Space Mono',monospace;cursor:pointer}
+.fbar{display:flex;border-bottom:1px solid var(--bord);background:var(--surf)}
+.flt{flex:1;padding:12px;border:none;background:transparent;color:var(--muted);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent}
+.flt.ag{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,.03)}
+.flt.ap{color:var(--p);border-bottom-color:var(--p);background:rgba(123,47,255,.03)}
+.flt.aa{color:var(--text);border-bottom-color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--bord);border-bottom:1px solid var(--bord)}
+.stat{background:var(--surf);padding:20px 16px;text-align:center}
+.stat .val{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;line-height:1}
+.stat .lbl{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
+.stat.gg .val{color:var(--gold)}
+.stat.pp .val{color:var(--p)}
+.stat.tt .val{color:var(--text)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);padding:12px 14px;text-align:left;border-bottom:1px solid var(--bord);background:var(--surf)}
+td{padding:13px 14px;border-bottom:1px solid var(--bord);font-size:13px;vertical-align:middle}
+tr:hover td{background:rgba(255,255,255,.015)}
+.pill{display:inline-block;padding:3px 10px;font-size:10px;font-family:'Space Mono',monospace;letter-spacing:1px;font-weight:700}
+.pill-g{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+.pill-p{background:rgba(123,47,255,.1);color:var(--p);border:1px solid rgba(123,47,255,.2)}
+.ssel{background:transparent;border:1px solid var(--bord);color:var(--text);padding:5px 10px;font-size:11px;font-family:'Instrument Sans',sans-serif;cursor:pointer;outline:none}
+.ssel option{background:#111}
+.ssel.s0{border-color:#f0a500;color:#f0a500}
+.ssel.s1{border-color:var(--gold);color:var(--gold)}
+.ssel.s2{border-color:var(--green);color:var(--green)}
+.ssel.s3{border-color:var(--muted2);color:var(--muted2)}
+.btn-del{background:transparent;border:none;color:#2a2a2a;cursor:pointer;font-size:15px;padding:4px 8px;transition:color .2s}
+.btn-del:hover{color:var(--red)}
+.btn-edit{background:transparent;border:1px solid var(--bord);color:var(--muted2);font-size:11px;padding:5px 10px;cursor:pointer;font-family:'Instrument Sans',sans-serif}
+.btn-edit:hover{border-color:var(--gold-dim);color:var(--gold)}
+.foto-thumb{width:44px;height:44px;object-fit:cover;border-radius:2px;border:1px solid var(--bord)}
+.no-foto{width:44px;height:44px;background:var(--surf2);border:1px solid var(--bord);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .ei{font-size:40px;margin-bottom:12px}
+.loading-txt{text-align:center;padding:40px;color:var(--muted);font-family:'Space Mono',monospace;font-size:12px}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.mbg.show{display:flex}
+.modal{background:var(--surf);border:1px solid var(--bord);width:100%;max-width:480px;margin:auto}
+.mhd{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between}
+.mhd h2{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;font-weight:700;color:var(--gold)}
+.mhd .cls{background:transparent;border:none;color:var(--muted2);font-size:20px;cursor:pointer;padding:4px}
+.mbody{padding:20px}
+.mf{margin-bottom:16px}
+.mf label{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold-dim);font-family:'Space Mono',monospace;margin-bottom:7px}
+.mf input,.mf textarea,.mf select{width:100%;background:var(--surf2);border:1px solid var(--bord);color:var(--text);padding:12px 14px;font-family:'Instrument Sans',sans-serif;font-size:13px;outline:none;-webkit-appearance:none;border-radius:0}
+.mf input:focus,.mf textarea:focus,.mf select:focus{border-color:var(--gold-dim)}
+.mf textarea{resize:vertical;min-height:80px}
+.mf select option{background:#111}
+.mr2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.vendedor-card{background:var(--surf2);border:1px solid var(--gold-dim);padding:12px 16px;margin-bottom:16px;display:none}
+.vc-nome{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--gold);margin-bottom:4px}
+.vc-pix{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)}
+.foto-preview-img{width:100%;max-height:200px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
+.mft{padding:0 20px 20px;display:flex;gap:10px}
+.mbtn{flex:1;padding:13px;border:none;font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
+.mbtn-g{background:var(--gold);color:var(--ink)}
+.mbtn-g:hover{background:var(--gold-l)}
+.mbtn-p{background:var(--p);color:#fff}
+.mbtn-x{background:transparent;border:1px solid var(--bord);color:var(--muted2)}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--gold);color:var(--ink);padding:12px 20px;font-family:'Space Mono',monospace;font-size:11px;z-index:999;display:none}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--bord)}
+@media(max-width:600px){.hacts .btn-ag,.hacts .btn-ap{font-size:9px;padding:7px 10px}.mr2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="login" id="ls">
+  <div class="login-box">
+    <h1>Madruga</h1>
+    <p>ACESSO RESTRITO — ADMIN</p>
+    <div class="senha-wrap">
+      <input type="password" id="pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()">
+      <button class="senha-toggle" onclick="togglePwd()">👁️</button>
+    </div>
+    <button class="btn-entrar" onclick="chk()">Entrar</button>
+    <div class="login-err" id="err">Senha incorreta.</div>
+  </div>
+</div>
+<div id="app" style="display:none">
+  <header>
+    <div class="hlogo">Madruga <span>ADMIN</span></div>
+    <div class="hacts">
+      <button class="btn-ag" onclick="openM('garimpo',false)">+ Garimpo</button>
+      <button class="btn-ap" onclick="openM('basements',false)">+ Basements</button>
+      <button class="btn-out" onclick="logout()">SAIR</button>
+    </div>
+  </header>
+  <div class="fbar">
+    <button class="flt aa" id="fa" onclick="sf('all')">Todos</button>
+    <button class="flt" id="fg" onclick="sf('garimpo')">👕 Garimpo</button>
+    <button class="flt" id="fp2" onclick="sf('basements')">🎮 Basements</button>
+  </div>
+  <div class="stats">
+    <div class="stat gg"><div class="val" id="sg">0</div><div class="lbl">Garimpo</div></div>
+    <div class="stat pp"><div class="val" id="sp">0</div><div class="lbl">Basements</div></div>
+    <div class="stat tt"><div class="val" id="st2">0</div><div class="lbl">Total</div></div>
+  </div>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descrição</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="loading-txt" id="loading">Carregando...</div>
+    <div class="empty" id="empty" style="display:none"><div class="ei">📦</div><p style="font-family:Space Mono,monospace;font-size:13px">Nenhum item ainda.</p></div>
+  </div>
+</div>
+<div class="mbg" id="mb">
+  <div class="modal">
+    <div class="mhd"><h2 id="mt">Nova peça</h2><button class="cls" onclick="closeM()">✕</button></div>
+    <div class="mbody">
+      <input type="hidden" id="ms">
+      <input type="hidden" id="mid">
+      <div class="mf">
+        <label>WhatsApp do vendedor</label>
+        <input id="m-wpp" type="tel" placeholder="11999999999" oninput="buscaVendedor(this.value)">
+      </div>
+      <div class="vendedor-card" id="vendedor-card">
+        <div class="vc-nome" id="vc-nome"></div>
+        <div class="vc-pix" id="vc-pix"></div>
+      </div>
+      <div class="mf"><label>Categoria</label><select id="mc"></select></div>
+      <div class="mf"><label>Descrição</label><textarea id="md" placeholder="Descreva a peca..."></textarea></div>
+      <div class="mr2">
+        <div class="mf"><label>Preco de venda</label><input id="mp-venda" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
+        <div class="mf"><label>Repasse ao vendedor</label><input id="mp-repasse" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
+      </div>
+      <div class="mf">
+        <label>Foto da peca</label>
+        <input type="file" id="m-foto" accept="image/*" onchange="previewFoto(this)" style="background:transparent;border:1px dashed var(--bord);color:var(--muted2);padding:10px;width:100%">
+        <img id="foto-preview" class="foto-preview-img">
+      </div>
+    </div>
+    <div class="mft">
+      <button class="mbtn mbtn-x" onclick="closeM()">Cancelar</button>
+      <button class="mbtn mbtn-g" id="mbtn" onclick="saveI()">Salvar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const SURL='https://bldlhcpghqueklouvtxe.supabase.co';
+const SKEY='sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
+const sb=supabase.createClient(SURL,SKEY);
+const PASS='3743';
+const CATS={garimpo:['Camiseta','Moletom / Hoodie','Calca','Shorts','Jaqueta','Tenis','Bone / Acessorio','Outro'],basements:['Video Game (Console)','Video Game (Jogo)','Manga / HQ','Figura / Colecional','Decoracao / Retro','Eletronico','Outro']};
+const STORAGE_URL='https://bldlhcpghqueklouvtxe.supabase.co/storage/v1/object/public/fotos/';
+let filter='all',editId=null,allPecas=[],vendedorAtual=null,buscaTimer=null,fotoAtual=null;
 
-    <div class="login" id="ls">
-        <div class="login-box">
-              <h1>Madruga</h1>
-            <p>ACESSO RESTRITO — ADMIN</p>
-            <div class="senha-wrap">
-                  <input type="password" id="pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')chk()">
-                  <button class="senha-toggle" onclick="togglePwd()">👁️</button>button>
-            </div>div>
-            <button class="btn-entrar" onclick="chk()">Entrar</button>button>
-            <div class="login-err" id="err">Senha incorreta.</div>div>
-        </div>div>
-    </div>div>
-  
-  <div id="app" style="display:none">
-    <header>
-          <div class="hlogo">Madruga <span>ADMIN</span></div>div>
-        <div class="hacts">
-              <button class="btn-ag" onclick="openM('garimpo')">+ Garimpo</button>button>
-              <button class="btn-ap" onclick="openM('basements')">+ Basements</button>button>
-              <button class="btn-out" onclick="logout()">SAIR</button>button>
-        </div>div>
-    </header>
-    <div class="fbar">
-        <button class="flt aa" id="fa" onclick="sf('all')">Todos</button>button>
-        <button class="flt" id="fg" onclick="sf('garimpo')">👕 Garimpo</button>button>
-        <button class="flt" id="fp2" onclick="sf('basements')">🎮 Basements</button>button>
-    </div>div>
-    <div class="stats">
-        <div class="stat gg"><div class="val" id="sg">0</div>div><div class="lbl">Garimpo</div>div></div>div>
-        <div class="stat pp"><div class="val" id="sp">0</div>div><div class="lbl">Basements</div>div></div>div>
-        <div class="stat tt"><div class="val" id="st2">0</div>div><div class="lbl">Total</div>div></div>div>
-    </div>div>
-    <div class="tw">
-        <table>
-                <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descrição</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Ações</th></tr></thead>
-              <tbody id="tbody"></tbody>tbody>
-        </table>
-        <div class="loading-txt" id="loading">Carregando...</div>div>
-        <div class="empty" id="empty" style="display:none"><div class="ei">📦</div>div><p style="font-family:Space Mono,monospace;font-size:13px">Nenhum item ainda.</p></div>div>
-    </div>div>
-  </div>div>
-  
-  <div class="mbg" id="mb">
-    <div class="modal">
-        <div class="mhd"><h2 id="mt">Nova peça</h2><button class="cls" onclick="closeM()">✕</button>button></div>div>
-        <div class="mbody">
-              <input type="hidden" id="ms">
-              <input type="hidden" id="mid">
-              <div class="mf">
-                      <label>WhatsApp do vendedor *</label>
-                      <input id="m-wpp" type="tel" placeholder="11999999999" oninput="buscaVendedor(this.value)">
-              </div>div>
-              <div class="vendedor-card" id="vendedor-card">
-                      <div class="vc-nome" id="vc-nome"></div>div>
-                      <div class="vc-pix" id="vc-pix"></div>div>
-              </div>div>
-              <div class="mf"><label>Categoria</label><select id="mc"></select>select></div>div>
-              <div class="mf"><label>Descrição</label><textarea id="md" placeholder="Descreva a peça..."></textarea></div>div>
-              <div class="mr2">
-                      <div class="mf"><label>Preço de venda (R$)</label><input id="mp-venda" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>div>
-                      <div class="mf"><label>Repasse ao vendedor (R$)</label><input id="mp-repasse" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>div>
-              </div>div>
-              <div class="mf">
-                      <label>Foto da peça</label>
-                      <input type="file" id="m-foto" accept="image/*" onchange="previewFoto(this)" style="background:transparent;border:1px dashed var(--bord);color:var(--muted2);padding:10px;width:100%">
-                      <img id="foto-preview" class="foto-preview-img">
-              </div>div>
-        </div>div>
-        <div class="mft">
-              <button class="mbtn mbtn-x" onclick="closeM()">Cancelar</button>button>
-              <button class="mbtn mbtn-g" id="mbtn" onclick="saveI()">Salvar</button>button>
-        </div>div>
-    </div>div>
-  </div>div>
-  
-  <div class="toast" id="toast"></div>div>
-  
-  <script>
-    const SUPABASE_URL='https://bldlhcpghqueklouvtxe.supabase.co';
-    const SUPABASE_KEY='sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
-    const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-    const PASS='3743';
-    const CATS={garimpo:['Camiseta','Moletom / Hoodie','Calça','Shorts','Jaqueta','Tênis','Boné / Acessório','Outro'],basements:['Video Game (Console)','Video Game (Jogo)','Mangá / HQ','Figura / Colecionável','Decoração / Retro','Eletrônico','Outro']};
-    let filter='all',editId=null,allPecas=[],vendedorAtual=null,buscaTimer=null;
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+function togglePwd(){const i=document.getElementById('pwd');i.type=i.type==='password'?'text':'password';}
 
-    function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
-    function togglePwd(){const i=document.getElementById('pwd');i.type=i.type==='password'?'text':'password';}
+function chk(){
+  if(document.getElementById('pwd').value===PASS){
+    document.getElementById('ls').style.display='none';
+    document.getElementById('app').style.display='block';
+    render();
+  } else {
+    document.getElementById('err').style.display='block';
+    document.getElementById('pwd').value='';
+  }
+}
 
-    function chk(){
-        if(document.getElementById('pwd').value===PASS){
-              document.getElementById('ls').style.display='none';
-              document.getElementById('app').style.display='block';
-              render();
-        } else {
-              document.getElementById('err').style.display='block';
-              document.getElementById('pwd').value='';
-        }
+function logout(){
+  document.getElementById('ls').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('pwd').value='';
+}
+
+function sf(f){
+  filter=f;
+  document.getElementById('fa').className='flt'+(f==='all'?' aa':'');
+  document.getElementById('fg').className='flt'+(f==='garimpo'?' ag':'');
+  document.getElementById('fp2').className='flt'+(f==='basements'?' ap':'');
+  renderTable();
+}
+
+function getFotoUrl(url){
+  if(!url)return null;
+  if(url.startsWith('http'))return url;
+  return STORAGE_URL+url;
+}
+
+async function render(){
+  document.getElementById('loading').style.display='block';
+  document.getElementById('empty').style.display='none';
+  const {data,error}=await sb.from('pecas').select('*, vendedores(nome,whatsapp,chave_pix)').order('criado_em',{ascending:false});
+  document.getElementById('loading').style.display='none';
+  if(error){toast('Erro: '+error.message);return;}
+  allPecas=data||[];
+  document.getElementById('sg').textContent=allPecas.filter(p=>p.loja==='garimpo').length;
+  document.getElementById('sp').textContent=allPecas.filter(p=>p.loja==='basements').length;
+  document.getElementById('st2').textContent=allPecas.length;
+  renderTable();
+}
+
+function renderTable(){
+  const fil=filter==='all'?allPecas:allPecas.filter(p=>p.loja===filter);
+  const tb=document.getElementById('tbody');
+  tb.innerHTML='';
+  if(!fil.length){document.getElementById('empty').style.display='block';return;}
+  document.getElementById('empty').style.display='none';
+  fil.forEach(p=>{
+    const isG=p.loja==='garimpo';
+    const v=p.vendedores||{};
+    const si=['disponivel','negociando','vendido','devolvido'].indexOf(p.status||'disponivel');
+    const fotoUrl=getFotoUrl(p.foto_url);
+    const tr=document.createElement('tr');
+    tr.innerHTML=
+      '<td>'+(fotoUrl?'<img src="'+fotoUrl+'" class="foto-thumb" onerror="this.parentNode.innerHTML=\'<div class=no-foto>📷</div>\'">':`<div class="no-foto">📷</div>`)+'</td>'+
+      '<td><span class="pill '+(isG?'pill-g':'pill-p')+'">'+(isG?'GARIMPO':'BASEMENTS')+'</span></td>'+
+      '<td><div style="font-weight:500">'+(v.nome||'—')+'</div><div style="font-size:11px;color:var(--muted2)">'+(v.whatsapp||'')+'</div>'+(v.chave_pix?'<div style="font-size:10px;color:var(--gold-dim);font-family:monospace">Pix: '+v.chave_pix+'</div>':'')+'</td>'+
+      '<td style="color:var(--muted2);font-size:12px">'+(p.categoria||'—')+'</td>'+
+      '<td style="max-width:140px;font-size:12px;color:var(--muted2)">'+(p.descricao||'').substring(0,45)+(p.descricao&&p.descricao.length>45?'...':'')+'</td>'+
+      '<td style="font-family:monospace;font-size:12px;color:var('+(isG?'--gold':'--p')+')">'+(p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'—')+'</td>'+
+      '<td style="font-family:monospace;font-size:12px;color:var(--green)">'+(p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'—')+'</td>'+
+      '<td><select class="ssel s'+Math.max(0,si)+'" onchange="setSt(\''+p.id+'\',this)">'+
+        '<option value="disponivel" '+(p.status==='disponivel'?'selected':'')+'>🟡 Disponivel</option>'+
+        '<option value="negociando" '+(p.status==='negociando'?'selected':'')+'>🔄 Negociando</option>'+
+        '<option value="vendido" '+(p.status==='vendido'?'selected':'')+'>✅ Vendido</option>'+
+        '<option value="devolvido" '+(p.status==='devolvido'?'selected':'')+'>↩️ Devolvido</option>'+
+      '</select></td>'+
+      '<td style="display:flex;gap:6px;align-items:center">'+
+        '<button class="btn-edit" onclick="editI(\''+p.id+'\')">✏️</button>'+
+        '<button class="btn-del" onclick="delI(\''+p.id+'\')">🗑️</button>'+
+      '</td>';
+    tb.appendChild(tr);
+  });
+}
+
+async function setSt(id,sel){
+  sel.className='ssel s'+['disponivel','negociando','vendido','devolvido'].indexOf(sel.value);
+  await sb.from('pecas').update({status:sel.value}).eq('id',id);
+  toast('Status atualizado!');
+  render();
+}
+
+async function delI(id){
+  if(!confirm('Excluir esta peca?'))return;
+  await sb.from('pecas').delete().eq('id',id);
+  toast('Excluida!');
+  render();
+}
+
+function openM(store, preserveEdit){
+  if(!preserveEdit) editId=null;
+  vendedorAtual=null;
+  fotoAtual=null;
+  document.getElementById('ms').value=store;
+  document.getElementById('mt').textContent='Nova peca — '+(store==='garimpo'?'Garimpo':'Basements');
+  document.getElementById('mbtn').className='mbtn '+(store==='garimpo'?'mbtn-g':'mbtn-p');
+  const sel=document.getElementById('mc');
+  sel.innerHTML='<option value="">Seleciona</option>';
+  CATS[store].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
+  document.getElementById('m-wpp').value='';
+  document.getElementById('vendedor-card').style.display='none';
+  document.getElementById('md').value='';
+  document.getElementById('mp-venda').value='';
+  document.getElementById('mp-repasse').value='';
+  document.getElementById('m-foto').value='';
+  document.getElementById('foto-preview').style.display='none';
+  document.getElementById('mb').classList.add('show');
+}
+
+async function buscaVendedor(val){
+  const wpp=val.replace(/\D/g,'');
+  const card=document.getElementById('vendedor-card');
+  if(wpp.length<8){card.style.display='none';vendedorAtual=null;return;}
+  clearTimeout(buscaTimer);
+  buscaTimer=setTimeout(async()=>{
+    const {data}=await sb.from('vendedores').select('id,nome,chave_pix').eq('whatsapp',wpp).single();
+    if(data){
+      vendedorAtual=data;
+      document.getElementById('vc-nome').textContent=data.nome||'Vendedor sem nome';
+      document.getElementById('vc-pix').textContent=data.chave_pix?'Pix: '+data.chave_pix:'Sem chave pix';
+      card.style.display='block';
+    } else {
+      vendedorAtual=null;
+      card.style.display='none';
     }
+  },600);
+}
 
-    function logout(){
-        document.getElementById('ls').style.display='flex';
-        document.getElementById('app').style.display='none';
-        document.getElementById('pwd').value='';
-    }
+async function editI(id){
+  const p=allPecas.find(x=>x.id===id);
+  if(!p)return;
+  editId=id;
+  fotoAtual=p.foto_url||null;
+  openM(p.loja, true);
+  document.getElementById('mt').textContent='Editar peca';
+  document.getElementById('mid').value=id;
+  document.getElementById('m-wpp').value=p.vendedores?.whatsapp||'';
+  if(p.vendedores?.whatsapp) buscaVendedor(p.vendedores.whatsapp);
+  document.getElementById('md').value=p.descricao||'';
+  document.getElementById('mp-venda').value=p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'';
+  document.getElementById('mp-repasse').value=p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'';
+  if(p.foto_url){
+    const img=document.getElementById('foto-preview');
+    img.src=getFotoUrl(p.foto_url);
+    img.style.display='block';
+  }
+  setTimeout(()=>document.getElementById('mc').value=p.categoria||'',100);
+}
 
-    function sf(f){
-        filter=f;
-        document.getElementById('fa').className='flt'+(f==='all'?' aa':'');
-        document.getElementById('fg').className='flt'+(f==='garimpo'?' ag':'');
-        document.getElementById('fp2').className='flt'+(f==='basements'?' ap':'');
-        renderTable();
-    }
+function closeM(){document.getElementById('mb').classList.remove('show');}
 
-    async function render(){
-        document.getElementById('loading').style.display='block';
-        document.getElementById('empty').style.display='none';
-        const {data,error}=await sb.from('pecas').select('*, vendedores(nome,whatsapp,chave_pix)').order('criado_em',{ascending:false});
-        document.getElementById('loading').style.display='none';
-        if(error){toast('Erro: '+error.message);return;}
-        allPecas=data||[];
-        document.getElementById('sg').textContent=allPecas.filter(p=>p.loja==='garimpo').length;
-        document.getElementById('sp').textContent=allPecas.filter(p=>p.loja==='basements').length;
-        document.getElementById('st2').textContent=allPecas.length;
-        renderTable();
-    }
+function previewFoto(input){
+  const file=input.files[0];
+  if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    const img=document.getElementById('foto-preview');
+    img.src=e.target.result;
+    img.style.display='block';
+  };
+  r.readAsDataURL(file);
+}
 
-    function getFotoUrl(fotoUrl){
-        if(!fotoUrl)return null;
-        // Se ja e uma URL completa, retorna direto
-        if(fotoUrl.startsWith('http'))return fotoUrl;
-        // Se e so o nome do arquivo, monta a URL publica
-        return SUPABASE_URL+'/storage/v1/object/public/fotos/'+fotoUrl;
-    }
+async function uploadFoto(file){
+  const ext=file.name.split('.').pop();
+  const nome=Date.now()+'.'+ext;
+  const {error}=await sb.storage.from('fotos').upload(nome,file,{upsert:true});
+  if(error)return null;
+  return STORAGE_URL+nome;
+}
 
-    function renderTable(){
-        const fil=filter==='all'?allPecas:allPecas.filter(p=>p.loja===filter);
-        const tb=document.getElementById('tbody');
-        tb.innerHTML='';
-        if(!fil.length){document.getElementById('empty').style.display='block';return;}
-        document.getElementById('empty').style.display='none';
-        fil.forEach(p=>{
-              const isG=p.loja==='garimpo';
-              const v=p.vendedores||{};
-              const si=['disponivel','negociando','vendido','devolvido'].indexOf(p.status||'disponivel');
-              const fotoUrl=getFotoUrl(p.foto_url);
-              const tr=document.createElement('tr');
-              tr.innerHTML=
-                      '<td>'+(fotoUrl?'<img src="'+fotoUrl+'" class="foto-thumb" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">'+'<div class="no-foto" style="display:none">📷</div>':`<div class="no-foto">📷</div>`)+'</td>'+
-                      '<td><span class="pill '+(isG?'pill-g':'pill-p')+'">'+(isG?'GARIMPO':'BASEMENTS')+'</span></td>'+
-                      '<td><div style="font-weight:500">'+(v.nome||'—')+'</div><div style="font-size:11px;color:var(--muted2)">'+(v.whatsapp||'')+'</div>'+(v.chave_pix?'<div style="font-size:10px;color:var(--gold-dim);font-family:monospace">Pix: '+v.chave_pix+'</div>':'')+'</td>'+
-                      '<td style="color:var(--muted2);font-size:12px">'+(p.categoria||'—')+'</td>'+
-                      '<td style="max-width:140px;font-size:12px;color:var(--muted2)">'+(p.descricao||'').substring(0,45)+(p.descricao&&p.descricao.length>45?'...':'')+'</td>'+
-                      '<td style="font-family:monospace;font-size:12px;color:var('+(isG?'--gold':'--p')+')">'+(p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'—')+'</td>'+
-                      '<td style="font-family:monospace;font-size:12px;color:var(--green)">'+(p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'—')+'</td>'+
-                      '<td><select class="ssel s'+Math.max(0,si)+'" onchange="setSt(\''+p.id+'\',this)">'+
-                        '<option value="disponivel" '+(p.status==='disponivel'?'selected':'')+'>🟡 Disponível</option>'+
-                        '<option value="negociando" '+(p.status==='negociando'?'selected':'')+'>🔄 Negociando</option>'+
-                        '<option value="vendido" '+(p.status==='vendido'?'selected':'')+'>✅ Vendido</option>'+
-                        '<option value="devolvido" '+(p.status==='devolvido'?'selected':'')+'>↩️ Devolvido</option>'+
-                      '</select></td>'+
-                      '<td style="display:flex;gap:6px;align-items:center">'+
-                        '<button class="btn-edit" onclick="editI(\''+p.id+'\')">✏️</button>'+
-                        '<button class="btn-del" onclick="delI(\''+p.id+'\')">🗑️</button>'+
-                      '</td>';
-              tb.appendChild(tr);
-        });
-    }
+async function saveI(){
+  const store=document.getElementById('ms').value;
+  const wpp=document.getElementById('m-wpp').value.replace(/\D/g,'');
+  if(!wpp){alert('Coloca o WhatsApp do vendedor!');return;}
+  document.getElementById('mbtn').textContent='Salvando...';
 
-    async function setSt(id,sel){
-        sel.className='ssel s'+['disponivel','negociando','vendido','devolvido'].indexOf(sel.value);
-        await sb.from('pecas').update({status:sel.value}).eq('id',id);
-        toast('Status atualizado!');
-        render();
-    }
+  let vendedorId=vendedorAtual?.id||null;
+  if(!vendedorId){
+    const {data:vNew}=await sb.from('vendedores').insert({nome:'Vendedor',whatsapp:wpp}).select().single();
+    if(vNew) vendedorId=vNew.id;
+  }
+  if(!vendedorId){toast('Erro ao salvar vendedor');document.getElementById('mbtn').textContent='Salvar';return;}
 
-    async function delI(id){
-        if(!confirm('Excluir esta peça?'))return;
-        await sb.from('pecas').delete().eq('id',id);
-        toast('Excluída!');
-        render();
-    }
+  let fotoUrl=fotoAtual;
+  const fotoFile=document.getElementById('m-foto').files[0];
+  if(fotoFile) fotoUrl=await uploadFoto(fotoFile);
 
-    function openM(store,preserveEditId){
-        if(!preserveEditId)editId=null;
-        vendedorAtual=null;
-        document.getElementById('ms').value=store;
-        document.getElementById('mid').value='';
-        document.getElementById('mt').textContent='Nova peça — '+(store==='garimpo'?'Garimpo':'Basements');
-        document.getElementById('mbtn').className='mbtn '+(store==='garimpo'?'mbtn-g':'mbtn-p');
-        const sel=document.getElementById('mc');
-        sel.innerHTML='<option value="">Seleciona</option>';
-        CATS[store].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;sel.appendChild(o);});
-        document.getElementById('m-wpp').value='';
-        document.getElementById('vendedor-card').style.display='none';
-        document.getElementById('md').value='';
-        document.getElementById('mp-venda').value='';
-        document.getElementById('mp-repasse').value='';
-        document.getElementById('m-foto').value='';
-        document.getElementById('foto-preview').style.display='none';
-        document.getElementById('mb').classList.add('show');
-    }
+  const toNum=v=>v?parseFloat(v.replace('R$ ','').replace(/\./g,'').replace(',','.')):null;
+  const dados={
+    vendedor_id:vendedorId,
+    loja:store,
+    categoria:document.getElementById('mc').value,
+    descricao:document.getElementById('md').value,
+    preco_venda:toNum(document.getElementById('mp-venda').value),
+    preco_repasse:toNum(document.getElementById('mp-repasse').value),
+    status:'disponivel',
+    foto_url:fotoUrl
+  };
 
-    async function buscaVendedor(val){
-        const wpp=val.replace(/\D/g,'');
-        const card=document.getElementById('vendedor-card');
-        if(wpp.length<8){card.style.display='none';vendedorAtual=null;return;}
-        clearTimeout(buscaTimer);
-        buscaTimer=setTimeout(async()=>{
-              const {data}=await sb.from('vendedores').select('id,nome,chave_pix').eq('whatsapp',wpp).single();
-              if(data){
-                      vendedorAtual=data;
-                      document.getElementById('vc-nome').textContent=data.nome||'Vendedor sem nome';
-                      document.getElementById('vc-pix').textContent=data.chave_pix?'Pix: '+data.chave_pix:'Sem chave pix cadastrada';
-                      card.style.display='block';
-              } else {
-                      vendedorAtual=null;
-                      card.style.display='none';
-              }
-        },600);
-    }
+  let error;
+  if(editId){
+    ({error}=await sb.from('pecas').update(dados).eq('id',editId));
+  } else {
+    ({error}=await sb.from('pecas').insert(dados));
+  }
 
-    async function editI(id){
-        const p=allPecas.find(x=>x.id===id);if(!p)return;
-        editId=id;
-        openM(p.loja,true);
-        document.getElementById('mt').textContent='Editar peça';
-        document.getElementById('m-wpp').value=p.vendedores?.whatsapp||'';
-        if(p.vendedores?.whatsapp)buscaVendedor(p.vendedores.whatsapp);
-        document.getElementById('md').value=p.descricao||'';
-        document.getElementById('mp-venda').value=p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'';
-        document.getElementById('mp-repasse').value=p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'';
-        if(p.foto_url){
-              const fotoUrl=getFotoUrl(p.foto_url);
-              const img=document.getElementById('foto-preview');
-              img.src=fotoUrl;
-              img.style.display='block';
-        }
-        setTimeout(()=>document.getElementById('mc').value=p.categoria||'',100);
-    }
+  document.getElementById('mbtn').textContent='Salvar';
+  if(error){toast('Erro: '+error.message);return;}
+  toast(editId?'Peca atualizada!':'Peca cadastrada!');
+  closeM();
+  render();
+}
 
-    function closeM(){document.getElementById('mb').classList.remove('show');}
+function fmt2(i){
+  let v=i.value.replace(/\D/g,'');
+  if(!v){i.value='';return;}
+  v=(parseInt(v)/100).toFixed(2);
+  i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
+}
 
-    function previewFoto(input){
-        const file=input.files[0];if(!file)return;
-        const r=new FileReader();
-        r.onload=e=>{const img=document.getElementById('foto-preview');img.src=e.target.result;img.style.display='block';};
-        r.readAsDataURL(file);
-    }
-
-    async function uploadFoto(file){
-        const ext=file.name.split('.').pop();
-        const nome=Date.now()+'.'+ext;
-        const {error}=await sb.storage.from('fotos').upload(nome,file,{upsert:true});
-        if(error){console.error('Upload error:',error);return null;}
-        const {data}=sb.storage.from('fotos').getPublicUrl(nome);
-        return data.publicUrl;
-    }
-
-    async function saveI(){
-        const store=document.getElementById('ms').value;
-        const wpp=document.getElementById('m-wpp').value.replace(/\D/g,'');
-        if(!wpp){alert('Coloca o WhatsApp do vendedor!');return;}
-        const btnEl=document.getElementById('mbtn');
-        btnEl.textContent='Salvando...';
-
-        let vendedorId=vendedorAtual?.id||null;
-        if(!vendedorId){
-              const {data:vNew}=await sb.from('vendedores').insert({nome:'Vendedor',whatsapp:wpp}).select().single();
-              if(vNew)vendedorId=vNew.id;
-        }
-        if(!vendedorId){toast('Erro ao salvar vendedor');btnEl.textContent='Salvar';return;}
-
-        let fotoUrl=null;
-        const fotoFile=document.getElementById('m-foto').files[0];
-        if(fotoFile){
-              fotoUrl=await uploadFoto(fotoFile);
-        } else if(editId){
-              // Mantém a foto_url existente ao editar sem trocar foto
-              const pecaAtual=allPecas.find(x=>x.id===editId);
-              fotoUrl=pecaAtual?.foto_url||null;
-        }
-
-        const toNum=v=>v?parseFloat(v.replace('R$ ','').replace(/\./g,'').replace(',','.')):null;
-        const dados={
-              vendedor_id:vendedorId,loja:store,
-              categoria:document.getElementById('mc').value,
-              descricao:document.getElementById('md').value,
-              preco_venda:toNum(document.getElementById('mp-venda').value),
-              preco_repasse:toNum(document.getElementById('mp-repasse').value),
-              status:'disponivel',
-              foto_url:fotoUrl
-        };
-
-        let error;
-        if(editId){({error}=await sb.from('pecas').update(dados).eq('id',editId));}
-        else{({error}=await sb.from('pecas').insert(dados));}
-
-        btnEl.textContent='Salvar';
-        if(error){toast('Erro: '+error.message);return;}
-        toast(editId?'Peça atualizada!':'Peça cadastrada!');
-        closeM();render();
-    }
-
-    function fmt2(i){let v=i.value.replace(/\D/g,'');if(!v){i.value='';return;}v=(parseInt(v)/100).toFixed(2);i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
-
-    document.getElementById('mb').addEventListener('click',function(e){if(e.target===this)closeM();});
-  </script>
-  </body>
+document.getElementById('mb').addEventListener('click',function(e){if(e.target===this)closeM();});
+</script>
+</body>
 </html>
