@@ -81,6 +81,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
 .vc-nome{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--gold);margin-bottom:4px}
 .vc-pix{font-size:11px;font-family:'Space Mono',monospace;color:var(--muted2)}
 .foto-preview-img{width:100%;max-height:200px;object-fit:cover;border:1px solid var(--bord);margin-top:8px;display:none}
+.upload-progress{font-size:12px;color:var(--gold);font-family:'Space Mono',monospace;margin-top:8px;display:none}
 .mft{padding:0 20px 20px;display:flex;gap:10px}
 .mbtn{flex:1;padding:13px;border:none;font-family:'Playfair Display',serif;font-size:16px;font-style:italic;font-weight:700;cursor:pointer;transition:all .2s}
 .mbtn-g{background:var(--gold);color:var(--ink)}
@@ -127,7 +128,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
   </div>
   <div class="tw">
     <table>
-      <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descrição</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Ações</th></tr></thead>
+      <thead><tr><th>Foto</th><th>Loja</th><th>Vendedor</th><th>Categoria</th><th>Descricao</th><th>Venda</th><th>Repasse</th><th>Status</th><th>Acoes</th></tr></thead>
       <tbody id="tbody"></tbody>
     </table>
     <div class="loading-txt" id="loading">Carregando...</div>
@@ -136,7 +137,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
 </div>
 <div class="mbg" id="mb">
   <div class="modal">
-    <div class="mhd"><h2 id="mt">Nova peça</h2><button class="cls" onclick="closeM()">✕</button></div>
+    <div class="mhd"><h2 id="mt">Nova peca</h2><button class="cls" onclick="closeM()">✕</button></div>
     <div class="mbody">
       <input type="hidden" id="ms">
       <input type="hidden" id="mid">
@@ -149,7 +150,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
         <div class="vc-pix" id="vc-pix"></div>
       </div>
       <div class="mf"><label>Categoria</label><select id="mc"></select></div>
-      <div class="mf"><label>Descrição</label><textarea id="md" placeholder="Descreva a peca..."></textarea></div>
+      <div class="mf"><label>Descricao</label><textarea id="md" placeholder="Descreva a peca..."></textarea></div>
       <div class="mr2">
         <div class="mf"><label>Preco de venda</label><input id="mp-venda" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
         <div class="mf"><label>Repasse ao vendedor</label><input id="mp-repasse" type="text" placeholder="R$ 0,00" oninput="fmt2(this)"></div>
@@ -158,6 +159,7 @@ tr:hover td{background:rgba(255,255,255,.015)}
         <label>Foto da peca</label>
         <input type="file" id="m-foto" accept="image/*" onchange="previewFoto(this)" style="background:transparent;border:1px dashed var(--bord);color:var(--muted2);padding:10px;width:100%">
         <img id="foto-preview" class="foto-preview-img">
+        <div class="upload-progress" id="upload-progress">Enviando foto...</div>
       </div>
     </div>
     <div class="mft">
@@ -172,8 +174,12 @@ const SURL='https://bldlhcpghqueklouvtxe.supabase.co';
 const SKEY='sb_publishable_l9gN8ThM0Nh_rLO-JE3Pvw_ptxknvpl';
 const sb=supabase.createClient(SURL,SKEY);
 const PASS='3743';
-const CATS={garimpo:['Camiseta','Moletom / Hoodie','Calca','Shorts','Jaqueta','Tenis','Bone / Acessorio','Outro'],basements:['Video Game (Console)','Video Game (Jogo)','Manga / HQ','Figura / Colecional','Decoracao / Retro','Eletronico','Outro']};
-const STORAGE_URL='https://bldlhcpghqueklouvtxe.supabase.co/storage/v1/object/public/fotos/';
+const CLOUD_NAME='dcc8og8se';
+const CLOUD_PRESET='madruga_upload';
+const CATS={
+  garimpo:['Camiseta','Moletom / Hoodie','Calca','Shorts','Jaqueta','Tenis','Bone / Acessorio','Outro'],
+  basements:['Video Game (Console)','Video Game (Jogo)','Manga / HQ','Figura / Colecional','Decoracao / Retro','Eletronico','Outro']
+};
 let filter='all',editId=null,allPecas=[],vendedorAtual=null,buscaTimer=null,fotoAtual=null;
 
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
@@ -204,10 +210,22 @@ function sf(f){
   renderTable();
 }
 
-function getFotoUrl(url){
-  if(!url)return null;
-  if(url.startsWith('http'))return url;
-  return STORAGE_URL+url;
+async function uploadCloudinary(file){
+  const prog=document.getElementById('upload-progress');
+  prog.style.display='block';
+  const fd=new FormData();
+  fd.append('file',file);
+  fd.append('upload_preset',CLOUD_PRESET);
+  try{
+    const res=await fetch('https://api.cloudinary.com/v1_1/'+CLOUD_NAME+'/image/upload',{method:'POST',body:fd});
+    const data=await res.json();
+    prog.style.display='none';
+    if(data.secure_url)return data.secure_url;
+    return null;
+  }catch(e){
+    prog.style.display='none';
+    return null;
+  }
 }
 
 async function render(){
@@ -233,10 +251,9 @@ function renderTable(){
     const isG=p.loja==='garimpo';
     const v=p.vendedores||{};
     const si=['disponivel','negociando','vendido','devolvido'].indexOf(p.status||'disponivel');
-    const fotoUrl=getFotoUrl(p.foto_url);
     const tr=document.createElement('tr');
     tr.innerHTML=
-      '<td>'+(fotoUrl?'<img src="'+fotoUrl+'" class="foto-thumb" onerror="this.parentNode.innerHTML=\'<div class=no-foto>📷</div>\'">':`<div class="no-foto">📷</div>`)+'</td>'+
+      '<td>'+(p.foto_url?'<img src="'+p.foto_url+'" class="foto-thumb" onerror="this.parentNode.innerHTML=\'<div class=no-foto>📷</div>\'">':`<div class="no-foto">📷</div>`)+'</td>'+
       '<td><span class="pill '+(isG?'pill-g':'pill-p')+'">'+(isG?'GARIMPO':'BASEMENTS')+'</span></td>'+
       '<td><div style="font-weight:500">'+(v.nome||'—')+'</div><div style="font-size:11px;color:var(--muted2)">'+(v.whatsapp||'')+'</div>'+(v.chave_pix?'<div style="font-size:10px;color:var(--gold-dim);font-family:monospace">Pix: '+v.chave_pix+'</div>':'')+'</td>'+
       '<td style="color:var(--muted2);font-size:12px">'+(p.categoria||'—')+'</td>'+
@@ -260,21 +277,18 @@ function renderTable(){
 async function setSt(id,sel){
   sel.className='ssel s'+['disponivel','negociando','vendido','devolvido'].indexOf(sel.value);
   await sb.from('pecas').update({status:sel.value}).eq('id',id);
-  toast('Status atualizado!');
-  render();
+  toast('Status atualizado!');render();
 }
 
 async function delI(id){
   if(!confirm('Excluir esta peca?'))return;
   await sb.from('pecas').delete().eq('id',id);
-  toast('Excluida!');
-  render();
+  toast('Excluida!');render();
 }
 
-function openM(store, preserveEdit){
-  if(!preserveEdit) editId=null;
-  vendedorAtual=null;
-  fotoAtual=null;
+function openM(store,preserveEdit){
+  if(!preserveEdit)editId=null;
+  vendedorAtual=null;fotoAtual=null;
   document.getElementById('ms').value=store;
   document.getElementById('mt').textContent='Nova peca — '+(store==='garimpo'?'Garimpo':'Basements');
   document.getElementById('mbtn').className='mbtn '+(store==='garimpo'?'mbtn-g':'mbtn-p');
@@ -288,6 +302,7 @@ function openM(store, preserveEdit){
   document.getElementById('mp-repasse').value='';
   document.getElementById('m-foto').value='';
   document.getElementById('foto-preview').style.display='none';
+  document.getElementById('upload-progress').style.display='none';
   document.getElementById('mb').classList.add('show');
 }
 
@@ -303,7 +318,7 @@ async function buscaVendedor(val){
       document.getElementById('vc-nome').textContent=data.nome||'Vendedor sem nome';
       document.getElementById('vc-pix').textContent=data.chave_pix?'Pix: '+data.chave_pix:'Sem chave pix';
       card.style.display='block';
-    } else {
+    }else{
       vendedorAtual=null;
       card.style.display='none';
     }
@@ -311,46 +326,27 @@ async function buscaVendedor(val){
 }
 
 async function editI(id){
-  const p=allPecas.find(x=>x.id===id);
-  if(!p)return;
-  editId=id;
-  fotoAtual=p.foto_url||null;
-  openM(p.loja, true);
+  const p=allPecas.find(x=>x.id===id);if(!p)return;
+  editId=id;fotoAtual=p.foto_url||null;
+  openM(p.loja,true);
   document.getElementById('mt').textContent='Editar peca';
   document.getElementById('mid').value=id;
   document.getElementById('m-wpp').value=p.vendedores?.whatsapp||'';
-  if(p.vendedores?.whatsapp) buscaVendedor(p.vendedores.whatsapp);
+  if(p.vendedores?.whatsapp)buscaVendedor(p.vendedores.whatsapp);
   document.getElementById('md').value=p.descricao||'';
   document.getElementById('mp-venda').value=p.preco_venda?'R$ '+Number(p.preco_venda).toFixed(2).replace('.',','):'';
   document.getElementById('mp-repasse').value=p.preco_repasse?'R$ '+Number(p.preco_repasse).toFixed(2).replace('.',','):'';
-  if(p.foto_url){
-    const img=document.getElementById('foto-preview');
-    img.src=getFotoUrl(p.foto_url);
-    img.style.display='block';
-  }
+  if(p.foto_url){const img=document.getElementById('foto-preview');img.src=p.foto_url;img.style.display='block';}
   setTimeout(()=>document.getElementById('mc').value=p.categoria||'',100);
 }
 
 function closeM(){document.getElementById('mb').classList.remove('show');}
 
 function previewFoto(input){
-  const file=input.files[0];
-  if(!file)return;
+  const file=input.files[0];if(!file)return;
   const r=new FileReader();
-  r.onload=e=>{
-    const img=document.getElementById('foto-preview');
-    img.src=e.target.result;
-    img.style.display='block';
-  };
+  r.onload=e=>{const img=document.getElementById('foto-preview');img.src=e.target.result;img.style.display='block';};
   r.readAsDataURL(file);
-}
-
-async function uploadFoto(file){
-  const ext=file.name.split('.').pop();
-  const nome=Date.now()+'.'+ext;
-  const {error}=await sb.storage.from('fotos').upload(nome,file,{upsert:true});
-  if(error)return null;
-  return STORAGE_URL+nome;
 }
 
 async function saveI(){
@@ -362,18 +358,20 @@ async function saveI(){
   let vendedorId=vendedorAtual?.id||null;
   if(!vendedorId){
     const {data:vNew}=await sb.from('vendedores').insert({nome:'Vendedor',whatsapp:wpp}).select().single();
-    if(vNew) vendedorId=vNew.id;
+    if(vNew)vendedorId=vNew.id;
   }
   if(!vendedorId){toast('Erro ao salvar vendedor');document.getElementById('mbtn').textContent='Salvar';return;}
 
   let fotoUrl=fotoAtual;
   const fotoFile=document.getElementById('m-foto').files[0];
-  if(fotoFile) fotoUrl=await uploadFoto(fotoFile);
+  if(fotoFile){
+    fotoUrl=await uploadCloudinary(fotoFile);
+    if(!fotoUrl){toast('Erro no upload da foto');document.getElementById('mbtn').textContent='Salvar';return;}
+  }
 
   const toNum=v=>v?parseFloat(v.replace('R$ ','').replace(/\./g,'').replace(',','.')):null;
   const dados={
-    vendedor_id:vendedorId,
-    loja:store,
+    vendedor_id:vendedorId,loja:store,
     categoria:document.getElementById('mc').value,
     descricao:document.getElementById('md').value,
     preco_venda:toNum(document.getElementById('mp-venda').value),
@@ -383,26 +381,16 @@ async function saveI(){
   };
 
   let error;
-  if(editId){
-    ({error}=await sb.from('pecas').update(dados).eq('id',editId));
-  } else {
-    ({error}=await sb.from('pecas').insert(dados));
-  }
+  if(editId){({error}=await sb.from('pecas').update(dados).eq('id',editId));}
+  else{({error}=await sb.from('pecas').insert(dados));}
 
   document.getElementById('mbtn').textContent='Salvar';
   if(error){toast('Erro: '+error.message);return;}
   toast(editId?'Peca atualizada!':'Peca cadastrada!');
-  closeM();
-  render();
+  closeM();render();
 }
 
-function fmt2(i){
-  let v=i.value.replace(/\D/g,'');
-  if(!v){i.value='';return;}
-  v=(parseInt(v)/100).toFixed(2);
-  i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');
-}
-
+function fmt2(i){let v=i.value.replace(/\D/g,'');if(!v){i.value='';return;}v=(parseInt(v)/100).toFixed(2);i.value='R$ '+v.replace('.',',').replace(/\B(?=(\d{3})+(?!\d))/g,'.');}
 document.getElementById('mb').addEventListener('click',function(e){if(e.target===this)closeM();});
 </script>
 </body>
