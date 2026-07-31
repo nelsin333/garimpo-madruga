@@ -1,0 +1,27 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# build
+dist/
+build/
+.expo/
+.turbo/
+*.tsbuildinfo
+
+# native (geradas por prebuild — mantemos fora até ejetar)
+apps/mobile/ios/
+apps/mobile/android/
+
+# env
+.env
+.env.*
+!.env.example
+
+# supabase local
+supabase/.branches/
+supabase/.temp/
+
+# misc
+.DS_Store
+*.log

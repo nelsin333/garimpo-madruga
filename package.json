@@ -1,0 +1,19 @@
+{
+  "name": "garimpo-madruga",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,sql}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,sql}\""
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.8",
+    "typescript": "~5.9.2"
+  }
+}
