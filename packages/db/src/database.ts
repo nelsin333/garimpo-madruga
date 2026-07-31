@@ -19,7 +19,7 @@ export type RiskLevel = 'low' | 'medium' | 'high' | 'inconclusive';
 
 export type VerdictSource = 'ai_auto' | 'human_confirmed' | 'human_overridden';
 
-interface ProfileRow {
+type ProfileRow = {
   id: string;
   username: string;
   display_name: string | null;
@@ -32,7 +32,7 @@ interface ProfileRow {
   updated_at: string;
 }
 
-interface CategoryRow {
+type CategoryRow = {
   id: string;
   parent_id: string | null;
   name: string;
@@ -41,7 +41,7 @@ interface CategoryRow {
   updated_at: string;
 }
 
-interface BrandRow {
+type BrandRow = {
   id: string;
   name: string;
   slug: string;
@@ -53,7 +53,7 @@ interface BrandRow {
   updated_at: string;
 }
 
-interface CheckRow {
+type CheckRow = {
   id: string;
   profile_id: string;
   brand_id: string | null;
@@ -66,7 +66,7 @@ interface CheckRow {
   updated_at: string;
 }
 
-interface CheckPhotoRow {
+type CheckPhotoRow = {
   id: string;
   check_id: string;
   region: string;
@@ -82,7 +82,7 @@ type Insertable<Row, Optional extends keyof Row, Omitted extends keyof Row = nev
   Omitted
 >;
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       profiles: {
