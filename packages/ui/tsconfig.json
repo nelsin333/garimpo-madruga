@@ -1,0 +1,4 @@
+{
+  "extends": "@garimpo/config/tsconfig.react-native.json",
+  "include": ["src"]
+}

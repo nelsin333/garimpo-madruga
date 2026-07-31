@@ -1,0 +1,15 @@
+{
+  "name": "@garimpo/db",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "gen:types": "supabase gen types typescript --local --schema public > src/database.generated.ts"
+  },
+  "devDependencies": {
+    "@garimpo/config": "workspace:*",
+    "typescript": "~5.9.2"
+  }
+}
