@@ -1,11 +1,5 @@
 import type { Session } from '@supabase/supabase-js';
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  type PropsWithChildren,
-} from 'react';
+import { createContext, useContext, useEffect, useState, type PropsWithChildren } from 'react';
 import { AppState } from 'react-native';
 import { supabase } from '@/lib/supabase';
 

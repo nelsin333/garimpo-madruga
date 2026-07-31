@@ -30,7 +30,7 @@ type ProfileRow = {
   settings: Json;
   created_at: string;
   updated_at: string;
-}
+};
 
 type CategoryRow = {
   id: string;
@@ -39,7 +39,7 @@ type CategoryRow = {
   slug: string;
   created_at: string;
   updated_at: string;
-}
+};
 
 type BrandRow = {
   id: string;
@@ -51,7 +51,7 @@ type BrandRow = {
   tier: number;
   created_at: string;
   updated_at: string;
-}
+};
 
 type CheckRow = {
   id: string;
@@ -64,7 +64,7 @@ type CheckRow = {
   submitted_at: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
 type CheckPhotoRow = {
   id: string;
@@ -75,7 +75,7 @@ type CheckPhotoRow = {
   quality: Json | null;
   exif: Json | null;
   created_at: string;
-}
+};
 
 type Insertable<Row, Optional extends keyof Row, Omitted extends keyof Row = never> = Omit<
   Partial<Pick<Row, Optional>> & Omit<Row, Optional | Omitted>,
@@ -149,7 +149,7 @@ export type Database = {
     };
     CompositeTypes: Record<string, never>;
   };
-}
+};
 
 export type Tables<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];

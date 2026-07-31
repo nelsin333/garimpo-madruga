@@ -36,12 +36,12 @@ mais checks → mais fotos consentidas → banco maior → IA melhor e mais bara
 
 ## Metas de cobertura
 
-| Marco | Banco de referência | Efeito |
-|---|---|---|
-| Mês 3 | 10 marcas × categorias core, ~50k crops | IA assiste humano |
-| Mês 6 | ~150k crops, réplicas de 30+ batches | auto-veredito nas fatias fortes |
-| Mês 12 | ~500k crops, 25 marcas, eras vintage mapeadas | 70% automático |
-| Mês 24 | milhões de crops, cobertura LatAm | API B2B viável |
+| Marco  | Banco de referência                           | Efeito                          |
+| ------ | --------------------------------------------- | ------------------------------- |
+| Mês 3  | 10 marcas × categorias core, ~50k crops       | IA assiste humano               |
+| Mês 6  | ~150k crops, réplicas de 30+ batches          | auto-veredito nas fatias fortes |
+| Mês 12 | ~500k crops, 25 marcas, eras vintage mapeadas | 70% automático                  |
+| Mês 24 | milhões de crops, cobertura LatAm             | API B2B viável                  |
 
 ## Governança do dado
 

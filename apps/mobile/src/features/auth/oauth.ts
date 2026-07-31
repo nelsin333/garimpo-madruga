@@ -59,5 +59,7 @@ export async function signInWithApple() {
 }
 
 export function isAppleCancel(e: unknown): boolean {
-  return typeof e === 'object' && e !== null && (e as { code?: string }).code === 'ERR_REQUEST_CANCELED';
+  return (
+    typeof e === 'object' && e !== null && (e as { code?: string }).code === 'ERR_REQUEST_CANCELED'
+  );
 }

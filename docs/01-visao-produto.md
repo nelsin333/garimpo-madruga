@@ -40,12 +40,12 @@ AUTENTICAR  →  VALORIZAR  →  VENDER  →  RASTREAR
 
 ## Cliente e personas
 
-| Persona | Dor | O que usamos para ganhar |
-|---|---|---|
-| **O Garimpeiro** (18–30, compra em brechó/bazar/online) | Medo de pagar caro em fake | Legit check no celular em minutos, preço de mercado na hora |
-| **O Revendedor** (reseller de sneaker/street) | Provar autenticidade e precificar rápido | Selo + anúncio em 1 clique + export multi-canal |
-| **O Colecionador** (25–45, alta renda) | Documentar e valorizar coleção | Vault digital, histórico da peça, estatísticas de valorização |
-| **O Comprador cauteloso** | Não entende de peça, quer segurança | Comprar só peça com selo; escrow; devolução se laudo divergir |
+| Persona                                                 | Dor                                      | O que usamos para ganhar                                      |
+| ------------------------------------------------------- | ---------------------------------------- | ------------------------------------------------------------- |
+| **O Garimpeiro** (18–30, compra em brechó/bazar/online) | Medo de pagar caro em fake               | Legit check no celular em minutos, preço de mercado na hora   |
+| **O Revendedor** (reseller de sneaker/street)           | Provar autenticidade e precificar rápido | Selo + anúncio em 1 clique + export multi-canal               |
+| **O Colecionador** (25–45, alta renda)                  | Documentar e valorizar coleção           | Vault digital, histórico da peça, estatísticas de valorização |
+| **O Comprador cauteloso**                               | Não entende de peça, quer segurança      | Comprar só peça com selo; escrow; devolução se laudo divergir |
 
 ## Posicionamento
 

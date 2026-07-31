@@ -11,15 +11,19 @@ Marketplace precisa de liquidez; liquidez nasce de nicho denso. Ordem de ataque:
 ## Loops de crescimento (produto = distribuição)
 
 ### Loop 1 — O certificado é viral por design
+
 Todo laudo/certificado tem página pública bonita com QR. Vendedor COMPARTILHA o certificado para vender (no Insta, no WhatsApp, no grupo) → comprador conhece o Garimpo pelo próprio ato da venda → baixa o app para conferir/comprar → faz o próprio check. **Cada venda externa é uma aquisição.** (Por isso exportação multi-canal é feature de growth, não de conveniência.)
 
 ### Loop 2 — Legit check como conteúdo
+
 "Real ou fake?" é formato campeão no TikTok/Reels/YouTube. Fazemos o formato oficial: laudos anonimizados virais (réplica desmascarada por detalhe de tipografia), série "quanto vale seu garimpo". Parcerias com criadores de streetwear/brechó — eles usam o app em vídeo (o produto é visualmente demonstrável em 15s: foto → score animado).
 
 ### Loop 3 — Wishlist e alerta de demanda
+
 Busca sem resultado → wishlist → notificação quando aparece. Isso puxa vendedores ("há 43 pessoas esperando por essa peça — anuncie") e traz compradores de volta sem mídia paga.
 
 ### Loop 4 — Comunidade (V2)
+
 Feed de fits e coleções gera hábito diário; peça tageada no fit vira anúncio; perfil de colecionador vira vitrine social que se compartilha fora do app.
 
 ## Go-to-market por fase

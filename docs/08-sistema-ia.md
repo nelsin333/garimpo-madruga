@@ -39,11 +39,13 @@ Detector de regiões (fine-tune de um DETR/YOLOv10 leve) recorta e normaliza (de
 ## Estágio 3 — Analisadores especializados
 
 ### 3a. OCR + validação de serial
+
 - Google Cloud Vision (ou PaddleOCR self-hosted para custo) sobre etiquetas e tags.
 - Texto extraído validado contra `reference_items.serial_format`: formato do serial por marca/era (regex + checksums quando existirem), país de fabricação plausível para a temporada, códigos de fábrica conhecidos, erros clássicos de réplica (caracteres trocados, acentuação errada em "made in", datas impossíveis).
 - Serial duplicado no nosso banco (mesmo serial em duas peças físicas diferentes) = flag fortíssima.
 
 ### 3b. Embeddings + kNN (o coração comparativo)
+
 - **Modelo**: começar com SigLIP 2 / OpenCLIP pré-treinado; depois **fine-tune com triplet/ArcFace loss** sobre nossos pares (autêntica ↔ autêntica perto; autêntica ↔ réplica longe) — é aqui que o banco proprietário vira vantagem de modelo.
 - **Um embedding por região, não por peça**: etiqueta tem espaço vetorial próprio, costura outro. Comparar globalmente dilui o sinal (réplica boa acerta a silhueta e erra o detalhe).
 - Armazenamento: `pgvector` com índice HNSW, filtrado por `brand_id + category_id + region + era` antes do kNN (ver doc 04).
@@ -52,17 +54,20 @@ Detector de regiões (fine-tune de um DETR/YOLOv10 leve) recorta e normaliza (de
   - densidade local (região do espaço com muitas referências = confiança alta; deserto = inconclusivo honesto).
 
 ### 3c. Tipografia e logos
+
 - Crop da etiqueta → segmentação de caracteres → métricas geométricas: espaçamento entre letras (kerning), proporção altura/largura, peso do traço, alinhamento da linha de base, serifa/terminações.
 - Comparação com gabarito da marca/era (medido a partir das referências, guardado em `reference_items.notes_md` + features numéricas).
 - Réplicas erram sistematicamente tipografia em 1–3%: invisível a olho nu, trivial para métrica geométrica **desde que o crop esteja normalizado** (por isso o estágio 2 importa tanto).
 - Logos/bordados: embedding específico + análise de densidade de pontos do bordado (transformada de Fourier no crop pega regularidade do ponto; bordado industrial de réplica tem assinatura espectral diferente).
 
 ### 3d. Costura e materiais
+
 - Densidade de pontos por cm (contagem via detecção de picos ao longo da linha de costura), regularidade (desvio-padrão do espaçamento), simetria entre lados.
 - Textura do tecido: features de textura (Gabor/embedding fino) comparadas às referências da mesma era — réplica usa malha de gramatura diferente que muda a micro-textura.
 - Limitação honesta: costura é sensível a foto ruim → esses achados têm peso menor e nunca decidem sozinhos.
 
 ### 3e. QR / NFC / tags
+
 - QR de marca: decodificar, validar formato/URL esperada da era (réplicas usam QR que resolve para domínio errado ou não resolve).
 - NFC (quando existir — app lê via `react-native-nfc-manager`): validar payload contra formato conhecido da marca. Nota: NFC clonado existe; NFC válido soma pouco, NFC inválido subtrai muito (assimetria correta).
 

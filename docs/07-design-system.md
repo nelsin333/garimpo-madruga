@@ -78,18 +78,18 @@ haptics: sucesso do check = notificação de sucesso; foto validada = tick leve
 
 ## Componentes-chave
 
-| Componente | Notas |
-|---|---|
-| `RiskBadge` | pill com cor semântica + label ("Baixo risco"); variantes sm/lg |
-| `ScoreRing` | anel de progresso com % central, animado, cor pelo risco |
-| `VerifiedShield` | selo 🛡️ lime; variantes: inline, card, watermark de foto |
-| `FindingCard` | achado do laudo: ícone ✓/⚠, texto, expande p/ foto com bbox |
-| `CompareSlider` | lado a lado sua peça × referência, zoom sincronizado, divisor arrastável |
-| `CameraOverlay` | moldura tracejada por região + dica + validação em tempo real |
-| `PriceSlider` | slider mín—premium com feedback de tempo de venda ao vivo |
-| `ListingCard` | foto, selo, preço, tamanho; grid 2 col |
-| `CertPage` | layout do certificado público (web) — imprime bem, funciona como "documento" |
-| `EmptyState` | ilustrado, sempre com ação ("Nenhum check ainda → Fazer o primeiro") |
+| Componente       | Notas                                                                        |
+| ---------------- | ---------------------------------------------------------------------------- |
+| `RiskBadge`      | pill com cor semântica + label ("Baixo risco"); variantes sm/lg              |
+| `ScoreRing`      | anel de progresso com % central, animado, cor pelo risco                     |
+| `VerifiedShield` | selo 🛡️ lime; variantes: inline, card, watermark de foto                     |
+| `FindingCard`    | achado do laudo: ícone ✓/⚠, texto, expande p/ foto com bbox                  |
+| `CompareSlider`  | lado a lado sua peça × referência, zoom sincronizado, divisor arrastável     |
+| `CameraOverlay`  | moldura tracejada por região + dica + validação em tempo real                |
+| `PriceSlider`    | slider mín—premium com feedback de tempo de venda ao vivo                    |
+| `ListingCard`    | foto, selo, preço, tamanho; grid 2 col                                       |
+| `CertPage`       | layout do certificado público (web) — imprime bem, funciona como "documento" |
+| `EmptyState`     | ilustrado, sempre com ação ("Nenhum check ainda → Fazer o primeiro")         |
 
 ## Tom de voz (pt-BR)
 

@@ -3,6 +3,7 @@
 ## Filosofia de sequenciamento
 
 O fosso é o **banco de peças autênticas**. Então a ordem é:
+
 1. MVP gera **demanda de checks** (e portanto dados) mesmo com IA imperfeita, usando revisão humana como rede de segurança.
 2. V1 usa os dados para **automatizar a maioria dos checks** e liga o marketplace.
 3. V2 adiciona **liquidez e serviços premium** (custódia, garantia, integração profunda).
@@ -15,6 +16,7 @@ O fosso é o **banco de peças autênticas**. Então a ordem é:
 **Objetivo:** provar que brasileiros pagam por autenticação rápida em português, e começar o banco de dados.
 
 **Escopo:**
+
 - App React Native (Expo) — iOS e Android — + landing Next.js.
 - Onboarding + auth (Supabase: e-mail, Apple, Google, telefone).
 - **Fluxo de legit check guiado por câmera**: checklist de fotos por categoria (tênis, camiseta, moletom, boné, jaqueta), com overlay de enquadramento e validação de qualidade da foto na hora (blur, luz, distância).

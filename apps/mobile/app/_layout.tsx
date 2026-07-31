@@ -1,7 +1,4 @@
-import {
-  Archivo_700Bold,
-  Archivo_800ExtraBold,
-} from '@expo-google-fonts/archivo';
+import { Archivo_700Bold, Archivo_800ExtraBold } from '@expo-google-fonts/archivo';
 import {
   Inter_400Regular,
   Inter_500Medium,

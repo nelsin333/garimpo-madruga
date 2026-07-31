@@ -14,8 +14,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     supportsTablet: false,
     usesAppleSignIn: true,
     infoPlist: {
-      NSCameraUsageDescription:
-        'A câmera é usada para fotografar as peças durante o legit check.',
+      NSCameraUsageDescription: 'A câmera é usada para fotografar as peças durante o legit check.',
     },
   },
   android: {

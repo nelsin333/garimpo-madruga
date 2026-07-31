@@ -28,7 +28,9 @@ export default function TabsLayout() {
         name="index"
         options={{
           title: 'Início',
-          tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tabs.Screen

@@ -3,29 +3,34 @@
 ## Fontes de receita (em ordem de ativação)
 
 ### 1. Legit check pago (MVP)
-| Produto | Preço | Nota |
-|---|---|---|
-| Check padrão (IA + revisão) | R$ 39 | veredito < 1h útil |
-| Check expresso | R$ 69 | fila prioritária, < 20 min |
-| Check IA instantâneo (V1) | R$ 19 | só fatias de alta confiança |
-| Pacote 5 checks | R$ 149 | p/ revendedores |
-| Pacote 20 checks | R$ 490 | assinatura implícita de reseller |
+
+| Produto                     | Preço  | Nota                             |
+| --------------------------- | ------ | -------------------------------- |
+| Check padrão (IA + revisão) | R$ 39  | veredito < 1h útil               |
+| Check expresso              | R$ 69  | fila prioritária, < 20 min       |
+| Check IA instantâneo (V1)   | R$ 19  | só fatias de alta confiança      |
+| Pacote 5 checks             | R$ 149 | p/ revendedores                  |
+| Pacote 20 checks            | R$ 490 | assinatura implícita de reseller |
 
 Referência de mercado: Legit App cobra US$ 3–30 por check; nosso preço em BRL com Pix, sem fricção cambial. Custo marginal (doc 08) dá margem bruta > 70% no check padrão mesmo com humano no loop.
 
 ### 2. Take rate do marketplace (V1) — a receita principal no longo prazo
+
 - **9% do vendedor** (peça verificada) — abaixo dos ~13–20% do Enjoei e ~9–12% StockX, sustentável porque o check já foi pago e o custo de confiança é amortizado.
 - Peça sem selo pode ser anunciada com taxa maior (12%) — incentivo permanente a verificar.
 - Comprador paga taxa de serviço fixa pequena (R$ 9,90) que financia a **Garantia Garimpo** (recompra se laudo baixo risco se provar errado).
 
 ### 3. Assinatura "Garimpo Pro" (V1)
+
 R$ 49/mês para revendedores: X checks inclusos, taxa reduzida (7%), selo de vendedor pro, análise de precificação avançada (tendência, raridade, melhor momento de venda), exportação multi-canal ilimitada, destaque na busca.
 
 ### 4. Serviços físicos (V2)
+
 - Custódia + autenticação física + fotos de estúdio: R$ 59–99/peça (embutido no preço de venda).
 - Tag NFC física para peças > R$ 2k: R$ 29.
 
 ### 5. B2B / API (V3)
+
 - API de autenticação para marketplaces e e-commerces (por chamada).
 - Painel de precificação para brechós (SaaS R$ 199–499/mês).
 - Dados de mercado (índice de preços, relatórios de tendência).

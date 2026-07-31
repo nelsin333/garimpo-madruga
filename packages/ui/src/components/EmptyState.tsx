@@ -13,7 +13,9 @@ export interface EmptyStateProps {
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   const theme = useTheme();
   return (
-    <View style={{ alignItems: 'center', gap: theme.space.md, paddingVertical: theme.space['4xl'] }}>
+    <View
+      style={{ alignItems: 'center', gap: theme.space.md, paddingVertical: theme.space['4xl'] }}
+    >
       <Text variant="title" style={{ textAlign: 'center' }}>
         {title}
       </Text>

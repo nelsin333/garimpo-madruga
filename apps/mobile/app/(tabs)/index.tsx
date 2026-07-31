@@ -57,7 +57,7 @@ export default function Home() {
         }}
       >
         <Text variant="title" style={{ color: theme.colors.text.onBrand }}>
-          🛡️  Fazer Legit Check
+          🛡️ Fazer Legit Check
         </Text>
         <Text variant="body" style={{ color: theme.colors.text.onBrand, opacity: 0.75 }}>
           Descubra em minutos se a sua peça é real.
@@ -79,7 +79,11 @@ export default function Home() {
           checks.map((check) => (
             <Card
               key={check.id}
-              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
             >
               <View style={{ gap: 2 }}>
                 <Text variant="bodyMedium">
