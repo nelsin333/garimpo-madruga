@@ -27,6 +27,7 @@ export type JobStatus = 'queued' | 'running' | 'completed' | 'failed';
 
 type ProfileRow = {
   id: string;
+  role: string;
   username: string;
   display_name: string | null;
   avatar_url: string | null;
@@ -146,6 +147,92 @@ type VerdictRow = {
   disclaimer_version: string;
   score_breakdown: Json | null;
   created_at: string;
+};
+
+type ReferenceItemRow = {
+  id: string;
+  brand_id: string;
+  category_id: string;
+  product_id: string | null;
+  authenticity: 'authentic' | 'replica';
+  source: string;
+  era: string | null;
+  serial_format: string | null;
+  measurements: Json | null;
+  notes_md: string | null;
+  quality_score: number;
+  quarantined: boolean;
+  sku: string | null;
+  colorway: string | null;
+  collection: string | null;
+  release_year: number | null;
+  country: string | null;
+  size_label: string | null;
+  material: string | null;
+  gender: string | null;
+  replica_batch: string | null;
+  provenance_confidence: number;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ReferencePhotoRow = {
+  id: string;
+  reference_item_id: string;
+  region: string;
+  storage_path: string;
+  meta: Json;
+  created_at: string;
+};
+
+type ReferenceJobRow = {
+  id: string;
+  reference_item_id: string;
+  status: JobStatus;
+  stage: string | null;
+  progress: number;
+  error: string | null;
+  started_at: string | null;
+  finished_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ReferencePhotoAnalysisRow = {
+  id: string;
+  photo_id: string;
+  phash: string | null;
+  width: number | null;
+  height: number | null;
+  sharpness: number | null;
+  ocr_provider: string | null;
+  ocr_raw: string;
+  ocr_normalized: string;
+  extracted: Json;
+  qr_payloads: string[];
+  regions: Json;
+  processed_at: string;
+};
+
+type ReferenceAnnotationRow = {
+  id: string;
+  reference_item_id: string;
+  photo_id: string | null;
+  aspect: string;
+  assessment: string;
+  note: string;
+  created_by: string;
+  created_at: string;
+};
+
+type ReferenceItemVersionRow = {
+  id: string;
+  reference_item_id: string;
+  version: number;
+  data: Json;
+  changed_by: string | null;
+  changed_at: string;
 };
 
 type CertificateRow = {
@@ -301,9 +388,111 @@ export type Database = {
         Update: Partial<CertificateRow>;
         Relationships: [];
       };
+      reference_items: {
+        Row: ReferenceItemRow;
+        Insert: Insertable<
+          ReferenceItemRow,
+          | 'id'
+          | 'product_id'
+          | 'source'
+          | 'era'
+          | 'serial_format'
+          | 'measurements'
+          | 'notes_md'
+          | 'quality_score'
+          | 'quarantined'
+          | 'sku'
+          | 'colorway'
+          | 'collection'
+          | 'release_year'
+          | 'country'
+          | 'size_label'
+          | 'material'
+          | 'gender'
+          | 'replica_batch'
+          | 'provenance_confidence'
+          | 'created_by'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<ReferenceItemRow>;
+        Relationships: [];
+      };
+      reference_photos: {
+        Row: ReferencePhotoRow;
+        Insert: Insertable<ReferencePhotoRow, 'id' | 'meta' | 'created_at'>;
+        Update: Partial<ReferencePhotoRow>;
+        Relationships: [];
+      };
+      reference_jobs: {
+        Row: ReferenceJobRow;
+        Insert: Insertable<
+          ReferenceJobRow,
+          | 'id'
+          | 'status'
+          | 'stage'
+          | 'progress'
+          | 'error'
+          | 'started_at'
+          | 'finished_at'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<ReferenceJobRow>;
+        Relationships: [];
+      };
+      reference_photo_analysis: {
+        Row: ReferencePhotoAnalysisRow;
+        Insert: Insertable<
+          ReferencePhotoAnalysisRow,
+          | 'id'
+          | 'phash'
+          | 'width'
+          | 'height'
+          | 'sharpness'
+          | 'ocr_provider'
+          | 'ocr_raw'
+          | 'ocr_normalized'
+          | 'extracted'
+          | 'qr_payloads'
+          | 'regions'
+          | 'processed_at'
+        >;
+        Update: Partial<ReferencePhotoAnalysisRow>;
+        Relationships: [];
+      };
+      reference_annotations: {
+        Row: ReferenceAnnotationRow;
+        Insert: Insertable<ReferenceAnnotationRow, 'id' | 'photo_id' | 'note' | 'created_at'>;
+        Update: Partial<ReferenceAnnotationRow>;
+        Relationships: [];
+      };
+      reference_item_versions: {
+        Row: ReferenceItemVersionRow;
+        Insert: Insertable<ReferenceItemVersionRow, 'id' | 'changed_by' | 'changed_at'>;
+        Update: Partial<ReferenceItemVersionRow>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      admin_reference_stats: {
+        Args: Record<string, never>;
+        Returns: Json;
+      };
+      admin_similar_reference_photos: {
+        Args: { p_photo_id: string; p_limit?: number };
+        Returns: {
+          photo_id: string;
+          reference_item_id: string;
+          region: string;
+          similarity: number;
+          authenticity: 'authentic' | 'replica';
+          brand_name: string | null;
+          product_name: string | null;
+        }[];
+      };
+    };
     Enums: {
       check_status: CheckStatus;
       risk_level: RiskLevel;
