@@ -1,8 +1,4 @@
-import {
-  photoChecklistSchema,
-  type PhotoChecklist,
-  type PhotoQuality,
-} from '@garimpo/contracts';
+import { photoChecklistSchema, type PhotoChecklist, type PhotoQuality } from '@garimpo/contracts';
 import type { Tables } from '@garimpo/db';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 import { decode as decodeBase64 } from 'base64-arraybuffer';
@@ -159,17 +155,15 @@ export async function uploadCheckPhoto(input: {
     .upload(path, decodeBase64(saved.base64), { contentType: 'image/jpeg', upsert: true });
   if (uploadError) throw uploadError;
 
-  const { error } = await supabase
-    .from('check_photos')
-    .upsert(
-      {
-        check_id: input.checkId,
-        region: input.region,
-        storage_path: path,
-        quality: input.quality,
-      },
-      { onConflict: 'check_id,region' },
-    );
+  const { error } = await supabase.from('check_photos').upsert(
+    {
+      check_id: input.checkId,
+      region: input.region,
+      storage_path: path,
+      quality: input.quality,
+    },
+    { onConflict: 'check_id,region' },
+  );
   if (error) throw error;
 }
 
@@ -188,11 +182,27 @@ export async function cancelCheck(checkId: string): Promise<void> {
 
 // ---------- Consulta (processamento, laudo, histórico) ----------
 
-export async function fetchCheckWithJob(checkId: string) {
+export interface CheckWithJob {
+  check: {
+    id: string;
+    status: string;
+    brands: { name: string } | null;
+    categories: { name: string } | null;
+  };
+  job: {
+    id: string;
+    status: string;
+    stage: string | null;
+    progress: number;
+    error: string | null;
+  } | null;
+}
+
+export async function fetchCheckWithJob(checkId: string): Promise<CheckWithJob> {
   const [{ data: check, error }, { data: jobs }] = await Promise.all([
     supabase
       .from('checks')
-      .select('id, status, brands(name), categories(name), declared')
+      .select('id, status, brands(name), categories(name)')
       .eq('id', checkId)
       .single(),
     supabase
@@ -203,7 +213,10 @@ export async function fetchCheckWithJob(checkId: string) {
       .limit(1),
   ]);
   if (error) throw error;
-  return { check, job: jobs?.[0] ?? null };
+  return {
+    check: check as unknown as CheckWithJob['check'],
+    job: (jobs?.[0] as CheckWithJob['job']) ?? null,
+  };
 }
 
 export interface Report {
@@ -245,12 +258,10 @@ export async function fetchReport(checkId: string): Promise<Report> {
   const photos = photosRes.data ?? [];
   const photoUrls: Record<string, string> = {};
   if (photos.length > 0) {
-    const { data: signed } = await supabase.storage
-      .from(BUCKET)
-      .createSignedUrls(
-        photos.map((p) => p.storage_path),
-        SIGNED_URL_TTL,
-      );
+    const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrls(
+      photos.map((p) => p.storage_path),
+      SIGNED_URL_TTL,
+    );
     signed?.forEach((entry, i) => {
       if (entry.signedUrl) photoUrls[photos[i]!.region] = entry.signedUrl;
     });
@@ -319,7 +330,8 @@ export async function fetchHistory(): Promise<HistoryItem[]> {
       categoryName: (row.categories as { name: string } | null)?.name ?? null,
       modelName:
         (row.products as { name: string } | null)?.name ??
-        ((row.declared as { model_name?: string | null } | null)?.model_name ?? null),
+        (row.declared as { model_name?: string | null } | null)?.model_name ??
+        null,
       probability: verdict?.authenticity_probability ?? null,
       outcome: verdict?.outcome ?? null,
       risk: verdict?.risk ?? null,
@@ -356,7 +368,9 @@ export async function fetchDraftForResume(checkId: string) {
   const paths = (photos ?? []).map((p) => p.storage_path);
   const urls: Record<string, string> = {};
   if (paths.length > 0) {
-    const { data: signed } = await supabase.storage.from(BUCKET).createSignedUrls(paths, SIGNED_URL_TTL);
+    const { data: signed } = await supabase.storage
+      .from(BUCKET)
+      .createSignedUrls(paths, SIGNED_URL_TTL);
     signed?.forEach((entry, i) => {
       if (entry.signedUrl) urls[(photos ?? [])[i]!.region] = entry.signedUrl;
     });

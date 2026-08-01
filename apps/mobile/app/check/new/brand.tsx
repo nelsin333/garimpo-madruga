@@ -31,9 +31,7 @@ export default function BrandStep() {
     onError: () => Alert.alert('Não foi possível adicionar a marca', 'Tente novamente.'),
   });
 
-  const hasExactMatch = (brands ?? []).some(
-    (b) => b.name.toLowerCase() === trimmed.toLowerCase(),
-  );
+  const hasExactMatch = (brands ?? []).some((b) => b.name.toLowerCase() === trimmed.toLowerCase());
 
   return (
     <Screen>

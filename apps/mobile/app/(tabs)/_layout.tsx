@@ -43,6 +43,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="checks"
+        options={{
+          title: 'Checks',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="shield-checkmark-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="saved"
         options={{
           title: 'Salvos',

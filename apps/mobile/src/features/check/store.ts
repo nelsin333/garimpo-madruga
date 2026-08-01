@@ -72,8 +72,7 @@ export const useCheckWizard = create<WizardState>((set) => ({
   setProduct: (product) => set({ product }),
   setChecklist: (checklist) => set({ checklist }),
   setCheckId: (checkId) => set({ checkId }),
-  upsertPhoto: (photo) =>
-    set((s) => ({ photos: { ...s.photos, [photo.region]: photo } })),
+  upsertPhoto: (photo) => set((s) => ({ photos: { ...s.photos, [photo.region]: photo } })),
   setPhotoUpload: (region, upload) =>
     set((s) => {
       const existing = s.photos[region];

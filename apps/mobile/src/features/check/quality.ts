@@ -62,8 +62,7 @@ export async function analyzePhotoQuality(uri: string): Promise<PhotoQuality> {
   for (let y = 1; y < height - 1; y++) {
     for (let x = 1; x < width - 1; x++) {
       const p = y * width + x;
-      const v =
-        4 * luma[p]! - luma[p - 1]! - luma[p + 1]! - luma[p - width]! - luma[p + width]!;
+      const v = 4 * luma[p]! - luma[p - 1]! - luma[p + 1]! - luma[p - width]! - luma[p + width]!;
       lapSum += v;
       lapSumSq += v * v;
       lapCount++;

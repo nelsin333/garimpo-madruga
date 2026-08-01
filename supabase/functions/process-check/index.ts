@@ -112,7 +112,8 @@ const TEMPLATES: Record<string, RegionTemplate> = {
   embroidery: {
     kind: 'embroidery_density',
     title: 'Densidade do bordado',
-    positive: 'Contagem e direção dos pontos do bordado compatíveis com produção industrial da marca.',
+    positive:
+      'Contagem e direção dos pontos do bordado compatíveis com produção industrial da marca.',
     suspicious: 'Pontos do bordado mais espaçados que o usual nas curvas.',
     positiveConclusion: 'Bordado compatível com o padrão original.',
     suspiciousConclusion: 'Densidade fora da faixa típica.',
@@ -120,7 +121,8 @@ const TEMPLATES: Record<string, RegionTemplate> = {
   print: {
     kind: 'print_quality',
     title: 'Qualidade da estampa',
-    positive: 'Bordas nítidas, cobertura uniforme e toque de tinta consistentes com o processo original.',
+    positive:
+      'Bordas nítidas, cobertura uniforme e toque de tinta consistentes com o processo original.',
     suspicious: 'Bordas da estampa com serrilhado além do esperado.',
     positiveConclusion: 'Estampa compatível com o processo original.',
     suspiciousConclusion: 'Indício de processo de impressão diferente.',
@@ -136,7 +138,8 @@ const TEMPLATES: Record<string, RegionTemplate> = {
   zipper: {
     kind: 'hardware',
     title: 'Zíper',
-    positive: 'Marcações do puller e trilho conferem com os fornecedores usados pela marca no período.',
+    positive:
+      'Marcações do puller e trilho conferem com os fornecedores usados pela marca no período.',
     suspicious: 'Acabamento do puller com brilho acima do usual para o período.',
     positiveConclusion: 'Hardware compatível.',
     suspiciousConclusion: 'Hardware possivelmente de fornecedor diferente.',
@@ -330,11 +333,7 @@ async function runAnalysis(
 
   // Cancelamento é respeitado entre estágios.
   for (let i = 0; i < STAGES.length; i++) {
-    const { data: current } = await db
-      .from('checks')
-      .select('status')
-      .eq('id', checkId)
-      .single();
+    const { data: current } = await db.from('checks').select('status').eq('id', checkId).single();
     if (current?.status === 'cancelled') {
       await db
         .from('check_jobs')
@@ -356,8 +355,7 @@ async function runAnalysis(
         ? 0.55 + rand() * 0.29 // zona incerta
         : 0.12 + rand() * 0.22; // réplica provável
 
-  const risk =
-    probability >= 0.9 ? 'low' : probability >= 0.7 ? 'medium' : ('high' as const);
+  const risk = probability >= 0.9 ? 'low' : probability >= 0.7 ? 'medium' : ('high' as const);
   const outcome =
     risk === 'low' && probability >= 0.85
       ? 'original'
@@ -365,7 +363,11 @@ async function runAnalysis(
         ? 'replica'
         : 'inconclusive';
   const confidence =
-    Math.abs(probability - 0.5) > 0.38 ? 'high' : Math.abs(probability - 0.5) > 0.2 ? 'medium' : 'low';
+    Math.abs(probability - 0.5) > 0.38
+      ? 'high'
+      : Math.abs(probability - 0.5) > 0.2
+        ? 'medium'
+        : 'low';
 
   const suspiciousBudget =
     outcome === 'original' ? 1 : outcome === 'replica' ? Math.max(3, (photos ?? []).length - 2) : 3;
@@ -373,7 +375,8 @@ async function runAnalysis(
   let suspiciousUsed = 0;
   const findings = (photos ?? []).map((photo, i) => {
     const template = TEMPLATES[photo.region] ?? GENERIC_TEMPLATE;
-    const wantSuspicious = suspiciousUsed < suspiciousBudget && rand() < (outcome === 'replica' ? 0.7 : 0.25);
+    const wantSuspicious =
+      suspiciousUsed < suspiciousBudget && rand() < (outcome === 'replica' ? 0.7 : 0.25);
     if (wantSuspicious) suspiciousUsed++;
     const polarity = wantSuspicious ? 'suspicious' : 'positive';
     return {
@@ -382,7 +385,9 @@ async function runAnalysis(
       region: photo.region,
       kind: template.kind,
       polarity,
-      score: Number((polarity === 'positive' ? 0.7 + rand() * 0.3 : 0.15 + rand() * 0.35).toFixed(3)),
+      score: Number(
+        (polarity === 'positive' ? 0.7 + rand() * 0.3 : 0.15 + rand() * 0.35).toFixed(3),
+      ),
       title: template.title,
       detail_md: polarity === 'positive' ? template.positive : template.suspicious,
       conclusion_md:

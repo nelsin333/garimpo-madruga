@@ -141,7 +141,9 @@ export default function ReportScreen() {
               finding={finding}
               photoUrl={
                 photoUrls[
-                  finding.photo_id ? (photoRegionById[finding.photo_id] ?? finding.region) : finding.region
+                  finding.photo_id
+                    ? (photoRegionById[finding.photo_id] ?? finding.region)
+                    : finding.region
                 ]
               }
             />

@@ -64,12 +64,20 @@ export default function ProcessingScreen() {
             Não conseguimos concluir a análise. Nenhum crédito foi consumido — tente novamente em
             instantes.
           </Text>
-          <Button variant="secondary" title="Voltar ao início" onPress={() => router.dismissAll()} />
+          <Button
+            variant="secondary"
+            title="Voltar ao início"
+            onPress={() => router.dismissAll()}
+          />
         </Card>
       ) : cancelled ? (
         <Card style={{ gap: theme.space.lg }}>
           <Text color="secondary">Análise cancelada.</Text>
-          <Button variant="secondary" title="Voltar ao início" onPress={() => router.dismissAll()} />
+          <Button
+            variant="secondary"
+            title="Voltar ao início"
+            onPress={() => router.dismissAll()}
+          />
         </Card>
       ) : (
         <>
@@ -93,11 +101,7 @@ export default function ProcessingScreen() {
                   ) : active ? (
                     <ActivityIndicator size="small" color={theme.colors.brand.primary} />
                   ) : (
-                    <Ionicons
-                      name="ellipse-outline"
-                      size={22}
-                      color={theme.colors.text.tertiary}
-                    />
+                    <Ionicons name="ellipse-outline" size={22} color={theme.colors.text.tertiary} />
                   )}
                   <Text
                     variant={active ? 'bodyMedium' : 'body'}

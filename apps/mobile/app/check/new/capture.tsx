@@ -212,7 +212,9 @@ export default function CaptureScreen() {
             </View>
           </>
         ) : phase.kind === 'analyzing' ? (
-          <View style={{ alignItems: 'center', gap: theme.space.md, paddingVertical: theme.space.lg }}>
+          <View
+            style={{ alignItems: 'center', gap: theme.space.md, paddingVertical: theme.space.lg }}
+          >
             <ActivityIndicator color={theme.colors.brand.primary} />
             <Text variant="caption" style={{ color: '#FFFFFFBB' }}>
               Verificando qualidade…

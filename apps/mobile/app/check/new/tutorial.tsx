@@ -17,7 +17,8 @@ export default function TutorialStep() {
   const { data: checklist, isPending } = useQuery({
     queryKey: ['wizard-checklist', wizard.category?.id, wizard.brand?.id],
     enabled: !!wizard.category,
-    queryFn: () => fetchChecklist(wizard.category!.id, wizard.category!.slug, wizard.brand?.id ?? null),
+    queryFn: () =>
+      fetchChecklist(wizard.category!.id, wizard.category!.slug, wizard.brand?.id ?? null),
   });
 
   const start = useMutation({
@@ -33,7 +34,8 @@ export default function TutorialStep() {
       wizard.setCheckId(checkId);
     },
     onSuccess: () => router.push('/check/new/photos'),
-    onError: () => Alert.alert('Não foi possível iniciar', 'Verifique sua conexão e tente de novo.'),
+    onError: () =>
+      Alert.alert('Não foi possível iniciar', 'Verifique sua conexão e tente de novo.'),
   });
 
   const required = (checklist ?? []).filter((s) => s.required);

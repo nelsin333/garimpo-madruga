@@ -33,11 +33,7 @@ export function FindingCard({ finding, photoUrl }: FindingCardProps) {
             backgroundColor: `${accent}22`,
           }}
         >
-          <Ionicons
-            name={suspicious ? 'alert' : 'checkmark'}
-            size={16}
-            color={accent}
-          />
+          <Ionicons name={suspicious ? 'alert' : 'checkmark'} size={16} color={accent} />
         </View>
         <Text variant="bodyMedium" style={{ flex: 1 }}>
           {finding.title}

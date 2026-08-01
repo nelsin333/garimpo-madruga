@@ -1,17 +1,11 @@
 import type { CheckStatus } from '@garimpo/contracts';
-import {
-  Card,
-  EmptyState,
-  PressableCard,
-  Screen,
-  Text,
-  VerifiedShield,
-  useTheme,
-} from '@garimpo/ui';
+import { EmptyState, PressableCard, Screen, Text, VerifiedShield, useTheme } from '@garimpo/ui';
 import { useQuery } from '@tanstack/react-query';
 import { router } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '@/features/auth/AuthProvider';
+import { openCheck } from '@/features/check/navigation';
+import { useResumeDraft } from '@/features/check/resume';
 import { CHECK_STATUS_LABELS } from '@/features/check/status';
 import { supabase } from '@/lib/supabase';
 
@@ -26,6 +20,7 @@ interface CheckListItem {
 export default function Home() {
   const theme = useTheme();
   const { session } = useAuth();
+  const resume = useResumeDraft();
 
   const { data: checks, isPending } = useQuery({
     queryKey: ['checks', session?.user.id],
@@ -77,8 +72,12 @@ export default function Home() {
           />
         ) : (
           checks.map((check) => (
-            <Card
+            <PressableCard
               key={check.id}
+              onPress={() => {
+                if (check.status === 'awaiting_photos') resume.mutate(check.id);
+                else openCheck(check);
+              }}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -97,7 +96,7 @@ export default function Home() {
               <Text variant="caption" color="brand">
                 {CHECK_STATUS_LABELS[check.status]}
               </Text>
-            </Card>
+            </PressableCard>
           ))
         )}
       </View>
