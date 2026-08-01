@@ -3,6 +3,9 @@
  * Mantidos à mão em sincronia com supabase/migrations até o CI rodar
  * `pnpm --filter @garimpo/db gen:types` contra um projeto real
  * (aí este arquivo passa a reexportar o gerado).
+ *
+ * IMPORTANTE: rows são `type` (não `interface`) — interfaces não têm index
+ * signature implícita e quebram a inferência do supabase-js.
  */
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
@@ -13,11 +16,14 @@ export type CheckStatus =
   | 'in_review'
   | 'completed'
   | 'cancelled'
-  | 'refunded';
+  | 'refunded'
+  | 'failed';
 
 export type RiskLevel = 'low' | 'medium' | 'high' | 'inconclusive';
 
 export type VerdictSource = 'ai_auto' | 'human_confirmed' | 'human_overridden';
+
+export type JobStatus = 'queued' | 'running' | 'completed' | 'failed';
 
 type ProfileRow = {
   id: string;
@@ -37,6 +43,8 @@ type CategoryRow = {
   parent_id: string | null;
   name: string;
   slug: string;
+  photo_checklist: Json;
+  display_order: number | null;
   created_at: string;
   updated_at: string;
 };
@@ -49,6 +57,21 @@ type BrandRow = {
   photo_checklist: Json;
   auth_guide: Json;
   tier: number;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ProductRow = {
+  id: string;
+  brand_id: string;
+  category_id: string | null;
+  name: string;
+  style_code: string | null;
+  colorway: string | null;
+  release_year: number | null;
+  source: string;
+  created_by: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -58,6 +81,7 @@ type CheckRow = {
   profile_id: string;
   brand_id: string | null;
   category_id: string | null;
+  product_id: string | null;
   status: CheckStatus;
   declared: Json;
   consent_training: boolean;
@@ -74,6 +98,60 @@ type CheckPhotoRow = {
   phash: string | null;
   quality: Json | null;
   exif: Json | null;
+  created_at: string;
+};
+
+type CheckJobRow = {
+  id: string;
+  check_id: string;
+  status: JobStatus;
+  stage: string | null;
+  progress: number;
+  error: string | null;
+  started_at: string | null;
+  finished_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type CheckFindingRow = {
+  id: string;
+  check_id: string;
+  photo_id: string | null;
+  region: string;
+  kind: string;
+  polarity: string;
+  score: number | null;
+  title: string;
+  detail_md: string;
+  conclusion_md: string;
+  bbox: Json | null;
+  position: number;
+  created_at: string;
+};
+
+type VerdictRow = {
+  id: string;
+  check_id: string;
+  authenticity_probability: number;
+  risk: RiskLevel;
+  outcome: string;
+  confidence: string;
+  source: VerdictSource;
+  summary_md: string;
+  recommendations_md: string;
+  next_steps_md: string;
+  ai_model_version: string | null;
+  disclaimer_version: string;
+  created_at: string;
+};
+
+type CertificateRow = {
+  id: string;
+  check_id: string;
+  public_code: string;
+  revoked: boolean;
+  revoked_reason: string | null;
   created_at: string;
 };
 
@@ -103,7 +181,10 @@ export type Database = {
       };
       categories: {
         Row: CategoryRow;
-        Insert: Insertable<CategoryRow, 'id' | 'parent_id' | 'created_at' | 'updated_at'>;
+        Insert: Insertable<
+          CategoryRow,
+          'id' | 'parent_id' | 'photo_checklist' | 'display_order' | 'created_at' | 'updated_at'
+        >;
         Update: Partial<CategoryRow>;
         Relationships: [];
       };
@@ -111,9 +192,33 @@ export type Database = {
         Row: BrandRow;
         Insert: Insertable<
           BrandRow,
-          'id' | 'aliases' | 'photo_checklist' | 'auth_guide' | 'tier' | 'created_at' | 'updated_at'
+          | 'id'
+          | 'aliases'
+          | 'photo_checklist'
+          | 'auth_guide'
+          | 'tier'
+          | 'created_by'
+          | 'created_at'
+          | 'updated_at'
         >;
         Update: Partial<BrandRow>;
+        Relationships: [];
+      };
+      products: {
+        Row: ProductRow;
+        Insert: Insertable<
+          ProductRow,
+          | 'id'
+          | 'category_id'
+          | 'style_code'
+          | 'colorway'
+          | 'release_year'
+          | 'source'
+          | 'created_by'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<ProductRow>;
         Relationships: [];
       };
       checks: {
@@ -123,6 +228,7 @@ export type Database = {
           | 'id'
           | 'brand_id'
           | 'category_id'
+          | 'product_id'
           | 'status'
           | 'declared'
           | 'consent_training'
@@ -139,6 +245,52 @@ export type Database = {
         Update: Partial<CheckPhotoRow>;
         Relationships: [];
       };
+      check_jobs: {
+        Row: CheckJobRow;
+        Insert: Insertable<
+          CheckJobRow,
+          | 'id'
+          | 'status'
+          | 'stage'
+          | 'progress'
+          | 'error'
+          | 'started_at'
+          | 'finished_at'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<CheckJobRow>;
+        Relationships: [];
+      };
+      check_findings: {
+        Row: CheckFindingRow;
+        Insert: Insertable<
+          CheckFindingRow,
+          'id' | 'photo_id' | 'score' | 'conclusion_md' | 'bbox' | 'position' | 'created_at'
+        >;
+        Update: Partial<CheckFindingRow>;
+        Relationships: [];
+      };
+      verdicts: {
+        Row: VerdictRow;
+        Insert: Insertable<
+          VerdictRow,
+          | 'id'
+          | 'recommendations_md'
+          | 'next_steps_md'
+          | 'ai_model_version'
+          | 'disclaimer_version'
+          | 'created_at'
+        >;
+        Update: Partial<VerdictRow>;
+        Relationships: [];
+      };
+      certificates: {
+        Row: CertificateRow;
+        Insert: Insertable<CertificateRow, 'id' | 'revoked' | 'revoked_reason' | 'created_at'>;
+        Update: Partial<CertificateRow>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -146,6 +298,7 @@ export type Database = {
       check_status: CheckStatus;
       risk_level: RiskLevel;
       verdict_source: VerdictSource;
+      job_status: JobStatus;
     };
     CompositeTypes: Record<string, never>;
   };

@@ -9,6 +9,7 @@ export const checkStatusSchema = z.enum([
   'completed',
   'cancelled',
   'refunded',
+  'failed',
 ]);
 export type CheckStatus = z.infer<typeof checkStatusSchema>;
 
@@ -17,9 +18,10 @@ export const riskLevelSchema = z.enum(['low', 'medium', 'high', 'inconclusive'])
 export type RiskLevel = z.infer<typeof riskLevelSchema>;
 
 /**
- * Regiões fotografáveis de uma peça. O checklist de cada marca/categoria
- * (brands.photo_checklist) referencia estes ids — validar aqui garante que
- * app, banco e pipeline falam o mesmo vocabulário.
+ * Regiões fotografáveis de uma peça. O checklist de cada categoria
+ * (categories.photo_checklist, com override por marca em brands.photo_checklist)
+ * referencia estes ids — validar aqui garante que app, banco e pipeline
+ * falam o mesmo vocabulário.
  */
 export const photoRegionSchema = z.enum([
   'front',
@@ -28,11 +30,20 @@ export const photoRegionSchema = z.enum([
   'wash_tag',
   'logo',
   'embroidery',
+  'print',
   'stitching',
+  'collar_stitch',
+  'hem_stitch',
+  'pocket_stitch',
+  'cuffs',
   'buttons',
   'zipper',
+  'hardware',
+  'lining',
+  'interior_label',
   'serial',
   'size_tag',
+  'hang_tag',
   'qr_code',
   'insole',
   'outsole',
@@ -40,6 +51,7 @@ export const photoRegionSchema = z.enum([
   'box_label',
   'packaging',
   'receipt',
+  'defects',
 ]);
 export type PhotoRegion = z.infer<typeof photoRegionSchema>;
 
