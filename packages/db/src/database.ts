@@ -268,7 +268,14 @@ export type Database = {
         Row: CheckFindingRow;
         Insert: Insertable<
           CheckFindingRow,
-          'id' | 'photo_id' | 'score' | 'conclusion_md' | 'bbox' | 'comparison' | 'position' | 'created_at'
+          | 'id'
+          | 'photo_id'
+          | 'score'
+          | 'conclusion_md'
+          | 'bbox'
+          | 'comparison'
+          | 'position'
+          | 'created_at'
         >;
         Update: Partial<CheckFindingRow>;
         Relationships: [];

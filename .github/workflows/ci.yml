@@ -24,3 +24,21 @@ jobs:
 
       - name: Check formatting
         run: pnpm format:check
+
+  ai-pipeline:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ai-pipeline
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - run: uv sync
+
+      - run: uv run ruff check .
+
+      - run: uv run ruff format --check .
+
+      - run: uv run pytest

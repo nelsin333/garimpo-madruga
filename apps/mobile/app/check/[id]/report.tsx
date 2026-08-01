@@ -60,6 +60,8 @@ export default function ReportScreen() {
   const probability = Number(verdict.authenticity_probability);
   const positives = findings.filter((f) => f.polarity === 'positive');
   const suspicious = findings.filter((f) => f.polarity === 'suspicious');
+  const graded = findings.filter((f) => f.polarity !== 'neutral');
+  const inconclusive = findings.filter((f) => f.polarity === 'neutral');
 
   const outcomeColor =
     outcome === 'original'
@@ -133,9 +135,9 @@ export default function ReportScreen() {
       </Section>
 
       {/* Evidências */}
-      <Section title="Evidências">
+      <Section title={`Itens analisados (${graded.length})`}>
         <View style={{ gap: theme.space.md }}>
-          {findings.map((finding) => (
+          {graded.map((finding) => (
             <FindingCard
               key={finding.id}
               finding={finding}
@@ -150,6 +152,26 @@ export default function ReportScreen() {
           ))}
         </View>
       </Section>
+
+      {inconclusive.length > 0 ? (
+        <Section title={`Itens inconclusivos (${inconclusive.length})`}>
+          <View style={{ gap: theme.space.md }}>
+            {inconclusive.map((finding) => (
+              <FindingCard
+                key={finding.id}
+                finding={finding}
+                photoUrl={
+                  photoUrls[
+                    finding.photo_id
+                      ? (photoRegionById[finding.photo_id] ?? finding.region)
+                      : finding.region
+                  ]
+                }
+              />
+            ))}
+          </View>
+        </Section>
+      ) : null}
 
       {verdict.recommendations_md ? (
         <Section title="Recomendações">

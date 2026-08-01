@@ -77,18 +77,7 @@ Deno.serve(async (req) => {
     .single();
   if (jobError) return json({ error: jobError.message }, 500);
 
-  // Dispara o worker sem bloquear a resposta. No Sprint 3 esta chamada é
-  // substituída pelo pipeline Python consumindo a fila — mesmo contrato.
-  const invocation = fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/process-check`, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      Authorization: `Bearer ${Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')}`,
-    },
-    body: JSON.stringify({ job_id: job.id }),
-  }).catch((e) => console.error('process-check invocation failed', e));
-  // @ts-ignore EdgeRuntime existe no runtime do Supabase
-  if (typeof EdgeRuntime !== 'undefined') EdgeRuntime.waitUntil(invocation);
-
+  // O worker do serviço de IA (services/ai-pipeline) consome a fila de
+  // check_jobs com FOR UPDATE SKIP LOCKED — nada mais a fazer aqui.
   return json({ job_id: job.id }, 202);
 });
