@@ -123,12 +123,10 @@ export default function ReferenceDetailPage() {
 
     const photoRows = (photosRes.data as Photo[]) ?? [];
     if (photoRows.length > 0) {
-      const { data: signed } = await client.storage
-        .from(REFERENCE_BUCKET)
-        .createSignedUrls(
-          photoRows.map((p) => p.storage_path),
-          3600,
-        );
+      const { data: signed } = await client.storage.from(REFERENCE_BUCKET).createSignedUrls(
+        photoRows.map((p) => p.storage_path),
+        3600,
+      );
       signed?.forEach((entry, index) => {
         if (entry.signedUrl) photoRows[index]!.url = entry.signedUrl;
       });
@@ -253,7 +251,10 @@ export default function ReferenceDetailPage() {
           <button className="secondary" onClick={() => void toggleQuarantine()}>
             {item.quarantined ? 'Liberar para o kNN' : 'Voltar para quarentena'}
           </button>
-          <button onClick={() => void process()} disabled={busy === 'process' || photos.length === 0}>
+          <button
+            onClick={() => void process()}
+            disabled={busy === 'process' || photos.length === 0}
+          >
             Processar peça
           </button>
         </div>
@@ -279,7 +280,11 @@ export default function ReferenceDetailPage() {
           <Field label="Material" value={item.material} />
           <Field label="Gênero" value={item.gender} />
         </div>
-        {item.notes_md ? <p className="muted" style={{ marginTop: 12 }}>{item.notes_md}</p> : null}
+        {item.notes_md ? (
+          <p className="muted" style={{ marginTop: 12 }}>
+            {item.notes_md}
+          </p>
+        ) : null}
         <p className="muted" style={{ marginTop: 8 }}>
           {versions.length} versões anteriores preservadas
           {versions.length > 0

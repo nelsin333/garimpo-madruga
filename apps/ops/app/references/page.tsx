@@ -82,15 +82,19 @@ export default function ReferencesPage() {
     <>
       <h1>Referências</h1>
       <p className="muted">
-        Busca por marca, modelo, SKU, ano, coleção, categoria, tipo e batch. Busca livre cobre SKU
-        e coleção — para modelo, use os filtros.
+        Busca por marca, modelo, SKU, ano, coleção, categoria, tipo e batch. Busca livre cobre SKU e
+        coleção — para modelo, use os filtros.
       </p>
 
       <div className="card" style={{ marginTop: 16 }}>
         <div className="grid cols-3">
           <div>
             <label>Busca (SKU / coleção)</label>
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="DD1391, FW23…" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="DD1391, FW23…"
+            />
           </div>
           <div>
             <label>Marca</label>
@@ -170,9 +174,7 @@ export default function ReferencesPage() {
                     <span className={`pill ${row.authenticity}`}>
                       {row.authenticity === 'authentic' ? 'Original' : 'Réplica'}
                     </span>
-                    {row.replica_batch ? (
-                      <span className="muted"> {row.replica_batch}</span>
-                    ) : null}
+                    {row.replica_batch ? <span className="muted"> {row.replica_batch}</span> : null}
                   </td>
                   <td>{row.sku ?? '—'}</td>
                   <td>{row.collection ?? '—'}</td>

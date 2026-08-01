@@ -61,7 +61,9 @@ export default function Dashboard() {
         <Stat label="Embeddings gerados" value={stats.embeddings_total} />
         <Stat
           label="Espaço utilizado"
-          value={gb >= 1 ? `${gb.toFixed(2)} GB` : `${(stats.storage_bytes / 1024 ** 2).toFixed(1)} MB`}
+          value={
+            gb >= 1 ? `${gb.toFixed(2)} GB` : `${(stats.storage_bytes / 1024 ** 2).toFixed(1)} MB`
+          }
         />
       </div>
 
@@ -80,15 +82,7 @@ export default function Dashboard() {
   );
 }
 
-function Stat({
-  label,
-  value,
-  color,
-}: {
-  label: string;
-  value: number | string;
-  color?: string;
-}) {
+function Stat({ label, value, color }: { label: string; value: number | string; color?: string }) {
   return (
     <div className="stat">
       <div className="value" style={color ? { color } : undefined}>

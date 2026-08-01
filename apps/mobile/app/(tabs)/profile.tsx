@@ -1,5 +1,6 @@
 import { Button, Card, Screen, Text, useTheme } from '@garimpo/ui';
 import { useQuery } from '@tanstack/react-query';
+import { router } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from '@/features/auth/AuthProvider';
 import { supabase } from '@/lib/supabase';
@@ -14,7 +15,7 @@ export default function Profile() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('profiles')
-        .select('username, display_name, bio, level, reputation_score')
+        .select('username, display_name, bio, level, reputation_score, role')
         .eq('id', session!.user.id)
         .single();
       if (error) throw error;
@@ -60,6 +61,14 @@ export default function Profile() {
         </Text>
         <Text color="secondary">{session?.user.email}</Text>
       </Card>
+
+      {profile && (profile.role === 'expert' || profile.role === 'admin') ? (
+        <Button
+          variant="secondary"
+          title="🛡️  Modo especialista"
+          onPress={() => router.push('/expert')}
+        />
+      ) : null}
 
       <Button variant="secondary" title="Sair" onPress={() => void signOut()} />
     </Screen>

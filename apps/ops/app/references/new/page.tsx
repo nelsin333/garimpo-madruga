@@ -122,7 +122,11 @@ export default function NewReferencePage() {
         <div className="grid cols-3">
           <div>
             <label>Marca *</label>
-            <select value={form.brand_id} onChange={(e) => set('brand_id', e.target.value)} required>
+            <select
+              value={form.brand_id}
+              onChange={(e) => set('brand_id', e.target.value)}
+              required
+            >
               <option value="">Selecione</option>
               {brands.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -191,7 +195,11 @@ export default function NewReferencePage() {
 
           <div>
             <label>SKU</label>
-            <input value={form.sku} onChange={(e) => set('sku', e.target.value)} placeholder="DD1391-100" />
+            <input
+              value={form.sku}
+              onChange={(e) => set('sku', e.target.value)}
+              placeholder="DD1391-100"
+            />
           </div>
           <div>
             <label>Cor / colorway</label>
@@ -199,7 +207,11 @@ export default function NewReferencePage() {
           </div>
           <div>
             <label>Coleção</label>
-            <input value={form.collection} onChange={(e) => set('collection', e.target.value)} placeholder="FW23" />
+            <input
+              value={form.collection}
+              onChange={(e) => set('collection', e.target.value)}
+              placeholder="FW23"
+            />
           </div>
           <div>
             <label>Ano</label>
@@ -211,15 +223,27 @@ export default function NewReferencePage() {
           </div>
           <div>
             <label>País de fabricação</label>
-            <input value={form.country} onChange={(e) => set('country', e.target.value)} placeholder="Vietnã" />
+            <input
+              value={form.country}
+              onChange={(e) => set('country', e.target.value)}
+              placeholder="Vietnã"
+            />
           </div>
           <div>
             <label>Tamanho</label>
-            <input value={form.size_label} onChange={(e) => set('size_label', e.target.value)} placeholder="G / 42" />
+            <input
+              value={form.size_label}
+              onChange={(e) => set('size_label', e.target.value)}
+              placeholder="G / 42"
+            />
           </div>
           <div>
             <label>Material</label>
-            <input value={form.material} onChange={(e) => set('material', e.target.value)} placeholder="100% algodão" />
+            <input
+              value={form.material}
+              onChange={(e) => set('material', e.target.value)}
+              placeholder="100% algodão"
+            />
           </div>
           <div>
             <label>Gênero</label>
