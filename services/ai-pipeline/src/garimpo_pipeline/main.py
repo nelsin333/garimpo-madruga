@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from . import db
+from .api.admin import router as admin_router
 from .api.routes import router
 from .worker import Worker
 
@@ -27,6 +28,7 @@ async def lifespan(_app: FastAPI):
 
 app = FastAPI(title="Garimpo Madruga — Motor de Autenticação", lifespan=lifespan)
 app.include_router(router)
+app.include_router(admin_router)
 
 
 @app.get("/health")
