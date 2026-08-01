@@ -22,7 +22,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     edgeToEdgeEnabled: true,
     permissions: ['android.permission.CAMERA'],
   },
-  plugins: ['expo-router', 'expo-apple-authentication', 'expo-web-browser'],
+  plugins: [
+    'expo-router',
+    'expo-apple-authentication',
+    'expo-web-browser',
+    [
+      'expo-camera',
+      {
+        cameraPermission: 'A câmera é usada para fotografar as peças durante o legit check.',
+      },
+    ],
+  ],
   experiments: {
     typedRoutes: true,
   },

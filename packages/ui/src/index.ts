@@ -8,3 +8,5 @@ export { ScoreRing, type ScoreRingProps } from './components/ScoreRing';
 export { VerifiedShield } from './components/VerifiedShield';
 export { Screen, type ScreenProps } from './components/Screen';
 export { EmptyState, type EmptyStateProps } from './components/EmptyState';
+export { ProgressBar, type ProgressBarProps } from './components/ProgressBar';
+export { Chip, type ChipProps } from './components/Chip';
