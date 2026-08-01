@@ -25,6 +25,16 @@ export type VerdictSource = 'ai_auto' | 'human_confirmed' | 'human_overridden';
 
 export type JobStatus = 'queued' | 'running' | 'completed' | 'failed';
 
+export type ListingStatus = 'draft' | 'active' | 'reserved' | 'sold' | 'paused' | 'removed';
+
+export type ConditionGrade =
+  | 'new_with_tags'
+  | 'new_no_tags'
+  | 'excellent'
+  | 'good'
+  | 'fair'
+  | 'poor';
+
 type ProfileRow = {
   id: string;
   role: string;
@@ -233,6 +243,60 @@ type ReferenceItemVersionRow = {
   data: Json;
   changed_by: string | null;
   changed_at: string;
+};
+
+type ListingRow = {
+  id: string;
+  seller_id: string;
+  check_id: string | null;
+  certificate_id: string | null;
+  brand_id: string | null;
+  category_id: string | null;
+  product_id: string | null;
+  title: string;
+  description_md: string;
+  condition: ConditionGrade | null;
+  size_label: string | null;
+  measurements: Json;
+  defects_md: string;
+  price_cents: number | null;
+  currency: string;
+  location_city: string | null;
+  location_state: string | null;
+  shipping_methods: string[];
+  hashtags: string[];
+  keywords: string[];
+  status: ListingStatus;
+  ai_generated: Json;
+  published_at: string | null;
+  sold_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ListingPhotoRow = {
+  id: string;
+  listing_id: string;
+  storage_path: string;
+  position: number;
+  source: string;
+  created_at: string;
+};
+
+type ListingFavoriteRow = {
+  profile_id: string;
+  listing_id: string;
+  price_cents_at_save: number | null;
+  created_at: string;
+};
+
+type NotificationRow = {
+  id: string;
+  profile_id: string;
+  kind: string;
+  payload: Json;
+  read: boolean;
+  created_at: string;
 };
 
 type CertificateRow = {
@@ -473,6 +537,57 @@ export type Database = {
         Update: Partial<ReferenceItemVersionRow>;
         Relationships: [];
       };
+      listings: {
+        Row: ListingRow;
+        Insert: Insertable<
+          ListingRow,
+          | 'id'
+          | 'check_id'
+          | 'certificate_id'
+          | 'brand_id'
+          | 'category_id'
+          | 'product_id'
+          | 'title'
+          | 'description_md'
+          | 'condition'
+          | 'size_label'
+          | 'measurements'
+          | 'defects_md'
+          | 'price_cents'
+          | 'currency'
+          | 'location_city'
+          | 'location_state'
+          | 'shipping_methods'
+          | 'hashtags'
+          | 'keywords'
+          | 'status'
+          | 'ai_generated'
+          | 'published_at'
+          | 'sold_at'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<ListingRow>;
+        Relationships: [];
+      };
+      listing_photos: {
+        Row: ListingPhotoRow;
+        Insert: Insertable<ListingPhotoRow, 'id' | 'position' | 'source' | 'created_at'>;
+        Update: Partial<ListingPhotoRow>;
+        Relationships: [];
+      };
+      listing_favorites: {
+        Row: ListingFavoriteRow;
+        Insert: Insertable<ListingFavoriteRow, 'price_cents_at_save' | 'created_at'>;
+        Update: Partial<ListingFavoriteRow>;
+        Relationships: [];
+      };
+      notifications: {
+        Row: NotificationRow;
+        Insert: Insertable<NotificationRow, 'id' | 'payload' | 'read' | 'created_at'>;
+        Update: Partial<NotificationRow>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -492,8 +607,18 @@ export type Database = {
           product_name: string | null;
         }[];
       };
+      public_certificate: {
+        Args: { p_code: string };
+        Returns: Json;
+      };
+      seller_public_stats: {
+        Args: { p_username: string };
+        Returns: Json;
+      };
     };
     Enums: {
+      listing_status: ListingStatus;
+      condition_grade: ConditionGrade;
       check_status: CheckStatus;
       risk_level: RiskLevel;
       verdict_source: VerdictSource;
