@@ -1,0 +1,42 @@
+[project]
+name = "garimpo-pipeline"
+version = "0.1.0"
+description = "Motor de autenticação do Garimpo Madruga — pipeline de análise de legit checks"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "pydantic>=2.9",
+  "pydantic-settings>=2.6",
+  "psycopg[binary,pool]>=3.2",
+  "pgvector>=0.3",
+  "httpx>=0.27",
+  "anthropic>=0.40",
+  "pyjwt[crypto]>=2.9",
+  "numpy>=1.26",
+  "pillow>=10.4",
+  "opencv-python-headless>=4.10",
+  "onnxruntime>=1.19",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3", "ruff>=0.7"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/garimpo_pipeline"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "SIM", "RUF"]
+# Textos de produto em pt-BR usam travessões/en-dash legitimamente.
+ignore = ["RUF001", "RUF002", "RUF003"]
