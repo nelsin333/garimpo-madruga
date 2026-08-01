@@ -126,6 +126,7 @@ type CheckFindingRow = {
   detail_md: string;
   conclusion_md: string;
   bbox: Json | null;
+  comparison: Json | null;
   position: number;
   created_at: string;
 };
@@ -143,6 +144,7 @@ type VerdictRow = {
   next_steps_md: string;
   ai_model_version: string | null;
   disclaimer_version: string;
+  score_breakdown: Json | null;
   created_at: string;
 };
 
@@ -266,7 +268,7 @@ export type Database = {
         Row: CheckFindingRow;
         Insert: Insertable<
           CheckFindingRow,
-          'id' | 'photo_id' | 'score' | 'conclusion_md' | 'bbox' | 'position' | 'created_at'
+          'id' | 'photo_id' | 'score' | 'conclusion_md' | 'bbox' | 'comparison' | 'position' | 'created_at'
         >;
         Update: Partial<CheckFindingRow>;
         Relationships: [];
@@ -280,6 +282,7 @@ export type Database = {
           | 'next_steps_md'
           | 'ai_model_version'
           | 'disclaimer_version'
+          | 'score_breakdown'
           | 'created_at'
         >;
         Update: Partial<VerdictRow>;
