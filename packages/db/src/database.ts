@@ -28,12 +28,7 @@ export type JobStatus = 'queued' | 'running' | 'completed' | 'failed';
 export type ListingStatus = 'draft' | 'active' | 'reserved' | 'sold' | 'paused' | 'removed';
 
 export type ConditionGrade =
-  | 'new_with_tags'
-  | 'new_no_tags'
-  | 'excellent'
-  | 'good'
-  | 'fair'
-  | 'poor';
+  'new_with_tags' | 'new_no_tags' | 'excellent' | 'good' | 'fair' | 'poor';
 
 type ProfileRow = {
   id: string;
