@@ -263,6 +263,10 @@ type ListingRow = {
   keywords: string[];
   status: ListingStatus;
   ai_generated: Json;
+  parcel_weight_grams: number;
+  parcel_length_cm: number;
+  parcel_width_cm: number;
+  parcel_height_cm: number;
   published_at: string | null;
   sold_at: string | null;
   created_at: string;
@@ -301,6 +305,233 @@ type CertificateRow = {
   revoked: boolean;
   revoked_reason: string | null;
   created_at: string;
+};
+
+// ===== Sprint 6: pedidos, pagamento, frete, disputa, saque =====
+
+export type OrderStatus =
+  | 'pending_payment'
+  | 'payment_processing'
+  | 'paid'
+  | 'preparing_shipment'
+  | 'shipped'
+  | 'delivered'
+  | 'completed'
+  | 'payment_failed'
+  | 'expired'
+  | 'cancelled'
+  | 'disputed'
+  | 'returned'
+  | 'refunded';
+
+export type PaymentStatus =
+  'created' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refunded' | 'charged_back';
+
+export type PaymentMethod = 'pix' | 'credit_card' | 'boleto';
+
+export type ShipmentStatus =
+  'pending' | 'label_created' | 'posted' | 'in_transit' | 'delivered' | 'returned' | 'cancelled';
+
+export type DisputeStatus = 'open' | 'under_review' | 'resolved' | 'closed';
+
+export type DisputeResolution =
+  'refund_buyer' | 'release_seller' | 'partial_refund' | 'return_and_refund';
+
+export type KycStatus = 'not_started' | 'pending' | 'approved' | 'rejected';
+
+export type PayoutStatus = 'requested' | 'processing' | 'paid' | 'failed';
+
+type AddressRow = {
+  id: string;
+  profile_id: string;
+  label: string | null;
+  recipient_name: string;
+  zip_code: string;
+  street: string;
+  number: string;
+  complement: string | null;
+  district: string;
+  city: string;
+  state: string;
+  is_default: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+type OrderRow = {
+  id: string;
+  buyer_id: string;
+  seller_id: string;
+  listing_id: string;
+  status: OrderStatus;
+  item_cents: number;
+  shipping_cents: number;
+  buyer_fee_cents: number;
+  platform_fee_cents: number;
+  discount_cents: number;
+  total_cents: number;
+  seller_amount_cents: number;
+  currency: string;
+  shipping_address: Json;
+  shipping_option: Json;
+  idempotency_key: string;
+  external_payment_id: string | null;
+  external_shipment_id: string | null;
+  payment_expires_at: string | null;
+  paid_at: string | null;
+  shipped_at: string | null;
+  delivered_at: string | null;
+  completed_at: string | null;
+  cancelled_at: string | null;
+  escrow_release_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type OrderEventRow = {
+  id: string;
+  order_id: string;
+  kind: string;
+  from_status: OrderStatus | null;
+  to_status: OrderStatus | null;
+  actor_id: string | null;
+  actor_kind: 'buyer' | 'seller' | 'system' | 'admin' | 'provider';
+  data: Json;
+  created_at: string;
+};
+
+type PaymentAttemptRow = {
+  id: string;
+  order_id: string;
+  provider: string;
+  method: PaymentMethod;
+  status: PaymentStatus;
+  amount_cents: number;
+  external_id: string | null;
+  checkout: Json;
+  raw_status: string | null;
+  approved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ShipmentRow = {
+  id: string;
+  order_id: string;
+  provider: string;
+  service_name: string | null;
+  status: ShipmentStatus;
+  external_id: string | null;
+  tracking_code: string | null;
+  label_url: string | null;
+  price_cents: number;
+  estimated_days: number | null;
+  posted_at: string | null;
+  delivered_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type ShipmentEventRow = {
+  id: string;
+  shipment_id: string;
+  status: ShipmentStatus;
+  description: string | null;
+  occurred_at: string;
+  created_at: string;
+};
+
+type ShippingQuoteRow = {
+  id: string;
+  profile_id: string;
+  listing_id: string;
+  provider: string;
+  service_id: string;
+  service_name: string;
+  carrier: string;
+  price_cents: number;
+  estimated_days: number | null;
+  from_zip: string;
+  to_zip: string;
+  expires_at: string;
+  created_at: string;
+};
+
+type DisputeRow = {
+  id: string;
+  order_id: string;
+  opened_by: string;
+  reason: 'not_received' | 'not_as_described' | 'damaged' | 'suspected_fake' | 'other';
+  description: string;
+  evidence: Json;
+  status: DisputeStatus;
+  resolution: DisputeResolution | null;
+  resolution_note: string | null;
+  refund_cents: number | null;
+  resolved_by: string | null;
+  resolved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+type DisputeMessageRow = {
+  id: string;
+  dispute_id: string;
+  author_id: string;
+  body: string;
+  attachments: Json;
+  created_at: string;
+};
+
+type ConversationRow = {
+  id: string;
+  listing_id: string;
+  buyer_id: string;
+  seller_id: string;
+  order_id: string | null;
+  last_message_at: string | null;
+  created_at: string;
+};
+
+type MessageRow = {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  body: string;
+  read_at: string | null;
+  created_at: string;
+};
+
+type SellerAccountRow = {
+  profile_id: string;
+  kyc_status: KycStatus;
+  kyc_submitted_at: string | null;
+  kyc_reviewed_at: string | null;
+  kyc_rejection_reason: string | null;
+  document_masked: string | null;
+  legal_name: string | null;
+  provider: string;
+  provider_account_id: string | null;
+  payout_method: 'pix' | 'bank_transfer' | null;
+  payout_key_masked: string | null;
+  pending_balance_cents: number;
+  available_balance_cents: number;
+  created_at: string;
+  updated_at: string;
+};
+
+type PayoutRow = {
+  id: string;
+  profile_id: string;
+  amount_cents: number;
+  status: PayoutStatus;
+  provider: string;
+  external_id: string | null;
+  failure_reason: string | null;
+  requested_at: string;
+  paid_at: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 type Insertable<Row, Optional extends keyof Row, Omitted extends keyof Row = never> = Omit<
@@ -557,6 +788,10 @@ export type Database = {
           | 'keywords'
           | 'status'
           | 'ai_generated'
+          | 'parcel_weight_grams'
+          | 'parcel_length_cm'
+          | 'parcel_width_cm'
+          | 'parcel_height_cm'
           | 'published_at'
           | 'sold_at'
           | 'created_at'
@@ -581,6 +816,109 @@ export type Database = {
         Row: NotificationRow;
         Insert: Insertable<NotificationRow, 'id' | 'payload' | 'read' | 'created_at'>;
         Update: Partial<NotificationRow>;
+        Relationships: [];
+      };
+      addresses: {
+        Row: AddressRow;
+        Insert: Insertable<
+          AddressRow,
+          'id' | 'label' | 'complement' | 'is_default' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<AddressRow>;
+        Relationships: [];
+      };
+      // Escrita exclusiva do backend: o app só lê (ver RLS e GRANTs da
+      // migration 20260805000001_orders.sql).
+      orders: {
+        Row: OrderRow;
+        Insert: Insertable<OrderRow, 'id' | 'created_at' | 'updated_at'>;
+        Update: Partial<OrderRow>;
+        Relationships: [];
+      };
+      order_events: {
+        Row: OrderEventRow;
+        Insert: Insertable<OrderEventRow, 'id' | 'data' | 'actor_kind' | 'created_at'>;
+        Update: Partial<OrderEventRow>;
+        Relationships: [];
+      };
+      payment_attempts: {
+        Row: PaymentAttemptRow;
+        Insert: Insertable<
+          PaymentAttemptRow,
+          'id' | 'provider' | 'status' | 'checkout' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<PaymentAttemptRow>;
+        Relationships: [];
+      };
+      shipments: {
+        Row: ShipmentRow;
+        Insert: Insertable<
+          ShipmentRow,
+          'id' | 'provider' | 'status' | 'price_cents' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<ShipmentRow>;
+        Relationships: [];
+      };
+      shipment_events: {
+        Row: ShipmentEventRow;
+        Insert: Insertable<ShipmentEventRow, 'id' | 'occurred_at' | 'created_at'>;
+        Update: Partial<ShipmentEventRow>;
+        Relationships: [];
+      };
+      shipping_quotes: {
+        Row: ShippingQuoteRow;
+        Insert: Insertable<ShippingQuoteRow, 'id' | 'provider' | 'created_at'>;
+        Update: Partial<ShippingQuoteRow>;
+        Relationships: [];
+      };
+      disputes: {
+        Row: DisputeRow;
+        Insert: Insertable<
+          DisputeRow,
+          'id' | 'description' | 'evidence' | 'status' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<DisputeRow>;
+        Relationships: [];
+      };
+      dispute_messages: {
+        Row: DisputeMessageRow;
+        Insert: Insertable<DisputeMessageRow, 'id' | 'attachments' | 'created_at'>;
+        Update: Partial<DisputeMessageRow>;
+        Relationships: [];
+      };
+      conversations: {
+        Row: ConversationRow;
+        Insert: Insertable<ConversationRow, 'id' | 'order_id' | 'last_message_at' | 'created_at'>;
+        Update: Partial<ConversationRow>;
+        Relationships: [];
+      };
+      messages: {
+        Row: MessageRow;
+        Insert: Insertable<MessageRow, 'id' | 'read_at' | 'created_at'>;
+        Update: Partial<MessageRow>;
+        Relationships: [];
+      };
+      seller_accounts: {
+        Row: SellerAccountRow;
+        Insert: Insertable<
+          SellerAccountRow,
+          | 'kyc_status'
+          | 'provider'
+          | 'pending_balance_cents'
+          | 'available_balance_cents'
+          | 'created_at'
+          | 'updated_at'
+        >;
+        Update: Partial<SellerAccountRow>;
+        Relationships: [];
+      };
+      payouts: {
+        Row: PayoutRow;
+        Insert: Insertable<
+          PayoutRow,
+          'id' | 'status' | 'provider' | 'requested_at' | 'created_at' | 'updated_at'
+        >;
+        Update: Partial<PayoutRow>;
         Relationships: [];
       };
     };
@@ -610,6 +948,40 @@ export type Database = {
         Args: { p_username: string };
         Returns: Json;
       };
+      // Funções financeiras: EXECUTE só para service_role. Declaradas aqui
+      // porque as Edge Functions as chamam com o cliente tipado.
+      create_order: {
+        Args: {
+          p_buyer_id: string;
+          p_listing_id: string;
+          p_idempotency_key: string;
+          p_shipping_address: Json;
+          p_shipping_option: Json;
+          p_shipping_cents: number;
+          p_buyer_fee_cents: number;
+          p_platform_fee_bps: number;
+        };
+        Returns: string;
+      };
+      apply_order_transition: {
+        Args: {
+          p_order_id: string;
+          p_to_status: OrderStatus;
+          p_kind: string;
+          p_actor_id: string | null;
+          p_actor_kind: string;
+          p_data?: Json;
+        };
+        Returns: OrderStatus;
+      };
+      request_payout: {
+        Args: { p_profile_id: string; p_amount_cents: number };
+        Returns: string;
+      };
+      purge_expired_shipping_quotes: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
     };
     Enums: {
       listing_status: ListingStatus;
@@ -618,6 +990,14 @@ export type Database = {
       risk_level: RiskLevel;
       verdict_source: VerdictSource;
       job_status: JobStatus;
+      order_status: OrderStatus;
+      payment_status: PaymentStatus;
+      payment_method: PaymentMethod;
+      shipment_status: ShipmentStatus;
+      dispute_status: DisputeStatus;
+      dispute_resolution: DisputeResolution;
+      kyc_status: KycStatus;
+      payout_status: PayoutStatus;
     };
     CompositeTypes: Record<string, never>;
   };
