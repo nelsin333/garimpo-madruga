@@ -82,6 +82,19 @@ export type ProviderPaymentStatus =
   'created' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'refunded' | 'charged_back';
 
 /**
+ * Transição a aplicar, ou `null` quando não há nada a fazer.
+ *
+ * Dois casos viram `null`: a transição é inválida a partir do estado atual
+ * (webhook atrasado chegando num pedido já cancelado, por exemplo) e o pedido
+ * já está no estado de destino (webhook reentregue). Assim o chamador só
+ * escreve no banco quando o estado realmente muda.
+ */
+function nextStatus(from: OrderStatus, to: OrderStatus): OrderStatus | null {
+  if (from === to) return null;
+  return canTransition(from, to) ? to : null;
+}
+
+/**
  * Estado do pagamento → transição a aplicar no pedido.
  * `null` significa "nada a fazer" (ex.: pagamento ainda pendente num pedido
  * que já está processando).
@@ -92,21 +105,16 @@ export function orderStatusForPayment(
 ): OrderStatus | null {
   switch (paymentStatus) {
     case 'approved':
-      // Webhook atrasado/reentregue pode chegar com o pedido já adiante
-      // (shipped, completed…). Nesse caso não há nada a fazer — voltar para
-      // 'paid' seria uma transição inválida.
-      return canTransition(currentOrderStatus, 'paid') && currentOrderStatus !== 'paid'
-        ? 'paid'
-        : null;
+      return nextStatus(currentOrderStatus, 'paid');
     case 'pending':
       return currentOrderStatus === 'pending_payment' ? 'payment_processing' : null;
     case 'rejected':
-      return canTransition(currentOrderStatus, 'payment_failed') ? 'payment_failed' : null;
+      return nextStatus(currentOrderStatus, 'payment_failed');
     case 'cancelled':
-      return canTransition(currentOrderStatus, 'cancelled') ? 'cancelled' : null;
+      return nextStatus(currentOrderStatus, 'cancelled');
     case 'refunded':
     case 'charged_back':
-      return canTransition(currentOrderStatus, 'refunded') ? 'refunded' : null;
+      return nextStatus(currentOrderStatus, 'refunded');
     case 'created':
       return null;
   }
@@ -124,14 +132,14 @@ export function orderStatusForShipment(
 ): OrderStatus | null {
   switch (shipmentStatus) {
     case 'label_created':
-      return canTransition(currentOrderStatus, 'preparing_shipment') ? 'preparing_shipment' : null;
+      return nextStatus(currentOrderStatus, 'preparing_shipment');
     case 'posted':
     case 'in_transit':
-      return canTransition(currentOrderStatus, 'shipped') ? 'shipped' : null;
+      return nextStatus(currentOrderStatus, 'shipped');
     case 'delivered':
-      return canTransition(currentOrderStatus, 'delivered') ? 'delivered' : null;
+      return nextStatus(currentOrderStatus, 'delivered');
     case 'returned':
-      return canTransition(currentOrderStatus, 'returned') ? 'returned' : null;
+      return nextStatus(currentOrderStatus, 'returned');
     default:
       return null;
   }
