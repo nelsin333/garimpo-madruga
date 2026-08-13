@@ -29,6 +29,24 @@ O usuário fotografa a peça guiado pelo app, uma IA multimodal analisa etiqueta
 | 17  | [Riscos e Mitigações](docs/17-riscos.md)                      | Técnicos, legais e operacionais                           |
 | 18  | [Diferenciais Competitivos](docs/18-diferenciais.md)          | Como vencer players internacionais no Brasil              |
 
+## Configuração
+
+| Onde                                | O quê                                                             |
+| ----------------------------------- | ----------------------------------------------------------------- |
+| `apps/mobile/.env.example`          | URL e anon key do Supabase (embutidas no bundle)                  |
+| `supabase/.env.example`             | Credenciais OAuth do Google e da Apple                            |
+| `supabase/functions/.env.example`   | Secrets das Edge Functions: Anthropic, Mercado Pago, Melhor Envio |
+| `services/ai-pipeline/.env.example` | Supabase, Anthropic, Google Vision e o worker do pipeline         |
+
+As Edge Functions de webhook (`payments-webhook`, `shipping-webhook`) são
+chamadas pelos provedores, então precisam ser publicadas com `--no-verify-jwt`
+— a autenticação delas é a assinatura/token do provedor, verificada no código:
+
+```
+supabase functions deploy payments-webhook --no-verify-jwt
+supabase functions deploy shipping-webhook --no-verify-jwt
+```
+
 ## Princípios inegociáveis
 
 1. **A IA nunca "garante" autenticidade.** Ela estima probabilidade, explica o porquê e escala casos incertos para revisão humana. Confiança se constrói com honestidade estatística.
