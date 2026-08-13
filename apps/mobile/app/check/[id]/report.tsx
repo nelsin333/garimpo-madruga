@@ -16,10 +16,11 @@ import {
   VerifiedShield,
   useTheme,
 } from '@garimpo/ui';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Pressable, Share, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, Share, View } from 'react-native';
 import { fetchReport } from '@/features/check/api';
+import { createListingFromCheck, findListingByCheck } from '@/features/listing/api';
 import { FindingCard } from '@/features/check/components/FindingCard';
 import { MarkdownLite } from '@/features/check/components/MarkdownLite';
 
@@ -30,6 +31,18 @@ export default function ReportScreen() {
   const { data: report, isPending } = useQuery({
     queryKey: ['check-report', id],
     queryFn: () => fetchReport(id),
+  });
+
+  // Anunciar: reaproveita o anúncio existente ou gera um novo pela IA.
+  const startListing = useMutation({
+    mutationFn: async () => (await findListingByCheck(id)) ?? (await createListingFromCheck(id)),
+    onSuccess: (listingId) =>
+      router.push({ pathname: '/listing/[id]/edit', params: { id: listingId } }),
+    onError: () =>
+      Alert.alert(
+        'Não foi possível criar o anúncio',
+        'Só peças com laudo favorável podem ser anunciadas.',
+      ),
   });
 
   if (isPending || !report) {
@@ -189,7 +202,15 @@ export default function ReportScreen() {
         </Section>
       ) : null}
 
-      <Button title="Compartilhar laudo" onPress={() => void share()} />
+      {outcome !== 'replica' ? (
+        <Button
+          title="Anunciar esta peça"
+          loading={startListing.isPending}
+          onPress={() => startListing.mutate()}
+        />
+      ) : null}
+
+      <Button variant="secondary" title="Compartilhar laudo" onPress={() => void share()} />
 
       <Text variant="caption" color="tertiary" style={{ textAlign: 'center' }}>
         ⓘ Análise probabilística baseada nas fotos enviadas e em referências catalogadas. Não é

@@ -43,6 +43,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="market"
+        options={{
+          title: 'Vitrine',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="pricetags-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="checks"
         options={{
           title: 'Checks',

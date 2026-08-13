@@ -2,8 +2,12 @@
 
 import type { Session } from '@supabase/supabase-js';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
+
+/** Rotas públicas (certificado e anúncio) não passam pelo gate de especialista. */
+const PUBLIC_PREFIXES = ['/cert/', '/l/'];
 
 interface ShellContextValue {
   session: Session;
@@ -20,6 +24,8 @@ export function useShell(): ShellContextValue {
 
 /** Autenticação + autorização (expert/admin) + navegação do painel. */
 export function Shell({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
+  const isPublic = PUBLIC_PREFIXES.some((prefix) => pathname?.startsWith(prefix));
   const [session, setSession] = useState<Session | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,6 +52,21 @@ export function Shell({ children }: { children: ReactNode }) {
       .single()
       .then(({ data }) => setRole(data?.role ?? 'user'));
   }, [session]);
+
+  if (isPublic) {
+    return (
+      <>
+        <header className="topbar">
+          <nav>
+            <Link className="brand" href="/">
+              garimpo madruga
+            </Link>
+          </nav>
+        </header>
+        <main>{children}</main>
+      </>
+    );
+  }
 
   if (loading) return <div className="center muted">Carregando…</div>;
   if (!session) return <Login />;
