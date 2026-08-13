@@ -317,17 +317,41 @@ export default function ListingDetailScreen() {
           />
         </View>
       ) : (
-        <Button
-          title="Compartilhar anúncio"
-          onPress={() =>
-            void shareListing({
-              listingId: listing.id,
-              title: listing.title,
-              priceCents: listing.price_cents,
-              certificateCode: listing.certificateCode,
-            })
-          }
-        />
+        <View style={{ gap: theme.space.md }}>
+          {listing.status === 'active' && listing.price_cents != null ? (
+            <>
+              <Button
+                title="Comprar com garantia"
+                onPress={() =>
+                  session
+                    ? router.push({ pathname: '/checkout/[listingId]', params: { listingId: id } })
+                    : router.push('/(auth)/sign-in')
+                }
+              />
+              <Text variant="caption" color="tertiary" style={{ textAlign: 'center' }}>
+                O pagamento fica retido até você confirmar o recebimento.
+              </Text>
+            </>
+          ) : (
+            <Text variant="caption" color="secondary" style={{ textAlign: 'center' }}>
+              {listing.status === 'sold' || listing.status === 'reserved'
+                ? 'Esta peça já foi vendida.'
+                : 'Anúncio indisponível para compra no momento.'}
+            </Text>
+          )}
+          <Button
+            title="Compartilhar anúncio"
+            variant="secondary"
+            onPress={() =>
+              void shareListing({
+                listingId: listing.id,
+                title: listing.title,
+                priceCents: listing.price_cents,
+                certificateCode: listing.certificateCode,
+              })
+            }
+          />
+        </View>
       )}
 
       <Text variant="caption" color="tertiary" style={{ textAlign: 'center' }}>

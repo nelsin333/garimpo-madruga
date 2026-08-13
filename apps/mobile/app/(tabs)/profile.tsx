@@ -62,6 +62,9 @@ export default function Profile() {
         <Text color="secondary">{session?.user.email}</Text>
       </Card>
 
+      <Button variant="secondary" title="📦  Meus pedidos" onPress={() => router.push('/orders')} />
+      <Button variant="secondary" title="💸  Carteira" onPress={() => router.push('/wallet')} />
+
       {profile && (profile.role === 'expert' || profile.role === 'admin') ? (
         <Button
           variant="secondary"
